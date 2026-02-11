@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Museum Clock & Calendar</title>
+    <style>
+        :root {
+            --gold: linear-gradient(145deg, #f9e17d, #bf953f, #8a6e2f, #bf953f, #f9e17d);
+            --marble: radial-gradient(circle at center, #ffffff 0%, #dcdcdc 70%, #c0c0c0 100%);
+            --bg-dark: #0a0805;
+            --ruby: radial-gradient(circle at 30% 30%, #ff4d4d, #800000);
+            --emerald: radial-gradient(circle at 30% 30%, #4dff4d, #004d00);
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: #d4b483;
+            font-family: 'Georgia', serif;
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .clock-section {
+            flex: 1.2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #2a1b0a 0%, #0a0805 100%);
+            border-right: 3px double #5c441a;
+            padding: 20px;
+        }
+
+        .museum-frame {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            padding: 20px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        .clock-face {
+            width: 100%; height: 100%;
+            background: var(--marble);
+            border-radius: 50%;
+            border: 10px solid #2a1b0a;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gears-bg {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px; height: 250px;
+            border: 2px dashed rgba(138, 110, 47, 0.2);
+            border-radius: 50%;
+            animation: rotateGear 60s linear infinite;
+        }
+
+        @keyframes rotateGear { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        .hand {
+            position: absolute;
+            bottom: 50%; left: 50%;
+            transform-origin: bottom;
+            background: #1a120b;
+        }
+        .hour { width: 10px; height: 100px; margin-left: -5px; clip-path: polygon(50% 0%, 100% 20%, 50% 100%, 0% 20%); z-index: 3; }
+        .minute { width: 6px; height: 140px; margin-left: -3px; clip-path: polygon(50% 0%, 100% 10%, 50% 100%, 0% 10%); z-index: 4; }
+        .second { width: 2px; height: 160px; margin-left: -1px; background: #a52a2a; z-index: 5; }
+
+        .schedule-section {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: #0f0a05;
+            overflow-y: auto;
+        }
+
+        .calendar-card {
+            background: rgba(42, 27, 10, 0.4);
+            border: 1px solid #5c441a;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .nav-btn { background: none; border: 1px solid #d4b483; color: #d4b483; padding: 5px 12px; cursor: pointer; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+        .day { padding: 8px 0; cursor: pointer; border: 1px solid rgba(212, 180, 131, 0.05); font-size: 0.9rem; }
+        .sun { color: #ff6b6b; font-weight: bold; } 
+        .sat { color: #6ba6ff; font-weight: bold; }
+        .today { background: #8a6e2f; color: white; border-radius: 4px; }
+
+        #note-area {
+            width: 100%;
+            height: 150px;
+            background: #1a120b;
+            border: 1px solid #3d2b1f;
+            color: #f4e4bc;
+            padding: 12px;
+            font-size: 1rem;
+            resize: none;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .gem { position: absolute; width: 20px; height: 20px; border-radius: 50%; z-index: 10; border: 1px solid #3d2b1f; }
+
+        @media (max-width: 800px) {
+            body { flex-direction: column; }
+            .clock-section { flex: none; height: 45vh; border-right: none; border-bottom: 3px double #5c441a; }
+            .museum-frame { width: 260px; height: 260px; }
+            .schedule-section { flex: 1; padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="clock-section">
+    <div class="museum-frame">
+        <div class="gem" style="top: -10px; left: 50%; transform: translateX(-50%); background: var(--ruby);"></div>
+        <div class="gem" style="bottom: -10px; left: 50%; transform: translateX(-50%); background: var(--ruby);"></div>
+        <div class="gem" style="left: -10px; top: 50%; transform: translateY(-50%); background: var(--emerald);"></div>
+        <div class="gem" style="right: -10px; top: 50%; transform: translateY(-50%); background: var(--emerald);"></div>
+        <div class="clock-face">
+            <div class="gears-bg"></div>
+            <div class="hand hour" id="hour"></div>
+            <div class="hand minute" id="minute"></div>
+            <div class="hand second" id="second"></div>
+        </div>
+    </div>
+</div>
+
+<div class="schedule-section">
+    <div class="calendar-card">
+        <div class="calendar-header">
+            <button class="nav-btn" onclick="changeMonth(-1)">◀</button>
+            <h3 id="month-display" style="margin:0"></h3>
+            <button class="nav-btn" onclick="changeMonth(1)">▶</button>
+        </div>
+        <div class="calendar-grid" id="calendar-days"></div>
+    </div>
+    <h4 id="selected-date-title" style="margin: 5px 0">日付を選択してください</h4>
+    <textarea id="note-area" placeholder="ここに予定を書き込むと自動保存されます..."></textarea>
+</div>
+
+<script>
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('second').style.transform = `rotate(${(now.getSeconds()/60)*360}deg)`;
+        document.getElementById('minute').style.transform = `rotate(${(now.getMinutes()/60)*360 + (now.getSeconds()/60)*6}deg)`;
+        document.getElementById('hour').style.transform = `rotate(${(now.getHours()%12/12)*360 + (now.getMinutes()/60)*30}deg)`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    let currentViewDate = new Date();
+    let selectedDateKey = "";
+
+    function renderCalendar() {
+        const year = currentViewDate.getFullYear();
+        const month = currentViewDate.getMonth();
+        document.getElementById('month-display').innerText = `${year}年 ${month + 1}月`;
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const lastDate = new Date(year, month + 1, 0).getDate();
+        const grid = document.getElementById('calendar-days');
+        grid.innerHTML = '';
+
+        ['日','月','火','水','木','金','土'].forEach((d, i) => {
+            const el = document.createElement('div');
+            el.className = `day ${i===0 ? 'sun' : (i===6 ? 'sat' : '')}`;
+            el.style.fontWeight = 'bold';
+            el.innerText = d;
+            grid.appendChild(el);
+        });
+
+        for(let i=0; i<firstDay; i++) grid.appendChild(document.createElement('div'));
+
+        for(let i=1; i<=lastDate; i++) {
+            const el = document.createElement('div');
+            el.className = 'day';
+            const dayOfWeek = new Date(year, month, i).getDay();
+            if(dayOfWeek === 0) el.classList.add('sun');
+            if(dayOfWeek === 6) el.classList.add('sat');
+            if(i === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear()) el.classList.add('today');
+
+            el.innerText = i;
+            el.onclick = () => selectDate(year, month + 1, i);
+            grid.appendChild(el);
+        }
+    }
+
+    function selectDate(y, m, d) {
+        selectedDateKey = `note_v2_${y}_${m}_${d}`;
+        document.getElementById('selected-date-title').innerText = `${y}年${m}月${d}日の予定`;
+        document.getElementById('note-area').value = localStorage.getItem(selectedDateKey) || "";
+    }
+
+    document.getElementById('note-area').oninput = (e) => {
+        if(selectedDateKey) localStorage.setItem(selectedDateKey, e.target.value);
+    };
+
+    function changeMonth(diff) {
+        currentViewDate.setMonth(currentViewDate.getMonth() + diff);
+        renderCalendar();
+    }
+
+    renderCalendar();
+    const t = new Date();
+    selectDate(t.getFullYear(), t.getMonth()+1, t.getDate());
+</script>
+</body>
+</html>
