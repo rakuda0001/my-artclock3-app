@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stellar Save-Enabled Dash</title>
+    <title>Stellar Schedule Dash</title>
     <style>
         :root {
             --panel-bg: rgba(5, 10, 20, 0.15); 
             --accent-gold: #f9e17d;
             --text-main: #ffffff;
+            --select-blue: rgba(116, 185, 255, 0.6);
         }
 
         body {
@@ -28,107 +29,83 @@
         }
 
         .main-container {
-            width: 94vw;
-            height: 92vh;
+            width: 94vw; height: 92vh;
             background: var(--panel-bg);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(249, 225, 125, 0.5);
             border-radius: 25px;
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
             box-shadow: 0 0 30px rgba(0,0,0,0.5);
             overflow: hidden;
         }
 
         .header-section {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid rgba(249, 225, 125, 0.2);
             background: rgba(255, 255, 255, 0.05);
         }
 
         .clock-box { display: flex; align-items: center; gap: 15px; }
         .analog-clock {
-            width: 90px; height: 90px;
+            width: 80px; height: 80px;
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-            border: 3px solid #bf953f;
-            position: relative;
+            border-radius: 50%; border: 3px solid #bf953f; position: relative;
         }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: #333; border-radius: 2px; }
-        .hour { width: 4px; height: 28px; margin-left: -2px; }
-        .minute { width: 3px; height: 40px; margin-left: -1.5px; }
-        .second { width: 1px; height: 43px; background: #ff4757; }
+        .hour { width: 4px; height: 25px; margin-left: -2px; }
+        .minute { width: 3px; height: 35px; margin-left: -1.5px; }
+        .second { width: 1px; height: 38px; background: #ff4757; }
 
-        .digital-info { text-align: left; text-shadow: 2px 2px 10px rgba(0,0,0,1); }
-        #time-digit { font-size: 2.5rem; font-weight: bold; color: var(--accent-gold); margin: 0; }
-        #date-digit { font-size: 1rem; opacity: 1; font-weight: bold; }
+        #time-digit { font-size: 2.2rem; font-weight: bold; color: var(--accent-gold); margin: 0; text-shadow: 2px 2px 10px #000; }
+        #date-digit { font-size: 0.9rem; font-weight: bold; text-shadow: 1px 1px 5px #000; }
 
-        .market-info { display: flex; gap: 20px; font-size: 0.95rem; text-shadow: 2px 2px 5px rgba(0,0,0,1); }
-        .val { display: block; color: var(--accent-gold); font-weight: bold; font-size: 1.2rem; }
+        .market-info { display: flex; gap: 15px; font-size: 0.85rem; text-shadow: 2px 2px 5px #000; }
+        .val { display: block; color: var(--accent-gold); font-weight: bold; font-size: 1.1rem; }
 
-        .search-bar {
-            padding: 15px 20px;
-            display: flex;
-            gap: 15px;
-            background: rgba(0,0,0,0.2);
-        }
+        .search-bar { padding: 12px 20px; display: flex; gap: 15px; background: rgba(0,0,0,0.2); }
         .input-group { flex: 1; display: flex; gap: 10px; }
         input {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(249, 225, 125, 0.4);
-            border-radius: 8px;
-            color: #fff;
-            padding: 10px;
-            font-size: 1rem;
-            outline: none;
+            flex: 1; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(249, 225, 125, 0.4);
+            border-radius: 8px; color: #fff; padding: 8px; font-size: 0.9rem; outline: none;
         }
         
         button {
-            background: linear-gradient(145deg, #bf953f, #8a6e2f);
-            border: none;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
+            background: linear-gradient(145deg, #bf953f, #8a6e2f); border: none;
+            color: #fff; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;
         }
 
         .content-section { flex: 1; display: flex; padding: 20px; gap: 20px; overflow: hidden; }
-        .cal-box { flex: 1.2; background: rgba(0,0,0,0.2); border-radius: 15px; padding: 15px; }
         
+        /* カレンダー */
+        .cal-box { flex: 1.2; background: rgba(0,0,0,0.2); border-radius: 15px; padding: 15px; }
         #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-        .d-cell { padding: 12px 0; font-size: 1.1rem; border-radius: 8px; text-shadow: 1px 1px 3px #000; }
+        .d-cell { padding: 10px 0; font-size: 1rem; border-radius: 8px; cursor: pointer; text-shadow: 1px 1px 3px #000; transition: 0.2s; }
+        .d-cell:hover { background: rgba(255,255,255,0.1); }
         .sun { color: #ffb3b3; font-weight: bold; } 
         .sat { color: #b3d9ff; font-weight: bold; }
-        .today { background: var(--accent-gold); color: #000; font-weight: bold; }
+        .today { border: 2px solid var(--accent-gold); }
+        /* 選択中の日 */
+        .selected-day { background: var(--select-blue) !important; color: white !important; box-shadow: 0 0 10px var(--select-blue); }
 
-        /* スケジュール入力欄 */
-        textarea {
-            flex: 1;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(249, 225, 125, 0.4);
-            border-radius: 15px;
-            color: #ffffff;
-            padding: 20px;
-            font-size: 1.2rem;
-            resize: none;
-            outline: none;
-            text-shadow: 1px 1px 3px #000;
-            line-height: 1.5;
+        /* 予定入力エリア */
+        .note-box { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+        .schedule-title { font-weight: bold; color: var(--accent-gold); border-left: 4px solid var(--accent-gold); padding-left: 10px; margin-bottom: 5px; }
+        .plan-row { display: flex; gap: 5px; align-items: center; }
+        .plan-time { width: 70px; text-align: center; }
+        .plan-text { flex: 1; }
+        
+        .note-input {
+            background: rgba(0,0,0,0.4); border: 1px solid rgba(249, 225, 125, 0.3);
+            border-radius: 8px; color: #fff; padding: 10px; font-size: 1rem; outline: none;
         }
 
         #alert-msg {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 71, 87, 0.9); color: white;
-            padding: 10px 20px; border-radius: 10px; display: none; z-index: 1000;
+            background: rgba(255, 71, 87, 0.9); color: white; padding: 10px 20px; border-radius: 10px; display: none; z-index: 1000;
         }
 
         @media (max-width: 800px) {
-            .main-container { height: 96vh; width: 96vw; }
             .content-section { flex-direction: column; overflow-y: auto; }
             .header-section { flex-direction: column; align-items: flex-end; }
         }
@@ -153,7 +130,7 @@
         </div>
         <div class="market-info">
             <div class="market-item">USD/JPY <span class="val" id="rate-usd">---.--</span></div>
-            <div class="market-item">BTC/JPY <span class="val" id="rate-btc">読み込み中</span></div>
+            <div class="market-item">BTC/JPY <span class="val" id="rate-btc">...</span></div>
             <div class="market-item"><span id="loc-label">東京</span> <span class="val" id="weather-val">--°C</span></div>
         </div>
     </div>
@@ -173,40 +150,89 @@
         <div class="cal-box">
             <div id="calendar-grid"></div>
         </div>
-        <div class="note-box" style="flex:1; display:flex;">
-            <textarea id="main-note" placeholder="今日の予定やメモを書き込んでください..." oninput="saveNote()"></textarea>
+        
+        <div class="note-box">
+            <div class="schedule-title"><span id="selected-date-label">日付を選択してください</span> の予定</div>
+            
+            <div class="plan-row">
+                <input type="text" class="note-input plan-time" id="t1" placeholder="時間" oninput="savePlans()">
+                <input type="text" class="note-input plan-text" id="p1" placeholder="予定1" oninput="savePlans()">
+            </div>
+            <div class="plan-row">
+                <input type="text" class="note-input plan-time" id="t2" placeholder="時間" oninput="savePlans()">
+                <input type="text" class="note-input plan-text" id="p2" placeholder="予定2" oninput="savePlans()">
+            </div>
+            <div class="plan-row">
+                <input type="text" class="note-input plan-time" id="t3" placeholder="時間" oninput="savePlans()">
+                <input type="text" class="note-input plan-text" id="p3" placeholder="予定3" oninput="savePlans()">
+            </div>
+            
+            <div style="margin-top:10px; font-size:0.8rem; opacity:0.6;">※入力すると自動で保存されます</div>
         </div>
     </div>
 </div>
 
 <script>
-    function showAlert(text) {
-        const el = document.getElementById('alert-msg');
-        el.innerText = text; el.style.display = 'block';
-        setTimeout(() => { el.style.display = 'none'; }, 3000);
-    }
+    let currentSelectedYMD = ""; // 現在選択中の日付 (YYYY-MM-DD)
 
     function startApp() {
         tick(); setInterval(tick, 1000);
         fetchFinance(); setInterval(fetchFinance, 60000);
         loadWeather(35.68, 139.69);
+        
+        const now = new Date();
+        currentSelectedYMD = formatDate(now);
         drawCal();
-        loadNote(); // 保存されたメモを読み込む
+        selectDay(currentSelectedYMD); // 初期状態で今日を選択
     }
 
-    // --- メモの保存・読み込み機能 ---
-    function saveNote() {
-        const noteText = document.getElementById('main-note').value;
-        localStorage.setItem('user_schedule', noteText);
+    // 日付を YYYY-MM-DD 形式にする
+    function formatDate(date) {
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     }
 
-    function loadNote() {
-        const savedText = localStorage.getItem('user_schedule');
-        if (savedText) {
-            document.getElementById('main-note').value = savedText;
+    // カレンダーで日を選択した時の処理
+    function selectDay(ymd) {
+        currentSelectedYMD = ymd;
+        document.getElementById('selected-date-label').innerText = ymd.replace(/-/g, '/');
+        
+        // 全マスの選択色を解除し、選んだ日だけ色をつける
+        document.querySelectorAll('.d-cell').forEach(el => {
+            el.classList.remove('selected-day');
+            if(el.getAttribute('data-ymd') === ymd) el.classList.add('selected-day');
+        });
+
+        // その日のデータを読み込む
+        loadPlans(ymd);
+    }
+
+    // 保存と読み込み
+    function savePlans() {
+        if(!currentSelectedYMD) return;
+        const data = {
+            t1: document.getElementById('t1').value, p1: document.getElementById('p1').value,
+            t2: document.getElementById('t2').value, p2: document.getElementById('p2').value,
+            t3: document.getElementById('t3').value, p3: document.getElementById('p3').value
+        };
+        localStorage.setItem('plans_' + currentSelectedYMD, JSON.stringify(data));
+    }
+
+    function loadPlans(ymd) {
+        const saved = localStorage.getItem('plans_' + ymd);
+        if(saved) {
+            const data = JSON.parse(saved);
+            document.getElementById('t1').value = data.t1 || ""; document.getElementById('p1').value = data.p1 || "";
+            document.getElementById('t2').value = data.t2 || ""; document.getElementById('p2').value = data.p2 || "";
+            document.getElementById('t3').value = data.t3 || ""; document.getElementById('p3').value = data.p3 || "";
+        } else {
+            // データがない場合は空にする
+            document.getElementById('t1').value = ""; document.getElementById('p1').value = "";
+            document.getElementById('t2').value = ""; document.getElementById('p2').value = "";
+            document.getElementById('t3').value = ""; document.getElementById('p3').value = "";
         }
     }
 
+    // --- 基本機能 ---
     function tick() {
         const n = new Date();
         document.getElementById('s-ptr').style.transform = `rotate(${(n.getSeconds()/60)*360}deg)`;
@@ -225,29 +251,25 @@
             const bd = await b.json();
             const btcJpy = parseFloat(bd.price) * ud.rates.JPY;
             document.getElementById('rate-btc').innerText = '¥' + Math.floor(btcJpy).toLocaleString();
-        } catch(e) { document.getElementById('rate-btc').innerText = "エラー"; }
+        } catch(e) { document.getElementById('rate-btc').innerText = "error"; }
     }
 
     async function updateCity() {
         const c = document.getElementById('in-city').value;
         if(!c) return;
-        try {
-            const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
-            const d = await r.json();
-            if(d.results) {
-                const res = d.results[0];
-                document.getElementById('loc-label').innerText = res.name;
-                loadWeather(res.latitude, res.longitude);
-            } else { showAlert("場所が見つかりません"); }
-        } catch(e) { showAlert("エラーが発生しました"); }
+        const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
+        const d = await r.json();
+        if(d.results) {
+            const res = d.results[0];
+            document.getElementById('loc-label').innerText = res.name;
+            loadWeather(res.latitude, res.longitude);
+        }
     }
 
     async function loadWeather(lat, lon) {
-        try {
-            const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-            const d = await r.json();
-            document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
-        } catch(e) {}
+        const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+        const d = await r.json();
+        document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
     }
 
     function goStock() {
@@ -258,23 +280,33 @@
     function drawCal() {
         const g = document.getElementById('calendar-grid');
         const n = new Date();
-        const last = new Date(n.getFullYear(), n.getMonth()+1, 0).getDate();
+        const year = n.getFullYear();
+        const month = n.getMonth();
+        const last = new Date(year, month + 1, 0).getDate();
+        const first = new Date(year, month, 1).getDay();
+        const todayYMD = formatDate(n);
+
         g.innerHTML = '';
         ['日','月','火','水','木','金','土'].forEach((w,i) => {
             const e = document.createElement('div');
             e.className = 'd-cell ' + (i===0?'sun':i===6?'sat':'');
-            e.innerText = w; e.style.fontSize = '0.8rem';
-            g.appendChild(e);
+            e.innerText = w; e.style.fontSize = '0.7rem'; g.appendChild(e);
         });
-        const first = new Date(n.getFullYear(), n.getMonth(), 1).getDay();
+
         for(let i=0; i<first; i++) g.appendChild(document.createElement('div'));
         for(let i=1; i<=last; i++) {
-            const e = document.createElement('div'); e.className = 'd-cell';
-            const dow = new Date(n.getFullYear(), n.getMonth(), i).getDay();
+            const e = document.createElement('div');
+            const ymd = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+            e.className = 'd-cell';
+            e.setAttribute('data-ymd', ymd);
+            const dow = new Date(year, month, i).getDay();
             if(dow===0) e.classList.add('sun');
             if(dow===6) e.classList.add('sat');
-            if(i===n.getDate()) e.classList.add('today');
-            e.innerText = i; g.appendChild(e);
+            if(ymd === todayYMD) e.classList.add('today');
+            
+            e.innerText = i;
+            e.onclick = () => selectDay(ymd);
+            g.appendChild(e);
         }
     }
 </script>
