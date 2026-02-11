@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stellar Pro Dash v10</title>
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="shortcut icon" href="icon.png" type="image/png">
+    <title>Stellar Pro Dash v11</title>
     <style>
         :root {
             --panel-bg: rgba(5, 10, 20, 0.4); 
@@ -33,6 +35,7 @@
         button, .d-cell, .calc-btn, .jump-btn, .nav-btn { transition: all 0.1s; cursor: pointer; border: 1px solid var(--accent-gold); border-radius: 6px; background: rgba(255,255,255,0.1); color: #fff; }
         button:active, .d-cell:active, .calc-btn:active, .jump-btn:active, .nav-btn:active { transform: scale(0.92); filter: brightness(1.5); }
 
+        /* --- Header --- */
         .header-section {
             padding: 5px 15px; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid rgba(249, 225, 125, 0.2); background: rgba(0,0,0,0.5);
@@ -53,16 +56,21 @@
         .f-label { font-size: 0.6rem; color: var(--accent-gold); display: block; }
         .f-val { font-size: 0.75rem; font-weight: bold; }
 
-        .tool-bar { padding: 4px 15px; background: rgba(0,0,0,0.6); display: flex; gap: 10px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        input { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-gold); color: #fff; padding: 4px; border-radius: 4px; font-size: 0.8rem; }
+        /* --- Toolbar (Adjusted for wider Alarm Music box) --- */
+        .tool-bar { padding: 5px 15px; background: rgba(0,0,0,0.6); display: flex; gap: 15px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .tool-group { display: flex; gap: 5px; align-items: center; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 12px; }
+        input[type="text"] { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-gold); color: #fff; padding: 5px; border-radius: 4px; font-size: 0.8rem; }
+        
+        /* Audio Input width extension */
+        .audio-group { border: none !important; flex: 1; display: flex; justify-content: flex-end; }
+        #audio-file { background: rgba(255,255,255,0.05); border: 1px solid var(--gem-red); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; width: 180px; }
 
+        /* --- Content Layout --- */
         .content-section { flex: 1; display: flex; padding: 8px; gap: 8px; overflow: hidden; }
         .left-col { flex: 1.2; display: flex; flex-direction: column; gap: 8px; height: 100%; }
 
-        /* Calendar Navigation */
         .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .nav-btn { padding: 2px 10px; background: rgba(255,255,255,0.05); font-weight: bold; }
-
+        .nav-btn { padding: 2px 12px; background: rgba(255,255,255,0.05); font-weight: bold; }
         .cal-box { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 8px; flex: 0 0 auto; }
         #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
         .d-cell { padding: 8px 0; font-size: 0.85rem; border: none; background: rgba(255,255,255,0.03); }
@@ -82,7 +90,6 @@
 
         .alarm-card { background: rgba(255,255,255,0.05); padding: 6px; border-radius: 8px; border: 1px solid var(--gem-red); display: flex; align-items: center; gap: 8px; justify-content: center; }
 
-        /* Calc 1:1 adjustment */
         .calc-box { background: rgba(0,0,0,0.6); border-radius: 10px; padding: 10px; flex: 1; display: flex; flex-direction: column; gap: 5px; max-height: 400px; }
         #calc-display { background: #000; color: var(--accent-gold); text-align: right; padding: 10px; font-size: 1.4rem; border-radius: 6px; border: 1px solid #333; margin-bottom: 5px; }
         .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; flex: 1; }
@@ -110,7 +117,10 @@
     <div class="tool-bar">
         <div class="tool-group">天気:<input type="text" id="in-city" placeholder="市町村" style="width:60px;"><button onclick="updateWeather()">🔍</button><span id="loc-label" style="color:var(--accent-gold); margin-left:5px;">多治見</span> <span id="weather-val">--°C</span></div>
         <div class="tool-group">株価:<input type="text" id="in-stock" placeholder="銘柄..." style="width:80px;"><button onclick="goStock()">🔍</button></div>
-        <div class="tool-group" style="border:none;">音:<input type="file" id="audio-file" accept="audio/*" onchange="loadAudio(this)" style="width:110px;"></div>
+        <div class="audio-group">
+            <span style="color:var(--gem-red); font-size:0.7rem; margin-right:5px;">Music:</span>
+            <input type="file" id="audio-file" accept="audio/*" onchange="loadAudio(this)">
+        </div>
     </div>
 
     <div class="content-section">
