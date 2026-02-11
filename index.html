@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stellar Executive Dash</title>
+    <title>Stellar Translucent Dash</title>
     <style>
         :root {
-            --panel-bg: rgba(13, 20, 35, 0.85);
+            /* パネルの透明度を上げました (0.85 → 0.6) */
+            --panel-bg: rgba(10, 15, 25, 0.6); 
             --accent-gold: #f9e17d;
-            --text-main: #e0e0e0;
+            --text-main: #ffffff;
         }
 
         body {
             background: #050a15;
-            /* 背景にイラストを設定（URLはあなたのGitHub上のパスや画像URLに差し替え可能） */
+            /* 背景画像の設定 */
             background-image: url('background.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             color: var(--text-main);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
@@ -28,114 +29,130 @@
             overflow: hidden;
         }
 
-        /* メインの大型操作パネル */
+        /* メインコンテナ：さらに透明感をアップ */
         .main-container {
-            width: 92vw;
-            height: 90vh;
+            width: 94vw;
+            height: 92vh;
             background: var(--panel-bg);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(249, 225, 125, 0.3);
-            border-radius: 20px;
+            backdrop-filter: blur(15px); /* 後ろのボケ具合を強くして文字を見やすく */
+            border: 1px solid rgba(249, 225, 125, 0.4);
+            border-radius: 25px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            box-shadow: 0 0 40px rgba(0,0,0,0.6);
             overflow: hidden;
         }
 
-        /* 上部：時計・相場エリア */
+        /* 各セクションの背景もさらに透明に */
         .header-section {
             padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(249, 225, 125, 0.2);
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .clock-box { display: flex; align-items: center; gap: 15px; }
         .analog-clock {
-            width: 80px; height: 80px;
-            background: radial-gradient(circle, #fff 0%, #dcdcdc 100%);
+            width: 90px; height: 90px;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 50%;
             border: 3px solid #bf953f;
             position: relative;
         }
-        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: #333; }
-        .hour { width: 4px; height: 25px; margin-left: -2px; }
-        .minute { width: 2px; height: 35px; margin-left: -1px; }
-        .second { width: 1px; height: 38px; background: red; }
+        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: #333; border-radius: 2px; }
+        .hour { width: 4px; height: 28px; margin-left: -2px; }
+        .minute { width: 3px; height: 40px; margin-left: -1.5px; }
+        .second { width: 1px; height: 43px; background: #ff4757; }
 
-        .digital-info { text-align: left; }
-        #time-digit { font-size: 2.2rem; font-weight: bold; color: var(--accent-gold); margin: 0; }
-        #date-digit { font-size: 0.9rem; opacity: 0.8; }
+        .digital-info { text-align: left; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+        #time-digit { font-size: 2.5rem; font-weight: bold; color: var(--accent-gold); margin: 0; }
+        #date-digit { font-size: 1rem; opacity: 0.9; }
 
-        .market-info { display: flex; gap: 20px; font-size: 0.9rem; }
-        .market-item { text-align: right; }
-        .val { display: block; color: var(--accent-gold); font-weight: bold; font-size: 1.1rem; }
+        .market-info { display: flex; gap: 20px; font-size: 0.95rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+        .val { display: block; color: var(--accent-gold); font-weight: bold; font-size: 1.2rem; }
 
-        /* 中部：検索エリア */
         .search-bar {
             padding: 15px 20px;
             display: flex;
             gap: 15px;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.3);
         }
-        .input-group { flex: 1; display: flex; gap: 8px; }
+        .input-group { flex: 1; display: flex; gap: 10px; }
         input {
             flex: 1;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid #555;
-            border-radius: 5px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(249, 225, 125, 0.3);
+            border-radius: 8px;
             color: #fff;
-            padding: 8px 12px;
+            padding: 10px;
             font-size: 1rem;
+            outline: none;
         }
+        input::placeholder { color: rgba(255,255,255,0.5); }
+        
         button {
-            background: linear-gradient(to bottom, #bf953f, #8a6e2f);
+            background: linear-gradient(145deg, #bf953f, #8a6e2f);
             border: none;
             color: #fff;
-            padding: 8px 15px;
-            border-radius: 5px;
+            padding: 10px 20px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
+            transition: 0.3s;
         }
+        button:active { transform: scale(0.95); }
 
-        /* 下部：カレンダー・スケジュール */
-        .content-section {
-            flex: 1;
-            display: flex;
-            padding: 20px;
-            gap: 20px;
-            overflow: hidden;
-        }
-        .cal-box { flex: 1.2; background: rgba(255,255,255,0.03); border-radius: 10px; padding: 10px; }
+        .content-section { flex: 1; display: flex; padding: 20px; gap: 20px; overflow: hidden; }
+        .cal-box { flex: 1.2; background: rgba(255,255,255,0.05); border-radius: 15px; padding: 15px; }
         .note-box { flex: 1; display: flex; flex-direction: column; }
         
         #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-        .d-cell { padding: 12px 0; font-size: 1.1rem; border-radius: 5px; cursor: pointer; }
-        .sun { color: #ff7675; } .sat { color: #74b9ff; }
+        .d-cell { padding: 12px 0; font-size: 1.1rem; border-radius: 8px; cursor: pointer; }
+        .sun { color: #ff7675; font-weight: bold; } 
+        .sat { color: #74b9ff; font-weight: bold; }
         .today { background: var(--accent-gold); color: #000; font-weight: bold; }
 
         textarea {
             flex: 1;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(249, 225, 125, 0.2);
-            border-radius: 10px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(249, 225, 125, 0.3);
+            border-radius: 15px;
             color: #f4e4bc;
-            padding: 15px;
+            padding: 20px;
             font-size: 1.2rem;
             resize: none;
             outline: none;
+            line-height: 1.6;
+        }
+
+        /* 警告メッセージ用のスタイル */
+        #alert-msg {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 71, 87, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         @media (max-width: 800px) {
-            .main-container { height: 95vh; width: 95vw; }
+            .main-container { height: 96vh; width: 96vw; }
             .content-section { flex-direction: column; overflow-y: auto; }
-            .header-section { flex-direction: column; gap: 10px; }
+            .header-section { flex-direction: column; align-items: flex-end; }
+            .clock-box { width: 100%; justify-content: space-between; }
         }
     </style>
 </head>
 <body onload="startApp()">
+
+<div id="alert-msg"></div>
 
 <div class="main-container">
     <div class="header-section">
@@ -147,7 +164,7 @@
             </div>
             <div class="digital-info">
                 <p id="time-digit">00:00</p>
-                <p id="date-digit">2026.02.11 Wed</p>
+                <p id="date-digit">----.--.-- ---</p>
             </div>
         </div>
         <div class="market-info">
@@ -159,12 +176,12 @@
 
     <div class="search-bar">
         <div class="input-group">
-            <input type="text" id="in-city" placeholder="市町村名で天気設定">
-            <button onclick="updateCity()">設定</button>
+            <input type="text" id="in-city" placeholder="市町村名 (例: 多治見市, 新宿区)">
+            <button onclick="updateCity()">天気設定</button>
         </div>
         <div class="input-group">
-            <input type="text" id="in-stock" placeholder="銘柄検索">
-            <button onclick="goStock()">株価</button>
+            <input type="text" id="in-stock" placeholder="銘柄検索 (例: トヨタ)">
+            <button onclick="goStock()">株価検索</button>
         </div>
     </div>
 
@@ -173,12 +190,19 @@
             <div id="calendar-grid"></div>
         </div>
         <div class="note-box">
-            <textarea id="main-note" placeholder="本日の予定を記入..."></textarea>
+            <textarea id="main-note" placeholder="本日の予定や日記を記入..."></textarea>
         </div>
     </div>
 </div>
 
 <script>
+    function showAlert(text) {
+        const el = document.getElementById('alert-msg');
+        el.innerText = text;
+        el.style.display = 'block';
+        setTimeout(() => { el.style.display = 'none'; }, 3000);
+    }
+
     function startApp() {
         tick();
         setInterval(tick, 1000);
@@ -193,7 +217,6 @@
         document.getElementById('s-ptr').style.transform = `rotate(${(n.getSeconds()/60)*360}deg)`;
         document.getElementById('m-ptr').style.transform = `rotate(${(n.getMinutes()/60)*360}deg)`;
         document.getElementById('h-ptr').style.transform = `rotate(${(n.getHours()%12/12)*360 + (n.getMinutes()/60)*30}deg)`;
-        
         document.getElementById('time-digit').innerText = n.toTimeString().split(' ')[0].substring(0,5);
         document.getElementById('date-digit').innerText = n.toLocaleDateString('ja-JP', { year:'numeric', month:'2-digit', day:'2-digit', weekday:'short' });
     }
@@ -203,33 +226,48 @@
             const u = await fetch('https://open.er-api.com/v6/latest/USD');
             const ud = await u.json();
             document.getElementById('rate-usd').innerText = ud.rates.JPY.toFixed(2);
-
             const b = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=jpy');
             const bd = await b.json();
             document.getElementById('rate-btc').innerText = '¥' + bd.bitcoin.jpy.toLocaleString();
-        } catch(e) {}
+        } catch(e) { console.error("Finance update failed"); }
     }
 
     async function updateCity() {
         const c = document.getElementById('in-city').value;
-        if(!c) return;
-        const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
-        const d = await r.json();
-        if(d.results) {
-            document.getElementById('loc-label').innerText = d.results[0].name;
-            loadWeather(d.results[0].latitude, d.results[0].longitude);
+        if(!c) {
+            showAlert("市町村名を入力してください。");
+            return;
+        }
+        try {
+            const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
+            const d = await r.json();
+            if(d.results && d.results.length > 0) {
+                const res = d.results[0];
+                document.getElementById('loc-label').innerText = res.name;
+                loadWeather(res.latitude, res.longitude);
+            } else {
+                showAlert("場所が見つかりませんでした。正しい名前に修正してください。");
+            }
+        } catch(e) {
+            showAlert("検索中にエラーが発生しました。");
         }
     }
 
     async function loadWeather(lat, lon) {
-        const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-        const d = await r.json();
-        document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
+        try {
+            const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+            const d = await r.json();
+            document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
+        } catch(e) { showAlert("天気の取得に失敗しました。"); }
     }
 
     function goStock() {
         const q = document.getElementById('in-stock').value;
-        if(q) window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`);
+        if(q) {
+            window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`);
+        } else {
+            showAlert("銘柄名を入力してください。");
+        }
     }
 
     function drawCal() {
@@ -240,7 +278,7 @@
         ['日','月','火','水','木','金','土'].forEach((w,i) => {
             const e = document.createElement('div');
             e.className = 'd-cell ' + (i===0?'sun':i===6?'sat':'');
-            e.innerText = w; e.style.fontSize = '0.7rem';
+            e.innerText = w; e.style.fontSize = '0.8rem';
             g.appendChild(e);
         });
         const first = new Date(n.getFullYear(), n.getMonth(), 1).getDay();
