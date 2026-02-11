@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stellar Crystal Multi-Dash v5</title>
+    <title>Stellar Crystal Ultimate Dash v6</title>
     <style>
         :root {
-            --panel-bg: rgba(5, 10, 20, 0.2); 
+            --panel-bg: rgba(5, 10, 20, 0.25); 
             --accent-gold: #f9e17d;
             --text-main: #ffffff;
             --gem-blue: #00d4ff;
             --gem-red: #ff3366;
-            --select-blue: rgba(116, 185, 255, 0.5);
+            --select-blue: rgba(116, 185, 255, 0.6);
         }
 
         body {
@@ -24,15 +24,28 @@
 
         .main-container {
             width: 98vw; height: 96vh;
-            background: var(--panel-bg); backdrop-filter: blur(12px);
+            background: var(--panel-bg); backdrop-filter: blur(15px);
             border: 2px solid rgba(249, 225, 125, 0.5); border-radius: 20px;
             display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* --- Jewelry Clock Section --- */
+        /* --- ボタンの反応エフェクト --- */
+        button, .d-cell, .calc-btn, .jump-btn {
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        button:active, .d-cell:active, .calc-btn:active, .jump-btn:active {
+            transform: scale(0.9) !important;
+            filter: brightness(1.8) !important;
+            box-shadow: 0 0 20px var(--accent-gold) !important;
+        }
+
+        /* --- Jewelry Clock --- */
         .header-section {
             padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(249, 225, 125, 0.3);
+            border-bottom: 1px solid rgba(249, 225, 125, 0.3); background: rgba(0,0,0,0.2);
         }
         .clock-container { position: relative; width: 110px; height: 110px; flex-shrink: 0; }
         .jewel-ring {
@@ -59,48 +72,38 @@
         #date-digit { font-size: 0.9rem; margin: 0; opacity: 0.8; }
 
         /* --- Financial Dashboard --- */
-        .finance-panel {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; flex: 1; padding: 0 20px;
-        }
+        .finance-panel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; flex: 1; padding: 0 20px; }
         .f-item { background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 6px; border-left: 3px solid var(--accent-gold); }
         .f-label { font-size: 0.65rem; color: var(--accent-gold); display: block; }
         .f-val { font-size: 0.85rem; font-weight: bold; }
 
-        /* --- Search & Tool Bar --- */
-        .tool-bar { padding: 8px 20px; background: rgba(0,0,0,0.3); display: flex; gap: 15px; flex-wrap: wrap; }
+        /* --- Tools --- */
+        .tool-bar { padding: 8px 20px; background: rgba(0,0,0,0.4); display: flex; gap: 15px; flex-wrap: wrap; border-bottom: 1px solid rgba(249, 225, 125, 0.2); }
         .tool-group { display: flex; gap: 5px; align-items: center; border-right: 1px solid rgba(255,255,255,0.2); padding-right: 15px; }
-        input, select { background: rgba(0,0,0,0.5); border: 1px solid var(--accent-gold); color: #fff; padding: 4px; border-radius: 4px; }
+        input, select { background: rgba(0,0,0,0.6); border: 1px solid var(--accent-gold); color: #fff; padding: 5px; border-radius: 5px; }
+        button { background: #444; color: #fff; border: 1px solid var(--accent-gold); padding: 5px 10px; border-radius: 5px; }
 
-        /* --- Main Layout --- */
+        /* --- Content --- */
         .content-section { flex: 1; display: flex; padding: 15px; gap: 15px; overflow: hidden; }
         .left-col { flex: 1.6; display: flex; flex-direction: column; gap: 12px; }
-        
-        /* Shortcuts */
-        .shortcut-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .jump-btn {
-            border: 1px solid var(--accent-gold); padding: 8px; border-radius: 8px; color: #fff;
-            font-size: 0.75rem; font-weight: bold; cursor: pointer; background: rgba(255,255,255,0.1);
-        }
-        .jump-btn:active { transform: scale(0.95); box-shadow: 0 0 10px var(--accent-gold); }
+        .shortcut-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .jump-btn { border: 1px solid var(--accent-gold); padding: 12px; border-radius: 10px; color: #fff; font-weight: bold; background: rgba(255,255,255,0.1); }
 
-        /* Alarm/Timer UI */
-        .timer-card { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 12px; border: 1px solid var(--gem-blue); display: flex; flex-direction: column; gap: 8px; }
-        .audio-input { font-size: 0.6rem; width: 100%; }
+        .timer-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .timer-card { background: rgba(0,0,0,0.5); padding: 12px; border-radius: 12px; border: 1px solid var(--gem-blue); }
 
-        .cal-box { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 10px; flex: 1; }
-        #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
-        .d-cell { padding: 6px 0; font-size: 0.85rem; border-radius: 4px; }
-        .sun { color: var(--gem-red); font-weight: bold; }
-        .sat { color: var(--gem-blue); font-weight: bold; }
-        .today { border: 1px solid var(--accent-gold); background: rgba(249, 225, 125, 0.1); }
+        .cal-box { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 12px; flex: 1; }
+        #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; }
+        .d-cell { padding: 10px 0; font-size: 0.95rem; border-radius: 6px; background: rgba(255,255,255,0.03); }
+        .sun, .holiday { color: var(--gem-red) !important; font-weight: bold; }
+        .sat { color: var(--gem-blue) !important; font-weight: bold; }
+        .today { border: 2px solid var(--accent-gold); background: rgba(249, 225, 125, 0.15); }
         .selected-day { background: var(--select-blue) !important; }
 
         .right-col { flex: 1.2; display: flex; flex-direction: column; gap: 10px; }
-        .calc-box { background: rgba(0,0,0,0.5); border-radius: 12px; padding: 8px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
-        #calc-display { grid-column: span 4; background: #000; color: var(--accent-gold); text-align: right; padding: 10px; font-size: 1.1rem; border-radius: 5px; height: 1.2rem; }
-        .calc-btn { background: #333; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-weight: bold; }
-        
-        .note-box { flex: 1; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .calc-box { background: rgba(0,0,0,0.6); border-radius: 12px; padding: 10px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        #calc-display { grid-column: span 4; background: #000; color: var(--accent-gold); text-align: right; padding: 12px; font-size: 1.3rem; border-radius: 6px; margin-bottom: 5px; }
+        .calc-btn { background: #333; border: 1px solid #555; color: #fff; padding: 15px; border-radius: 8px; font-weight: bold; }
     </style>
 </head>
 <body onload="startApp()">
@@ -135,18 +138,18 @@
         <div class="tool-group">
             <span style="font-size:0.7rem;">天気:</span>
             <input type="text" id="in-city" placeholder="市町村" style="width:70px;">
-            <button onclick="updateWeather()">🔍</button>
-            <span id="loc-label" style="font-size:0.7rem;">多治見</span>
-            <span id="weather-val" style="color:var(--accent-gold);">--°C</span>
+            <button onclick="updateWeather()">検索</button>
+            <span id="loc-label" style="font-size:0.7rem; margin-left:5px;">多治見</span>
+            <span id="weather-val" style="color:var(--accent-gold); font-weight:bold;">--°C</span>
         </div>
         <div class="tool-group">
             <span style="font-size:0.7rem;">株価:</span>
-            <input type="text" id="in-stock" placeholder="銘柄履歴..." style="width:100px;">
-            <button onclick="goStock()">🔍</button>
+            <input type="text" id="in-stock" placeholder="銘柄..." style="width:90px;">
+            <button onclick="goStock()">検索</button>
         </div>
         <div class="tool-group" style="border:none;">
-            <span style="font-size:0.7rem; color:var(--gem-red);">Alarm音:</span>
-            <input type="file" id="audio-file" accept="audio/*" class="audio-input" onchange="loadAudio(this)">
+            <span style="font-size:0.7rem; color:var(--gem-red);">Alarm音設定:</span>
+            <input type="file" id="audio-file" accept="audio/*" style="font-size:0.6rem; width:120px;" onchange="loadAudio(this)">
         </div>
     </div>
 
@@ -156,28 +159,28 @@
                 <button class="jump-btn" onclick="openL('yahoo')">Yahoo!路線</button>
                 <button class="jump-btn" onclick="openL('gemini')">Gemini</button>
                 <button class="jump-btn" onclick="openL('ipat')">JRA IPAT</button>
-                <button class="jump-btn" onclick="openL('yshop')">Shopping</button>
+                <button class="jump-btn" onclick="openL('yshop')">ショッピング</button>
                 <button class="jump-btn" onclick="openL('yauc')">ヤフオク</button>
                 <button class="jump-btn" onclick="openL('gmap')">GoogleMap</button>
             </div>
             
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="timer-row">
                 <div class="timer-card">
-                    <div style="font-size:0.75rem; color:var(--gem-blue); font-weight:bold;">TIMER</div>
-                    <div style="display:flex; gap:3px;">
-                        <input type="number" id="t-min" placeholder="分" style="width:40px;" min="0">
-                        <input type="number" id="t-sec" placeholder="秒" style="width:40px;" min="0" max="59">
-                        <button id="t-btn" onclick="toggleTimer()" style="background:var(--gem-blue); border:none; color:#000; font-weight:bold; border-radius:4px;">START</button>
+                    <div style="font-size:0.8rem; color:var(--gem-blue); font-weight:bold; margin-bottom:5px;">タイマー</div>
+                    <div style="display:flex; gap:5px;">
+                        <input type="number" id="t-min" placeholder="分" style="width:45px;" min="0">
+                        <input type="number" id="t-sec" placeholder="秒" style="width:45px;" min="0" max="59">
+                        <button id="t-btn" onclick="toggleTimer()">START</button>
                     </div>
-                    <div id="t-disp" style="text-align:center; font-family:monospace; font-size:1.2rem; color:var(--gem-blue);">00:00</div>
+                    <div id="t-disp" style="text-align:center; font-size:1.5rem; color:var(--gem-blue); margin-top:5px; font-family:monospace;">00:00</div>
                 </div>
                 <div class="timer-card" style="border-color:var(--gem-red);">
-                    <div style="font-size:0.75rem; color:var(--gem-red); font-weight:bold;">ALARM</div>
-                    <div style="display:flex; gap:3px;">
+                    <div style="font-size:0.8rem; color:var(--gem-red); font-weight:bold; margin-bottom:5px;">アラーム</div>
+                    <div style="display:flex; gap:5px;">
                         <input type="time" id="a-time" style="flex:1;">
-                        <button id="a-btn" onclick="toggleAlarm()" style="background:var(--gem-red); border:none; color:#fff; font-weight:bold; border-radius:4px;">SET</button>
+                        <button id="a-btn" onclick="toggleAlarm()">SET</button>
                     </div>
-                    <div id="a-status" style="font-size:0.6rem; text-align:center;">OFF</div>
+                    <div id="a-status" style="font-size:0.7rem; text-align:center; margin-top:8px;">OFF</div>
                 </div>
             </div>
 
@@ -190,11 +193,11 @@
                 <button class="calc-btn" onclick="calcI('7')">7</button>
                 <button class="calc-btn" onclick="calcI('8')">8</button>
                 <button class="calc-btn" onclick="calcI('9')">9</button>
-                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcI('/')">/</button>
+                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcI('/')">÷</button>
                 <button class="calc-btn" onclick="calcI('4')">4</button>
                 <button class="calc-btn" onclick="calcI('5')">5</button>
                 <button class="calc-btn" onclick="calcI('6')">6</button>
-                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcI('*')">*</button>
+                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcI('*')">×</button>
                 <button class="calc-btn" onclick="calcI('1')">1</button>
                 <button class="calc-btn" onclick="calcI('2')">2</button>
                 <button class="calc-btn" onclick="calcI('3')">3</button>
@@ -204,11 +207,11 @@
                 <button class="calc-btn" style="background:#8a6e2f;" onclick="calcS()">=</button>
                 <button class="calc-btn" style="background:#8a6e2f;" onclick="calcI('+')">+</button>
             </div>
-            <div class="note-box">
-                <div id="sel-date" style="font-weight:bold; color:var(--accent-gold); font-size:0.8rem;">日付選択</div>
-                <div class="plan-row"><select id="h1"></select>:<select id="m1"></select><input type="text" id="p1" class="plan-text" oninput="saveP()"></div>
-                <div class="plan-row"><select id="h2"></select>:<select id="m2"></select><input type="text" id="p2" class="plan-text" oninput="saveP()"></div>
-                <div class="plan-row"><select id="h3"></select>:<select id="m3"></select><input type="text" id="p3" class="plan-text" oninput="saveP()"></div>
+            <div class="note-box" style="background:rgba(255,255,255,0.05); border-radius:12px; padding:10px; flex:1; display:flex; flex-direction:column; gap:8px;">
+                <div id="sel-date" style="font-weight:bold; color:var(--accent-gold);">日付選択</div>
+                <div style="display:flex; gap:5px;"><select id="h1"></select>:<select id="m1"></select><input type="text" id="p1" style="flex:1;" oninput="saveP()"></div>
+                <div style="display:flex; gap:5px;"><select id="h2"></select>:<select id="m2"></select><input type="text" id="p2" style="flex:1;" oninput="saveP()"></div>
+                <div style="display:flex; gap:5px;"><select id="h3"></select>:<select id="m3"></select><input type="text" id="p3" style="flex:1;" oninput="saveP()"></div>
             </div>
         </div>
     </div>
@@ -219,6 +222,13 @@
     let timerInterval; let timerLeft = 0;
     let alarmTime = null; let isAlarmSet = false;
 
+    // 2026年 祝日リスト (月-日)
+    const holidays2026 = [
+        "2026-01-01", "2026-01-12", "2026-02-11", "2026-02-23", "2026-03-20", "2026-04-29",
+        "2026-05-03", "2026-05-04", "2026-05-05", "2026-05-06", "2026-07-20", "2026-08-11",
+        "2026-09-21", "2026-09-22", "2026-09-23", "2026-10-12", "2026-11-03", "2026-11-23"
+    ];
+
     function startApp() {
         createJewels(); initT(); tick(); setInterval(tick, 1000);
         fetchF(); setInterval(fetchF, 60000);
@@ -226,57 +236,36 @@
         drawC(); selectD(curYMD); loadW(35.33, 137.12);
     }
 
-    // --- Audio Control ---
+    // --- Audio ---
     function loadAudio(input) {
         const file = input.files[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            document.getElementById('alarm-sound').src = url;
-            alert("アラーム音を設定しました。");
-        }
+        if (file) { document.getElementById('alarm-sound').src = URL.createObjectURL(file); }
     }
-
     function playAlarm() { document.getElementById('alarm-sound').play(); }
-    function stopAlarm() { 
-        document.getElementById('alarm-sound').pause(); 
-        document.getElementById('alarm-sound').currentTime = 0;
-    }
+    function stopAlarm() { document.getElementById('alarm-sound').pause(); document.getElementById('alarm-sound').currentTime = 0; }
 
-    // --- Timer ---
+    // --- Timer & Alarm ---
     function toggleTimer() {
         const btn = document.getElementById('t-btn');
-        if (timerInterval) {
-            clearInterval(timerInterval); timerInterval = null;
-            btn.innerText = "START"; stopAlarm(); return;
-        }
+        if (timerInterval) { clearInterval(timerInterval); timerInterval = null; btn.innerText = "START"; stopAlarm(); return; }
         const m = parseInt(document.getElementById('t-min').value) || 0;
         const s = parseInt(document.getElementById('t-sec').value) || 0;
-        timerLeft = m * 60 + s;
-        if (timerLeft <= 0) return;
+        timerLeft = m * 60 + s; if (timerLeft <= 0) return;
         btn.innerText = "STOP";
         timerInterval = setInterval(() => {
             timerLeft--;
-            const rm = Math.floor(timerLeft / 60); const rs = timerLeft % 60;
-            document.getElementById('t-disp').innerText = `${String(rm).padStart(2,'0')}:${String(rs).padStart(2,'0')}`;
-            if (timerLeft <= 0) {
-                clearInterval(timerInterval); timerInterval = null;
-                btn.innerText = "STOP ALARM"; playAlarm();
-            }
+            document.getElementById('t-disp').innerText = `${String(Math.floor(timerLeft/60)).padStart(2,'0')}:${String(timerLeft%60).padStart(2,'0')}`;
+            if (timerLeft <= 0) { clearInterval(timerInterval); timerInterval = null; btn.innerText = "消音"; playAlarm(); }
         }, 1000);
     }
-
-    // --- Alarm ---
     function toggleAlarm() {
         isAlarmSet = !isAlarmSet;
         const btn = document.getElementById('a-btn');
-        const status = document.getElementById('a-status');
         if (isAlarmSet) {
             alarmTime = document.getElementById('a-time').value;
             if (!alarmTime) { isAlarmSet = false; return; }
-            btn.innerText = "CANCEL"; status.innerText = "SET: " + alarmTime;
-        } else {
-            btn.innerText = "SET"; status.innerText = "OFF"; stopAlarm();
-        }
+            btn.innerText = "解除"; document.getElementById('a-status').innerText = "SET: " + alarmTime;
+        } else { btn.innerText = "SET"; document.getElementById('a-status').innerText = "OFF"; stopAlarm(); }
     }
 
     // --- Jewelry Clock ---
@@ -285,13 +274,11 @@
         for(let i=0; i<12; i++) {
             const g = document.createElement('div'); g.className = 'gem';
             const ang = (i*30) * (Math.PI/180);
-            g.style.left = (55 + 50 * Math.cos(ang)) - 4 + 'px';
-            g.style.top = (55 + 50 * Math.sin(ang)) - 4 + 'px';
+            g.style.left = (55 + 50 * Math.cos(ang)) - 4 + 'px'; g.style.top = (55 + 50 * Math.sin(ang)) - 4 + 'px';
             if(i%3===0) g.style.boxShadow = "0 0 15px var(--gem-red)";
             ring.appendChild(g);
         }
     }
-
     function tick() {
         const n = new Date();
         document.getElementById('s-ptr').style.transform = `rotate(${(n.getSeconds()/60)*360}deg)`;
@@ -299,10 +286,30 @@
         document.getElementById('h-ptr').style.transform = `rotate(${(n.getHours()%12/12)*360 + (n.getMinutes()/60)*30}deg)`;
         document.getElementById('time-digit').innerText = n.toTimeString().substring(0,5);
         document.getElementById('date-digit').innerText = n.toLocaleDateString();
-        
-        // Check Alarm
-        if (isAlarmSet && alarmTime === n.toTimeString().substring(0,5) && n.getSeconds() === 0) {
-            playAlarm();
+        if (isAlarmSet && alarmTime === n.toTimeString().substring(0,5) && n.getSeconds() === 0) playAlarm();
+    }
+
+    // --- Calendar (祝日赤色化) ---
+    function drawC() {
+        const g = document.getElementById('calendar-grid'); const n = new Date();
+        const y = n.getFullYear(); const m = n.getMonth();
+        const last = new Date(y, m+1, 0).getDate(); const first = new Date(y, m, 1).getDay();
+        g.innerHTML = '';
+        ['日','月','火','水','木','金','土'].forEach((w,i) => {
+            const e = document.createElement('div'); e.innerText = w; e.className = 'd-cell ' + (i===0?'sun':i===6?'sat':'');
+            g.appendChild(e);
+        });
+        for(let i=0; i<first; i++) g.appendChild(document.createElement('div'));
+        for(let i=1; i<=last; i++) {
+            const e = document.createElement('div'); 
+            const ymd = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+            const dow = new Date(y, m, i).getDay();
+            e.className = 'd-cell';
+            if(dow===0 || holidays2026.includes(ymd)) e.classList.add('holiday');
+            if(dow===6) e.classList.add('sat');
+            if(ymd === formatD(n)) e.classList.add('today');
+            e.setAttribute('data-ymd', ymd); e.innerText = i; e.onclick = () => selectD(ymd);
+            g.appendChild(e);
         }
     }
 
@@ -325,52 +332,19 @@
 
     // --- Others ---
     function openL(t) {
-        const links = {
-            yahoo: "https://transit.yahoo.co.jp/search/result?from=%E6%96%B0%E5%AE%88%E5%B1%B1&to=%E5%B0%8F%E6%B3%89(%E5%B2%90%E9%98%9C%E7%9C%8C)",
-            gemini: "https://gemini.google.com/",
-            ipat: "https://www.ipat.jra.go.jp/",
-            yshop: "https://shopping.yahoo.co.jp/",
-            yauc: "https://auctions.yahoo.co.jp/",
-            gmap: "https://www.google.com/maps"
-        };
+        const links = { yahoo: "https://transit.yahoo.co.jp/search/result?from=%E6%96%B0%E5%AE%88%E5%B1%B1&to=%E5%B0%8F%E6%B3%89(%E5%B2%90%E9%98%9C%E7%9C%8C)", gemini: "https://gemini.google.com/", ipat: "https://www.ipat.jra.go.jp/", yshop: "https://shopping.yahoo.co.jp/", yauc: "https://auctions.yahoo.co.jp/", gmap: "https://www.google.co.jp/maps" };
         window.open(links[t], '_blank');
     }
-
     async function updateWeather() {
         const c = document.getElementById('in-city').value;
         const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
         const d = await r.json();
-        if(d.results) {
-            document.getElementById('loc-label').innerText = d.results[0].name;
-            loadW(d.results[0].latitude, d.results[0].longitude);
-        }
+        if(d.results) { document.getElementById('loc-label').innerText = d.results[0].name; loadW(d.results[0].latitude, d.results[0].longitude); }
     }
-
     async function loadW(lat, lon) {
         const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-        const d = await r.json();
-        document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
+        const d = await r.json(); document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
     }
-
-    function drawC() {
-        const g = document.getElementById('calendar-grid'); const n = new Date();
-        const y = n.getFullYear(); const m = n.getMonth();
-        const last = new Date(y, m+1, 0).getDate(); const first = new Date(y, m, 1).getDay();
-        g.innerHTML = '';
-        ['日','月','火','水','木','金','土'].forEach((w,i) => {
-            const e = document.createElement('div'); e.innerText = w; e.className = 'd-cell ' + (i===0?'sun':i===6?'sat':'');
-            g.appendChild(e);
-        });
-        for(let i=0; i<first; i++) g.appendChild(document.createElement('div'));
-        for(let i=1; i<=last; i++) {
-            const e = document.createElement('div'); const ymd = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-            const dow = new Date(y, m, i).getDay(); e.className = 'd-cell';
-            if(dow===0) e.classList.add('sun'); if(dow===6) e.classList.add('sat');
-            if(ymd === formatD(n)) e.classList.add('today');
-            e.setAttribute('data-ymd', ymd); e.innerText = i; e.onclick = () => selectD(ymd); g.appendChild(e);
-        }
-    }
-
     function initT() {
         for(let i=1; i<=3; i++) {
             const h = document.getElementById('h'+i); const m = document.getElementById('m'+i);
