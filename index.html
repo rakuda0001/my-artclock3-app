@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stellar Ultimate Executive Dash</title>
+    <title>Stellar Executive Ultimate Dash</title>
     <style>
         :root {
             --panel-bg: rgba(5, 10, 20, 0.15); 
             --accent-gold: #f9e17d;
             --text-main: #ffffff;
             --select-blue: rgba(116, 185, 255, 0.6);
+            --sun-red: #ff4d4d;
+            --sat-blue: #4da6ff;
         }
 
         body {
@@ -21,67 +23,73 @@
         }
 
         .main-container {
-            width: 96vw; height: 94vh;
+            width: 96vw; height: 96vh;
             background: var(--panel-bg); backdrop-filter: blur(8px);
             border: 1px solid rgba(249, 225, 125, 0.4); border-radius: 20px;
             display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* --- Header --- */
+        /* --- UI Components --- */
+        button, .d-cell, .calc-btn {
+            transition: transform 0.1s, filter 0.2s;
+            cursor: pointer;
+        }
+        button:active, .d-cell:active, .calc-btn:active {
+            transform: scale(0.92);
+            filter: brightness(1.5);
+        }
+
+        /* Header */
         .header-section {
             padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid rgba(249, 225, 125, 0.2); background: rgba(255, 255, 255, 0.05);
         }
         .clock-box { display: flex; align-items: center; gap: 10px; }
-        .analog-clock { width: 60px; height: 60px; background: #eee; border-radius: 50%; border: 2px solid #bf953f; position: relative; }
-        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: #333; }
-        .hour { width: 3px; height: 18px; margin-left: -1.5px; }
-        .minute { width: 2px; height: 25px; margin-left: -1px; }
-        .second { width: 1px; height: 28px; background: red; }
         #time-digit { font-size: 1.8rem; font-weight: bold; color: var(--accent-gold); margin: 0; }
 
-        .market-info { display: flex; gap: 15px; font-size: 0.8rem; text-align: right; }
-
-        /* --- Search Bar --- */
-        .search-bar { padding: 10px 20px; display: flex; gap: 10px; background: rgba(0,0,0,0.3); }
+        /* Search & History */
+        .search-bar { padding: 10px 20px; display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.3); }
+        .input-row { display: flex; gap: 10px; }
         input, select { background: rgba(0,0,0,0.5); border: 1px solid #8a6e2f; color: #fff; border-radius: 5px; padding: 5px; }
+        .history-tags { display: flex; gap: 8px; font-size: 0.75rem; flex-wrap: wrap; }
+        .h-tag { background: rgba(249, 225, 125, 0.2); padding: 2px 8px; border-radius: 10px; cursor: pointer; border: 1px solid var(--accent-gold); }
 
-        /* --- Main Layout --- */
+        /* Main Content */
         .content-section { flex: 1; display: flex; padding: 15px; gap: 15px; overflow: hidden; }
+        .left-col { flex: 1.6; display: flex; flex-direction: column; gap: 10px; }
         
-        .left-col { flex: 1.5; display: flex; flex-direction: column; gap: 10px; }
-        
-        /* ショートカットエリア */
-        .shortcut-card {
-            background: rgba(255,255,255,0.08); border: 1px solid var(--accent-gold); border-radius: 10px; padding: 15px;
+        /* Shortcut Grid */
+        .shortcut-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+            background: rgba(255,255,255,0.08); border: 1px solid var(--accent-gold); border-radius: 10px; padding: 10px;
         }
-        .shortcut-title { color: var(--accent-gold); font-weight: bold; font-size: 0.9rem; margin-bottom: 10px; }
-        .btn-group { display: flex; gap: 10px; }
         .jump-btn {
-            flex: 1; border: none; padding: 10px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight: bold; color: #fff; transition: 0.3s;
+            border: none; padding: 8px; border-radius: 5px; font-size: 0.75rem; font-weight: bold; color: #fff; text-align: center;
         }
-        .yahoo-btn { background: #ff0000; box-shadow: 0 0 10px rgba(255,0,0,0.3); }
-        .gemini-btn { background: #4285f4; box-shadow: 0 0 10px rgba(66,133,244,0.3); }
-        .jump-btn:hover { filter: brightness(1.2); transform: translateY(-2px); }
+        .btn-y { background: #ff0000; } .btn-g { background: #4285f4; } .btn-j { background: #228b22; }
+        .btn-o { background: #ff8c00; } .btn-s { background: #9b59b6; } .btn-h { background: #1abc9c; }
 
+        /* Calendar */
         .cal-box { background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; flex: 1; }
         #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
-        .d-cell { padding: 8px 0; font-size: 0.9rem; border-radius: 5px; cursor: pointer; }
+        .d-cell { padding: 6px 0; font-size: 0.9rem; border-radius: 5px; }
+        .sun { color: var(--sun-red); font-weight: bold; }
+        .sat { color: var(--sat-blue); font-weight: bold; }
         .selected-day { background: var(--select-blue) !important; }
         .today { border: 1px solid var(--accent-gold); }
 
+        /* Right Col */
         .right-col { flex: 1.2; display: flex; flex-direction: column; gap: 10px; }
-        
         .calc-box {
-            background: rgba(0,0,0,0.4); border-radius: 10px; padding: 10px;
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
+            background: rgba(0,0,0,0.4); border-radius: 10px; padding: 8px;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
         }
-        #calc-display { grid-column: span 4; background: #000; color: var(--accent-gold); text-align: right; padding: 10px; font-size: 1.2rem; border-radius: 5px; margin-bottom: 5px; height: 1.5rem; }
-        .calc-btn { background: linear-gradient(#444, #222); border: 1px solid #666; color: #fff; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        #calc-display { grid-column: span 4; background: #000; color: var(--accent-gold); text-align: right; padding: 8px; font-size: 1.1rem; border-radius: 5px; height: 1.2rem; }
+        .calc-btn { background: linear-gradient(#444, #222); border: 1px solid #666; color: #fff; padding: 10px; border-radius: 5px; font-size: 0.9rem; }
         .calc-btn.op { background: linear-gradient(#bf953f, #8a6e2f); }
 
         .note-box { flex: 1; background: rgba(255,255,255,0.05); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-        .plan-row { display: flex; gap: 5px; }
+        .plan-row { display: flex; gap: 4px; }
         .plan-text { flex: 1; }
     </style>
 </head>
@@ -90,38 +98,35 @@
 <div class="main-container">
     <div class="header-section">
         <div class="clock-box">
-            <div class="analog-clock">
-                <div id="h-ptr" class="hand hour"></div>
-                <div id="m-ptr" class="hand minute"></div>
-                <div id="s-ptr" class="hand second"></div>
-            </div>
-            <div>
-                <p id="time-digit">--:--</p>
-                <p id="date-digit" style="font-size:0.8rem; margin:0;">----/--/--</p>
-            </div>
+            <p id="time-digit">--:--</p>
+            <p id="date-digit" style="font-size:0.8rem; margin:0;">----/--/--</p>
         </div>
-        <div class="market-info">
-            <div>USD/JPY <span id="rate-usd" style="color:var(--accent-gold)">---.--</span></div>
-            <div>BTC/JPY <span id="rate-btc" style="color:var(--accent-gold)">---</span></div>
-            <div><span id="loc-label">多治見</span> <span id="weather-val" style="color:var(--accent-gold)">--°C</span></div>
+        <div style="text-align:right; font-size:0.8rem;">
+            USD <span id="rate-usd" style="color:var(--accent-gold)">---</span> | 
+            BTC <span id="rate-btc" style="color:var(--accent-gold)">---</span> |
+            <span id="loc-label">多治見</span> <span id="weather-val" style="color:var(--accent-gold)">--°C</span>
         </div>
     </div>
 
     <div class="search-bar">
-        <input type="text" id="in-city" placeholder="都市名" style="width:100px;">
-        <button onclick="updateCity()">天気設定</button>
-        <input type="text" id="in-stock" placeholder="銘柄検索" style="flex:1;">
-        <button onclick="goStock()">株価検索</button>
+        <div class="input-row">
+            <input type="text" id="in-city" placeholder="都市名" style="width:80px;">
+            <button onclick="updateCity()" style="background:#444; color:#fff; border:1px solid #8a6e2f; border-radius:5px;">天気</button>
+            <input type="text" id="in-stock" placeholder="銘柄検索" style="flex:1;">
+            <button onclick="goStock()" style="background:#bf953f; color:#fff; border:none; border-radius:5px; padding:0 15px;">株価検索</button>
+        </div>
+        <div class="history-tags" id="stock-history"></div>
     </div>
 
     <div class="content-section">
         <div class="left-col">
-            <div class="shortcut-card">
-                <div class="shortcut-title">QUICK ACCESS</div>
-                <div class="btn-group">
-                    <button class="jump-btn yahoo-btn" onclick="openYahooTransit()">Yahoo! 路線 (新守山→小泉)</button>
-                    <button class="jump-btn gemini-btn" onclick="openGemini()">Google Gemini</button>
-                </div>
+            <div class="shortcut-grid">
+                <button class="jump-btn btn-y" onclick="openLink('yahoo')">Yahoo!路線</button>
+                <button class="jump-btn btn-g" onclick="openLink('gemini')">Gemini</button>
+                <button class="jump-btn btn-j" onclick="openLink('ipat')">JRA IPAT</button>
+                <button class="jump-btn btn-o" onclick="openLink('oomatsu')">オオマツチラシ</button>
+                <button class="jump-btn btn-s" onclick="openLink('suno')">SUNO AI</button>
+                <button class="jump-btn btn-h" onclick="openLink('hailuo')">Hailuo AI</button>
             </div>
             <div class="cal-box">
                 <div id="calendar-grid"></div>
@@ -148,12 +153,11 @@
                 <button class="calc-btn op" onclick="calcSolve()">=</button>
                 <button class="calc-btn op" onclick="calcInput('+')">+</button>
             </div>
-
             <div class="note-box">
-                <div style="font-size:0.9rem; color:var(--accent-gold); font-weight:bold;"><span id="sel-date">日付選択</span> の予定</div>
-                <div class="plan-row"><select id="h1" onchange="savePlans()"></select>:<select id="m1" onchange="savePlans()"></select><input type="text" id="p1" class="plan-text" placeholder="予定1" oninput="savePlans()"></div>
-                <div class="plan-row"><select id="h2" onchange="savePlans()"></select>:<select id="m2" onchange="savePlans()"></select><input type="text" id="p2" class="plan-text" placeholder="予定2" oninput="savePlans()"></div>
-                <div class="plan-row"><select id="h3" onchange="savePlans()"></select>:<select id="m3" onchange="savePlans()"></select><input type="text" id="p3" class="plan-text" placeholder="予定3" oninput="savePlans()"></div>
+                <div style="font-size:0.85rem; color:var(--accent-gold); font-weight:bold;"><span id="sel-date">日付</span></div>
+                <div class="plan-row"><select id="h1" onchange="savePlans()"></select>:<select id="m1" onchange="savePlans()"></select><input type="text" id="p1" class="plan-text" oninput="savePlans()"></div>
+                <div class="plan-row"><select id="h2" onchange="savePlans()"></select>:<select id="m2" onchange="savePlans()"></select><input type="text" id="p2" class="plan-text" oninput="savePlans()"></div>
+                <div class="plan-row"><select id="h3" onchange="savePlans()"></select>:<select id="m3" onchange="savePlans()"></select><input type="text" id="p3" class="plan-text" oninput="savePlans()"></div>
             </div>
         </div>
     </div>
@@ -162,31 +166,78 @@
 <script>
     let currentYMD = "";
     let calcBuffer = "";
+    let stockHistory = JSON.parse(localStorage.getItem('stock_history') || "[]");
 
     function startApp() {
         initTimeDropdowns();
         tick(); setInterval(tick, 1000);
         fetchFinance(); setInterval(fetchFinance, 60000);
+        renderStockHistory();
         const now = new Date();
         currentYMD = formatDate(now);
         drawCal(); selectDay(currentYMD);
         loadWeather(35.33, 137.12);
     }
 
-    // ショートカット機能
-    function openYahooTransit() {
-        window.open("https://transit.yahoo.co.jp/search/result?from=%E6%96%B0%E5%AE%88%E5%B1%B1&to=%E5%B0%8F%E6%B3%89(%E5%B2%90%E9%98%9C%E7%9C%8C)&type=1", '_blank');
-    }
-    function openGemini() {
-        window.open("https://gemini.google.com/", '_blank');
+    function openLink(type) {
+        const links = {
+            yahoo: "https://transit.yahoo.co.jp/search/result?from=%E6%96%B0%E5%AE%88%E5%B1%B1&to=%E5%B0%8F%E6%B3%89(%E5%B2%90%E9%98%9C%E7%9C%8C)&type=1",
+            gemini: "https://gemini.google.com/",
+            ipat: "https://www.ipat.jra.go.jp/",
+            oomatsu: "https://tokubai.co.jp/%E3%82%AA%E3%82%AA%E3%83%9E%E3%83%84%E3%83%95%E3%83%BC%E3%83%89/2744",
+            suno: "https://suno.com/",
+            hailuo: "https://www.hailuo.ai/"
+        };
+        window.open(links[type], '_blank');
     }
 
-    // --- 計算機機能 ---
+    // --- 株価履歴機能 ---
+    function goStock(query) {
+        const q = query || document.getElementById('in-stock').value;
+        if(!q) return;
+        if(!stockHistory.includes(q)) {
+            stockHistory.unshift(q);
+            if(stockHistory.length > 5) stockHistory.pop();
+            localStorage.setItem('stock_history', JSON.stringify(stockHistory));
+            renderStockHistory();
+        }
+        window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`);
+    }
+
+    function renderStockHistory() {
+        const container = document.getElementById('stock-history');
+        container.innerHTML = stockHistory.map(h => `<span class="h-tag" onclick="goStock('${h}')">${h}</span>`).join('');
+    }
+
+    // --- 計算機 ---
     function calcInput(v) { calcBuffer += v; document.getElementById('calc-display').innerText = calcBuffer; }
     function calcClear() { calcBuffer = ""; document.getElementById('calc-display').innerText = "0"; }
     function calcSolve() { try { calcBuffer = eval(calcBuffer).toString(); document.getElementById('calc-display').innerText = calcBuffer; } catch(e) { calcClear(); } }
 
-    // --- 基本ロジック ---
+    // --- カレンダー描画 (土日色分け) ---
+    function drawCal() {
+        const g = document.getElementById('calendar-grid'); const n = new Date();
+        const y = n.getFullYear(); const m = n.getMonth();
+        const last = new Date(y, m+1, 0).getDate(); const first = new Date(y, m, 1).getDay();
+        g.innerHTML = '';
+        ['日','月','火','水','木','金','土'].forEach((w,i) => {
+            const e = document.createElement('div'); e.innerText = w; e.className = 'd-cell ' + (i===0?'sun':i===6?'sat':'');
+            e.style.fontSize = '0.7rem'; g.appendChild(e);
+        });
+        for(let i=0; i<first; i++) g.appendChild(document.createElement('div'));
+        for(let i=1; i<=last; i++) {
+            const e = document.createElement('div'); const ymd = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+            const dow = new Date(y, m, i).getDay();
+            e.className = 'd-cell'; 
+            if(dow === 0) e.classList.add('sun');
+            if(dow === 6) e.classList.add('sat');
+            if(ymd === formatDate(n)) e.classList.add('today');
+            e.setAttribute('data-ymd', ymd); e.innerText = i; e.onclick = () => selectDay(ymd);
+            g.appendChild(e);
+        }
+    }
+
+    // --- その他基本機能 ---
     function initTimeDropdowns() {
         for(let i=1; i<=3; i++) {
             const hSel = document.getElementById('h'+i); const mSel = document.getElementById('m'+i);
@@ -195,16 +246,11 @@
             for(let m=0; m<60; m+=5) mSel.innerHTML += `<option value="${String(m).padStart(2,'0')}">${String(m).padStart(2,'0')}</option>`;
         }
     }
-
     function tick() {
         const n = new Date();
-        document.getElementById('s-ptr').style.transform = `rotate(${(n.getSeconds()/60)*360}deg)`;
-        document.getElementById('m-ptr').style.transform = `rotate(${(n.getMinutes()/60)*360}deg)`;
-        document.getElementById('h-ptr').style.transform = `rotate(${(n.getHours()%12/12)*360 + (n.getMinutes()/60)*30}deg)`;
-        document.getElementById('time-digit').innerText = n.toTimeString().split(' ')[0].substring(0,5);
+        document.getElementById('time-digit').innerText = n.toTimeString().substring(0,5);
         document.getElementById('date-digit').innerText = n.toLocaleDateString();
     }
-
     async function fetchFinance() {
         try {
             const u = await fetch('https://open.er-api.com/v6/latest/USD');
@@ -212,10 +258,9 @@
             document.getElementById('rate-usd').innerText = ud.rates.JPY.toFixed(2);
             const b = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
             const bd = await b.json();
-            document.getElementById('rate-btc').innerText = '¥' + Math.floor(parseFloat(bd.price) * ud.rates.JPY).toLocaleString();
+            document.getElementById('rate-btc').innerText = Math.floor(parseFloat(bd.price) * ud.rates.JPY).toLocaleString();
         } catch(e) {}
     }
-
     async function updateCity() {
         const c = document.getElementById('in-city').value;
         const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
@@ -225,13 +270,11 @@
             loadWeather(d.results[0].latitude, d.results[0].longitude);
         }
     }
-
     async function loadWeather(lat, lon) {
         const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
         const d = await r.json();
         document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
     }
-
     function selectDay(ymd) {
         currentYMD = ymd; document.getElementById('sel-date').innerText = ymd;
         document.querySelectorAll('.d-cell').forEach(el => {
@@ -239,16 +282,10 @@
         });
         loadPlans(ymd);
     }
-
     function savePlans() {
-        const data = {
-            h1: document.getElementById('h1').value, m1: document.getElementById('m1').value, p1: document.getElementById('p1').value,
-            h2: document.getElementById('h2').value, m2: document.getElementById('m2').value, p2: document.getElementById('p2').value,
-            h3: document.getElementById('h3').value, m3: document.getElementById('m3').value, p3: document.getElementById('p3').value
-        };
+        const data = { h1: document.getElementById('h1').value, m1: document.getElementById('m1').value, p1: document.getElementById('p1').value, h2: document.getElementById('h2').value, m2: document.getElementById('m2').value, p2: document.getElementById('p2').value, h3: document.getElementById('h3').value, m3: document.getElementById('m3').value, p3: document.getElementById('p3').value };
         localStorage.setItem('plans_' + currentYMD, JSON.stringify(data));
     }
-
     function loadPlans(ymd) {
         const s = localStorage.getItem('plans_' + ymd); const d = s ? JSON.parse(s) : {};
         for(let i=1; i<=3; i++) {
@@ -257,27 +294,7 @@
             document.getElementById('p'+i).value = d['p'+i] || "";
         }
     }
-
     function formatDate(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-
-    function drawCal() {
-        const g = document.getElementById('calendar-grid'); const n = new Date();
-        const y = n.getFullYear(); const m = n.getMonth();
-        const last = new Date(y, m+1, 0).getDate(); const first = new Date(y, m, 1).getDay();
-        g.innerHTML = '';
-        ['日','月','火','水','木','金','土'].forEach(w => {
-            const e = document.createElement('div'); e.innerText = w; e.style.fontSize = '0.7rem'; g.appendChild(e);
-        });
-        for(let i=0; i<first; i++) g.appendChild(document.createElement('div'));
-        for(let i=1; i<=last; i++) {
-            const e = document.createElement('div'); const ymd = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-            e.className = 'd-cell'; e.setAttribute('data-ymd', ymd);
-            if(ymd === formatDate(n)) e.classList.add('today');
-            e.innerText = i; e.onclick = () => selectDay(ymd);
-            g.appendChild(e);
-        }
-    }
-    function goStock() { const q = document.getElementById('in-stock').value; if(q) window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`); }
 </script>
 </body>
 </html>
