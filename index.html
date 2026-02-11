@@ -174,4 +174,109 @@
             <div id="calendar-grid"></div>
         </div>
         <div class="note-box" style="flex:1; display:flex;">
-            <textarea id="main-note" placeholder
+            <textarea id="main-note" placeholder="今日の予定やメモを書き込んでください..." oninput="saveNote()"></textarea>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showAlert(text) {
+        const el = document.getElementById('alert-msg');
+        el.innerText = text; el.style.display = 'block';
+        setTimeout(() => { el.style.display = 'none'; }, 3000);
+    }
+
+    function startApp() {
+        tick(); setInterval(tick, 1000);
+        fetchFinance(); setInterval(fetchFinance, 60000);
+        loadWeather(35.68, 139.69);
+        drawCal();
+        loadNote(); // 保存されたメモを読み込む
+    }
+
+    // --- メモの保存・読み込み機能 ---
+    function saveNote() {
+        const noteText = document.getElementById('main-note').value;
+        localStorage.setItem('user_schedule', noteText);
+    }
+
+    function loadNote() {
+        const savedText = localStorage.getItem('user_schedule');
+        if (savedText) {
+            document.getElementById('main-note').value = savedText;
+        }
+    }
+
+    function tick() {
+        const n = new Date();
+        document.getElementById('s-ptr').style.transform = `rotate(${(n.getSeconds()/60)*360}deg)`;
+        document.getElementById('m-ptr').style.transform = `rotate(${(n.getMinutes()/60)*360}deg)`;
+        document.getElementById('h-ptr').style.transform = `rotate(${(n.getHours()%12/12)*360 + (n.getMinutes()/60)*30}deg)`;
+        document.getElementById('time-digit').innerText = n.toTimeString().split(' ')[0].substring(0,5);
+        document.getElementById('date-digit').innerText = n.toLocaleDateString('ja-JP', { year:'numeric', month:'2-digit', day:'2-digit', weekday:'short' });
+    }
+
+    async function fetchFinance() {
+        try {
+            const u = await fetch('https://open.er-api.com/v6/latest/USD');
+            const ud = await u.json();
+            document.getElementById('rate-usd').innerText = ud.rates.JPY.toFixed(2);
+            const b = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+            const bd = await b.json();
+            const btcJpy = parseFloat(bd.price) * ud.rates.JPY;
+            document.getElementById('rate-btc').innerText = '¥' + Math.floor(btcJpy).toLocaleString();
+        } catch(e) { document.getElementById('rate-btc').innerText = "エラー"; }
+    }
+
+    async function updateCity() {
+        const c = document.getElementById('in-city').value;
+        if(!c) return;
+        try {
+            const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
+            const d = await r.json();
+            if(d.results) {
+                const res = d.results[0];
+                document.getElementById('loc-label').innerText = res.name;
+                loadWeather(res.latitude, res.longitude);
+            } else { showAlert("場所が見つかりません"); }
+        } catch(e) { showAlert("エラーが発生しました"); }
+    }
+
+    async function loadWeather(lat, lon) {
+        try {
+            const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+            const d = await r.json();
+            document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
+        } catch(e) {}
+    }
+
+    function goStock() {
+        const q = document.getElementById('in-stock').value;
+        if(q) window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`);
+    }
+
+    function drawCal() {
+        const g = document.getElementById('calendar-grid');
+        const n = new Date();
+        const last = new Date(n.getFullYear(), n.getMonth()+1, 0).getDate();
+        g.innerHTML = '';
+        ['日','月','火','水','木','金','土'].forEach((w,i) => {
+            const e = document.createElement('div');
+            e.className = 'd-cell ' + (i===0?'sun':i===6?'sat':'');
+            e.innerText = w; e.style.fontSize = '0.8rem';
+            g.appendChild(e);
+        });
+        const first = new Date(n.getFullYear(), n.getMonth(), 1).getDay();
+        for(let i=0; i<first; i++) g.appendChild(document.createElement('div'));
+        for(let i=1; i<=last; i++) {
+            const e = document.createElement('div'); e.className = 'd-cell';
+            const dow = new Date(n.getFullYear(), n.getMonth(), i).getDay();
+            if(dow===0) e.classList.add('sun');
+            if(dow===6) e.classList.add('sat');
+            if(i===n.getDate()) e.classList.add('today');
+            e.innerText = i; g.appendChild(e);
+        }
+    }
+</script>
+</body>
+</html>
