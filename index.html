@@ -3,140 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Museum Digital & Analog</title>
+    <title>Museum Market & Weather</title>
     <style>
         :root {
             --gold: linear-gradient(145deg, #f9e17d, #bf953f, #8a6e2f, #bf953f, #f9e17d);
             --marble: radial-gradient(circle at center, #ffffff 0%, #dcdcdc 70%, #c0c0c0 100%);
             --bg-dark: #0a0805;
-            --ruby: radial-gradient(circle at 30% 30%, #ff4d4d, #800000);
-            --emerald: radial-gradient(circle at 30% 30%, #4dff4d, #004d00);
         }
 
         body {
             background: var(--bg-dark);
             color: #d4b483;
-            font-family: 'Georgia', serif;
+            font-family: 'Georgia', 'Hiragino Mincho ProN', serif;
             display: flex;
-            flex-direction: column; /* スマホ・アプリ基準で上下構成 */
+            flex-direction: column;
             height: 100vh;
             margin: 0;
             overflow: hidden;
         }
 
-        /* --- 上部：時計・デジタル・天気セクション --- */
+        /* --- 上部：コックピットセクション --- */
         .top-section {
             flex: none;
-            height: 35vh; /* 少しコンパクトに */
+            height: 42vh;
             display: flex;
             background: radial-gradient(circle at 0% 50%, #2a1b0a 0%, #0a0805 100%);
             border-bottom: 3px double #5c441a;
-            position: relative;
             padding: 10px;
             box-sizing: border-box;
         }
 
-        /* アナログ時計を左端に */
         .museum-frame {
             position: relative;
-            width: 140px;
-            height: 140px;
+            width: 110px;
+            height: 110px;
             padding: 8px;
             background: var(--gold);
             border-radius: 50%;
             align-self: center;
-            margin-left: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
 
         .clock-face {
             width: 100%; height: 100%;
             background: var(--marble);
             border-radius: 50%;
-            border: 5px solid #2a1b0a;
+            border: 4px solid #2a1b0a;
             position: relative;
         }
 
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: #1a120b; }
-        .hour { width: 4px; height: 35px; margin-left: -2px; z-index: 3; }
-        .minute { width: 3px; height: 50px; margin-left: -1.5px; z-index: 4; }
-        .second { width: 1px; height: 55px; margin-left: -0.5px; background: #a52a2a; z-index: 5; }
+        .hour { width: 4px; height: 30px; margin-left: -2px; }
+        .minute { width: 3px; height: 40px; margin-left: -1.5px; }
+        .second { width: 1px; height: 45px; margin-left: -0.5px; background: #a52a2a; }
 
-        /* 右上：デジタル時計と日付 */
         .info-panel {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            justify-content: flex-start;
-            padding-top: 10px;
-            padding-right: 15px;
+            gap: 4px;
         }
 
-        #digital-date { font-size: 0.9rem; opacity: 0.8; margin-bottom: 2px; }
-        #digital-clock { font-size: 1.8rem; font-weight: bold; color: #f9e17d; text-shadow: 0 0 10px rgba(249, 225, 125, 0.5); }
+        #digital-clock { font-size: 1.5rem; font-weight: bold; color: #f9e17d; }
+        #digital-date { font-size: 0.8rem; opacity: 0.7; }
 
-        /* 天気予報エリア */
-        .weather-panel {
-            margin-top: 15px;
-            text-align: right;
-            background: rgba(255,255,255,0.05);
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid rgba(212, 180, 131, 0.2);
-        }
-
-        #city-select {
-            background: #1a120b;
-            color: #d4b483;
-            border: 1px solid #5c441a;
-            font-size: 0.7rem;
-            margin-bottom: 5px;
-        }
-
-        #weather-info { font-size: 0.8rem; }
-
-        /* --- 下部：カレンダー・スケジュール（1.3倍拡大） --- */
-        .schedule-section {
-            flex: 1; /* 残りのスペースをすべて使う */
-            padding: 15px;
+        .market-panel {
+            width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 4px;
+            margin-top: 5px;
+        }
+
+        .data-row {
+            background: rgba(255,255,255,0.05);
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(212, 180, 131, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 4px;
+            width: 100%;
+            justify-content: flex-end;
+            margin-top: 2px;
+        }
+
+        input {
+            background: #1a120b;
+            border: 1px solid #5c441a;
+            color: #f9e17d;
+            font-size: 0.7rem;
+            padding: 3px;
+            border-radius: 3px;
+        }
+
+        .small-btn {
+            background: #5c441a;
+            color: #f4e4bc;
+            border: none;
+            font-size: 0.65rem;
+            padding: 3px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        /* --- 下部：カレンダー --- */
+        .schedule-section {
+            flex: 1;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
             background: #0f0a05;
-            overflow-y: auto;
         }
 
         .calendar-card {
             background: rgba(42, 27, 10, 0.4);
             border: 1px solid #5c441a;
-            padding: 10px;
-            border-radius: 10px;
+            padding: 5px;
+            border-radius: 8px;
+            margin-bottom: 8px;
         }
 
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .nav-btn { background: none; border: 1px solid #d4b483; color: #d4b483; padding: 2px 10px; cursor: pointer; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
-        .day { padding: 12px 0; cursor: pointer; border: 1px solid rgba(212, 180, 131, 0.05); font-size: 1rem; }
-        .sun { color: #ff6b6b; font-weight: bold; } 
-        .sat { color: #6ba6ff; font-weight: bold; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; text-align: center; }
+        .day { padding: 10px 0; font-size: 0.9rem; cursor: pointer; }
+        .sun { color: #ff6b6b; } 
+        .sat { color: #6ba6ff; }
         .today { background: #8a6e2f; color: white; border-radius: 4px; }
 
         #note-area {
-            flex: 1; /* スケジュール欄を広げ、余った縦幅を全部使う */
-            min-height: 120px;
+            flex: 1;
             background: #1a120b;
-            border: 1px solid #3d2b1f;
             color: #f4e4bc;
+            border: 1px solid #3d2b1f;
             padding: 12px;
             font-size: 1rem;
-            resize: none;
-            box-sizing: border-box;
-            outline: none;
             border-radius: 5px;
+            outline: none;
         }
-
-        .gem { position: absolute; width: 10px; height: 100px; z-index: 1; }
     </style>
 </head>
 <body>
@@ -151,127 +160,53 @@
     </div>
 
     <div class="info-panel">
-        <div id="digital-date">2026.02.11 (Wed)</div>
-        <div id="digital-clock">15:49</div>
+        <div id="digital-clock">00:00</div>
+        <div id="digital-date">2026.02.11</div>
         
-        <div class="weather-panel">
-            <select id="city-select" onchange="getWeather()">
-                <option value="35.6895,139.6917">東京</option>
-                <option value="34.6937,135.5023">大阪</option>
-                <option value="43.0642,141.3468">札幌</option>
-                <option value="35.1815,136.9066">名古屋</option>
-                <option value="33.5904,130.4017">福岡</option>
-                <option value="26.2124,127.6809">那覇</option>
-            </select>
-            <div id="weather-info">Loading...</div>
+        <div class="market-panel">
+            <div class="data-row"><span>USD/JPY</span><span id="usd-jpy">---.--</span></div>
+            <div class="data-row"><span>BTC/JPY</span><span id="btc-jpy">---,---</span></div>
+            <div class="data-row">
+                <span id="location-name" style="font-size: 0.65rem; color: #aaa;">東京</span>
+                <span id="weather-info">--°C</span>
+            </div>
+            
+            <div class="search-box">
+                <input type="text" id="city-input" placeholder="市町村名" style="width: 70px;">
+                <button class="small-btn" onclick="searchCity()">天気設定</button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="stock-input" placeholder="銘柄/コード" style="width: 70px;">
+                <button class="small-btn" onclick="searchStock()">株価検索</button>
+            </div>
         </div>
     </div>
 </div>
 
 <div class="schedule-section">
     <div class="calendar-card">
-        <div class="calendar-header">
-            <button class="nav-btn" onclick="changeMonth(-1)">◀</button>
-            <h3 id="month-display" style="margin:0; font-size: 1.1rem;"></h3>
-            <button class="nav-btn" onclick="changeMonth(1)">▶</button>
-        </div>
         <div class="calendar-grid" id="calendar-days"></div>
     </div>
-    <h4 id="selected-date-title" style="margin: 0; font-size: 0.9rem;">日付を選択</h4>
-    <textarea id="note-area" placeholder="ここに予定を書き込む..."></textarea>
+    <textarea id="note-area" placeholder="記録を記す..."></textarea>
 </div>
 
 <script>
-    // 時計更新
+    // 時計
     function updateClock() {
         const now = new Date();
-        // アナログ
         document.getElementById('second').style.transform = `rotate(${(now.getSeconds()/60)*360}deg)`;
-        document.getElementById('minute').style.transform = `rotate(${(now.getMinutes()/60)*360 + (now.getSeconds()/60)*6}deg)`;
+        document.getElementById('minute').style.transform = `rotate(${(now.getMinutes()/60)*360}deg)`;
         document.getElementById('hour').style.transform = `rotate(${(now.getHours()%12/12)*360 + (now.getMinutes()/60)*30}deg)`;
-        
-        // デジタル日付・時刻
-        const y = now.getFullYear();
-        const m = now.getMonth() + 1;
-        const d = now.getDate();
-        const w = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][now.getDay()];
-        const hh = String(now.getHours()).padStart(2, '0');
-        const mm = String(now.getMinutes()).padStart(2, '0');
-        
-        document.getElementById('digital-date').innerText = `${y}.${m}.${d} (${w})`;
-        document.getElementById('digital-clock').innerText = `${hh}:${mm}`;
+        document.getElementById('digital-clock').innerText = now.toTimeString().split(' ')[0].substring(0,5);
+        document.getElementById('digital-date').innerText = now.toLocaleDateString();
     }
-    setInterval(updateClock, 1000);
-    updateClock();
+    setInterval(updateClock, 1000); updateClock();
 
-    // 天気予報取得
-    async function getWeather() {
-        const coords = document.getElementById('city-select').value.split(',');
+    // 相場取得
+    async function getFinanceData() {
         try {
-            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords[0]}&longitude=${coords[1]}&current_weather=true&timezone=Asia%2FTokyo`);
-            const data = await res.json();
-            const temp = data.current_weather.temperature;
-            const code = data.current_weather.weathercode;
-            const icons = { 0: "☀️", 1: "🌤", 2: "⛅", 3: "☁️", 45: "🌫", 51: "🌦", 61: "🌧", 71: "❄️", 95: "⚡" };
-            const icon = icons[code] || "✨";
-            document.getElementById('weather-info').innerText = `${icon} ${temp}°C`;
-        } catch (e) {
-            document.getElementById('weather-info').innerText = "取得エラー";
-        }
-    }
-    getWeather();
+            const usdRes = await fetch('https://open.er-api.com/v6/latest/USD');
+            const usdData = await usdRes.json();
+            document.getElementById('usd-jpy').innerText = usdData.rates.JPY.toFixed(2);
 
-    // カレンダー機能
-    let currentViewDate = new Date();
-    let selectedDateKey = "";
-
-    function renderCalendar() {
-        const year = currentViewDate.getFullYear();
-        const month = currentViewDate.getMonth();
-        document.getElementById('month-display').innerText = `${year}年 ${month + 1}月`;
-        const firstDay = new Date(year, month, 1).getDay();
-        const lastDate = new Date(year, month + 1, 0).getDate();
-        const grid = document.getElementById('calendar-days');
-        grid.innerHTML = '';
-        ['日','月','火','水','木','金','土'].forEach((d, i) => {
-            const el = document.createElement('div');
-            el.className = `day ${i===0 ? 'sun' : (i===6 ? 'sat' : '')}`;
-            el.style.fontSize = "0.7rem";
-            el.innerText = d;
-            grid.appendChild(el);
-        });
-        for(let i=0; i<firstDay; i++) grid.appendChild(document.createElement('div'));
-        for(let i=1; i<=lastDate; i++) {
-            const el = document.createElement('div');
-            el.className = 'day';
-            const dow = new Date(year, month, i).getDay();
-            if(dow === 0) el.classList.add('sun');
-            if(dow === 6) el.classList.add('sat');
-            if(i === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear()) el.classList.add('today');
-            el.innerText = i;
-            el.onclick = () => selectDate(year, month + 1, i);
-            grid.appendChild(el);
-        }
-    }
-
-    function selectDate(y, m, d) {
-        selectedDateKey = `note_v2_${y}_${m}_${d}`;
-        document.getElementById('selected-date-title').innerText = `${y}/${m}/${d} の記録`;
-        document.getElementById('note-area').value = localStorage.getItem(selectedDateKey) || "";
-    }
-
-    document.getElementById('note-area').oninput = (e) => {
-        if(selectedDateKey) localStorage.setItem(selectedDateKey, e.target.value);
-    };
-
-    function changeMonth(diff) {
-        currentViewDate.setMonth(currentViewDate.getMonth() + diff);
-        renderCalendar();
-    }
-
-    renderCalendar();
-    const t = new Date();
-    selectDate(t.getFullYear(), t.getMonth()+1, t.getDate());
-</script>
-</body>
-</html>
+            const btcRes = await fetch('
