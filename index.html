@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stellar Translucent Dash</title>
+    <title>Stellar Ultra-Translucent Dash</title>
     <style>
         :root {
-            /* パネルの透明度を上げました (0.85 → 0.6) */
-            --panel-bg: rgba(10, 15, 25, 0.6); 
+            /* 透明度を約85%に設定 (0.15 = 15%の不透明度) */
+            --panel-bg: rgba(5, 10, 20, 0.15); 
             --accent-gold: #f9e17d;
             --text-main: #ffffff;
         }
 
         body {
             background: #050a15;
-            /* 背景画像の設定 */
             background-image: url('background.png');
             background-size: cover;
             background-position: center;
@@ -29,28 +28,28 @@
             overflow: hidden;
         }
 
-        /* メインコンテナ：さらに透明感をアップ */
+        /* 85%透明のメインパネル */
         .main-container {
             width: 94vw;
             height: 92vh;
             background: var(--panel-bg);
-            backdrop-filter: blur(15px); /* 後ろのボケ具合を強くして文字を見やすく */
-            border: 1px solid rgba(249, 225, 125, 0.4);
+            backdrop-filter: blur(8px); /* 透明感を活かすためボケを少し弱めに */
+            border: 1px solid rgba(249, 225, 125, 0.5); /* 枠線だけ少し強調 */
             border-radius: 25px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 0 40px rgba(0,0,0,0.6);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
             overflow: hidden;
         }
 
-        /* 各セクションの背景もさらに透明に */
+        /* 各パーツも背景を極限まで薄く */
         .header-section {
             padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(249, 225, 125, 0.2);
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .clock-box { display: flex; align-items: center; gap: 15px; }
@@ -66,31 +65,30 @@
         .minute { width: 3px; height: 40px; margin-left: -1.5px; }
         .second { width: 1px; height: 43px; background: #ff4757; }
 
-        .digital-info { text-align: left; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+        .digital-info { text-align: left; text-shadow: 2px 2px 10px rgba(0,0,0,1); }
         #time-digit { font-size: 2.5rem; font-weight: bold; color: var(--accent-gold); margin: 0; }
-        #date-digit { font-size: 1rem; opacity: 0.9; }
+        #date-digit { font-size: 1rem; opacity: 1; font-weight: bold; }
 
-        .market-info { display: flex; gap: 20px; font-size: 0.95rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+        .market-info { display: flex; gap: 20px; font-size: 0.95rem; text-shadow: 2px 2px 5px rgba(0,0,0,1); }
         .val { display: block; color: var(--accent-gold); font-weight: bold; font-size: 1.2rem; }
 
         .search-bar {
             padding: 15px 20px;
             display: flex;
             gap: 15px;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.2);
         }
         .input-group { flex: 1; display: flex; gap: 10px; }
         input {
             flex: 1;
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(249, 225, 125, 0.3);
+            background: rgba(0, 0, 0, 0.4); /* 入力欄は見やすくするため少し暗めに */
+            border: 1px solid rgba(249, 225, 125, 0.4);
             border-radius: 8px;
             color: #fff;
             padding: 10px;
             font-size: 1rem;
             outline: none;
         }
-        input::placeholder { color: rgba(255,255,255,0.5); }
         
         button {
             background: linear-gradient(145deg, #bf953f, #8a6e2f);
@@ -100,53 +98,40 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.3s;
         }
-        button:active { transform: scale(0.95); }
 
         .content-section { flex: 1; display: flex; padding: 20px; gap: 20px; overflow: hidden; }
-        .cal-box { flex: 1.2; background: rgba(255,255,255,0.05); border-radius: 15px; padding: 15px; }
-        .note-box { flex: 1; display: flex; flex-direction: column; }
+        .cal-box { flex: 1.2; background: rgba(0,0,0,0.2); border-radius: 15px; padding: 15px; }
         
         #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-        .d-cell { padding: 12px 0; font-size: 1.1rem; border-radius: 8px; cursor: pointer; }
-        .sun { color: #ff7675; font-weight: bold; } 
-        .sat { color: #74b9ff; font-weight: bold; }
+        .d-cell { padding: 12px 0; font-size: 1.1rem; border-radius: 8px; cursor: pointer; text-shadow: 1px 1px 3px #000; }
+        .sun { color: #ffb3b3; font-weight: bold; } 
+        .sat { color: #b3d9ff; font-weight: bold; }
         .today { background: var(--accent-gold); color: #000; font-weight: bold; }
 
         textarea {
             flex: 1;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(249, 225, 125, 0.3);
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(249, 225, 125, 0.4);
             border-radius: 15px;
-            color: #f4e4bc;
+            color: #ffffff;
             padding: 20px;
             font-size: 1.2rem;
             resize: none;
             outline: none;
-            line-height: 1.6;
+            text-shadow: 1px 1px 3px #000;
         }
 
-        /* 警告メッセージ用のスタイル */
         #alert-msg {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 71, 87, 0.9);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            display: none;
-            z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 71, 87, 0.9); color: white;
+            padding: 10px 20px; border-radius: 10px; display: none; z-index: 1000;
         }
 
         @media (max-width: 800px) {
             .main-container { height: 96vh; width: 96vw; }
             .content-section { flex-direction: column; overflow-y: auto; }
             .header-section { flex-direction: column; align-items: flex-end; }
-            .clock-box { width: 100%; justify-content: space-between; }
         }
     </style>
 </head>
@@ -169,18 +154,18 @@
         </div>
         <div class="market-info">
             <div class="market-item">USD/JPY <span class="val" id="rate-usd">---.--</span></div>
-            <div class="market-item">BTC/JPY <span class="val" id="rate-btc">--,---</span></div>
+            <div class="market-item">BTC/JPY <span class="val" id="rate-btc">読み込み中</span></div>
             <div class="market-item"><span id="loc-label">東京</span> <span class="val" id="weather-val">--°C</span></div>
         </div>
     </div>
 
     <div class="search-bar">
         <div class="input-group">
-            <input type="text" id="in-city" placeholder="市町村名 (例: 多治見市, 新宿区)">
+            <input type="text" id="in-city" placeholder="市町村名">
             <button onclick="updateCity()">天気設定</button>
         </div>
         <div class="input-group">
-            <input type="text" id="in-stock" placeholder="銘柄検索 (例: トヨタ)">
+            <input type="text" id="in-stock" placeholder="銘柄検索">
             <button onclick="goStock()">株価検索</button>
         </div>
     </div>
@@ -189,8 +174,8 @@
         <div class="cal-box">
             <div id="calendar-grid"></div>
         </div>
-        <div class="note-box">
-            <textarea id="main-note" placeholder="本日の予定や日記を記入..."></textarea>
+        <div class="note-box" style="flex:1; display:flex;">
+            <textarea id="main-note" placeholder="予定を記入..."></textarea>
         </div>
     </div>
 </div>
@@ -198,16 +183,13 @@
 <script>
     function showAlert(text) {
         const el = document.getElementById('alert-msg');
-        el.innerText = text;
-        el.style.display = 'block';
+        el.innerText = text; el.style.display = 'block';
         setTimeout(() => { el.style.display = 'none'; }, 3000);
     }
 
     function startApp() {
-        tick();
-        setInterval(tick, 1000);
-        fetchFinance();
-        setInterval(fetchFinance, 60000);
+        tick(); setInterval(tick, 1000);
+        fetchFinance(); setInterval(fetchFinance, 30000); // 30秒ごとに更新
         loadWeather(35.68, 139.69);
         drawCal();
     }
@@ -223,34 +205,35 @@
 
     async function fetchFinance() {
         try {
+            // 為替取得
             const u = await fetch('https://open.er-api.com/v6/latest/USD');
             const ud = await u.json();
             document.getElementById('rate-usd').innerText = ud.rates.JPY.toFixed(2);
-            const b = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=jpy');
+
+            // ビットコイン取得 (代替APIを使用)
+            const b = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
             const bd = await b.json();
-            document.getElementById('rate-btc').innerText = '¥' + bd.bitcoin.jpy.toLocaleString();
-        } catch(e) { console.error("Finance update failed"); }
+            const btcUsd = parseFloat(bd.price);
+            const btcJpy = btcUsd * ud.rates.JPY; // ドル価格 × 為替 で計算
+            document.getElementById('rate-btc').innerText = '¥' + Math.floor(btcJpy).toLocaleString();
+        } catch(e) { 
+            console.error("Finance Error");
+            document.getElementById('rate-btc').innerText = "エラー";
+        }
     }
 
     async function updateCity() {
         const c = document.getElementById('in-city').value;
-        if(!c) {
-            showAlert("市町村名を入力してください。");
-            return;
-        }
+        if(!c) return;
         try {
             const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
             const d = await r.json();
-            if(d.results && d.results.length > 0) {
+            if(d.results) {
                 const res = d.results[0];
                 document.getElementById('loc-label').innerText = res.name;
                 loadWeather(res.latitude, res.longitude);
-            } else {
-                showAlert("場所が見つかりませんでした。正しい名前に修正してください。");
-            }
-        } catch(e) {
-            showAlert("検索中にエラーが発生しました。");
-        }
+            } else { showAlert("場所が見つかりません"); }
+        } catch(e) { showAlert("エラーが発生しました"); }
     }
 
     async function loadWeather(lat, lon) {
@@ -258,16 +241,12 @@
             const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
             const d = await r.json();
             document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
-        } catch(e) { showAlert("天気の取得に失敗しました。"); }
+        } catch(e) {}
     }
 
     function goStock() {
         const q = document.getElementById('in-stock').value;
-        if(q) {
-            window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`);
-        } else {
-            showAlert("銘柄名を入力してください。");
-        }
+        if(q) window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`);
     }
 
     function drawCal() {
@@ -284,14 +263,12 @@
         const first = new Date(n.getFullYear(), n.getMonth(), 1).getDay();
         for(let i=0; i<first; i++) g.appendChild(document.createElement('div'));
         for(let i=1; i<=last; i++) {
-            const e = document.createElement('div');
-            e.className = 'd-cell';
+            const e = document.createElement('div'); e.className = 'd-cell';
             const dow = new Date(n.getFullYear(), n.getMonth(), i).getDay();
             if(dow===0) e.classList.add('sun');
             if(dow===6) e.classList.add('sat');
             if(i===n.getDate()) e.classList.add('today');
-            e.innerText = i;
-            g.appendChild(e);
+            e.innerText = i; g.appendChild(e);
         }
     }
 </script>
