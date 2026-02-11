@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stellar Schedule Dash</title>
+    <title>Stellar Executive Dash - Final</title>
     <style>
         :root {
             --panel-bg: rgba(5, 10, 20, 0.15); 
@@ -36,7 +36,6 @@
             border-radius: 25px;
             display: flex; flex-direction: column;
             box-shadow: 0 0 30px rgba(0,0,0,0.5);
-            overflow: hidden;
         }
 
         .header-section {
@@ -65,40 +64,32 @@
 
         .search-bar { padding: 12px 20px; display: flex; gap: 15px; background: rgba(0,0,0,0.2); }
         .input-group { flex: 1; display: flex; gap: 10px; }
-        input {
-            flex: 1; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(249, 225, 125, 0.4);
+        
+        input, select {
+            background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(249, 225, 125, 0.4);
             border-radius: 8px; color: #fff; padding: 8px; font-size: 0.9rem; outline: none;
         }
-        
+        select option { background: #1a120b; color: #fff; }
+
         button {
             background: linear-gradient(145deg, #bf953f, #8a6e2f); border: none;
             color: #fff; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;
         }
 
         .content-section { flex: 1; display: flex; padding: 20px; gap: 20px; overflow: hidden; }
-        
-        /* カレンダー */
         .cal-box { flex: 1.2; background: rgba(0,0,0,0.2); border-radius: 15px; padding: 15px; }
         #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-        .d-cell { padding: 10px 0; font-size: 1rem; border-radius: 8px; cursor: pointer; text-shadow: 1px 1px 3px #000; transition: 0.2s; }
-        .d-cell:hover { background: rgba(255,255,255,0.1); }
-        .sun { color: #ffb3b3; font-weight: bold; } 
-        .sat { color: #b3d9ff; font-weight: bold; }
+        .d-cell { padding: 10px 0; font-size: 1rem; border-radius: 8px; cursor: pointer; text-shadow: 1px 1px 3px #000; }
+        .sun { color: #ffb3b3; } .sat { color: #b3d9ff; }
         .today { border: 2px solid var(--accent-gold); }
-        /* 選択中の日 */
-        .selected-day { background: var(--select-blue) !important; color: white !important; box-shadow: 0 0 10px var(--select-blue); }
+        .selected-day { background: var(--select-blue) !important; color: white !important; }
 
-        /* 予定入力エリア */
-        .note-box { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-        .schedule-title { font-weight: bold; color: var(--accent-gold); border-left: 4px solid var(--accent-gold); padding-left: 10px; margin-bottom: 5px; }
-        .plan-row { display: flex; gap: 5px; align-items: center; }
-        .plan-time { width: 70px; text-align: center; }
-        .plan-text { flex: 1; }
+        .note-box { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+        .schedule-title { font-weight: bold; color: var(--accent-gold); border-left: 4px solid var(--accent-gold); padding-left: 10px; }
         
-        .note-input {
-            background: rgba(0,0,0,0.4); border: 1px solid rgba(249, 225, 125, 0.3);
-            border-radius: 8px; color: #fff; padding: 10px; font-size: 1rem; outline: none;
-        }
+        .plan-row { display: flex; gap: 8px; align-items: center; }
+        .time-selectors { display: flex; align-items: center; gap: 3px; }
+        .plan-text { flex: 1; }
 
         #alert-msg {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
@@ -137,7 +128,7 @@
 
     <div class="search-bar">
         <div class="input-group">
-            <input type="text" id="in-city" placeholder="市町村名">
+            <input type="text" id="in-city" placeholder="市町村名 (例: 多治見市)">
             <button onclick="updateCity()">天気設定</button>
         </div>
         <div class="input-group">
@@ -152,87 +143,108 @@
         </div>
         
         <div class="note-box">
-            <div class="schedule-title"><span id="selected-date-label">日付を選択してください</span> の予定</div>
+            <div class="schedule-title"><span id="selected-date-label">日付を選択</span> の予定</div>
             
             <div class="plan-row">
-                <input type="text" class="note-input plan-time" id="t1" placeholder="時間" oninput="savePlans()">
-                <input type="text" class="note-input plan-text" id="p1" placeholder="予定1" oninput="savePlans()">
+                <div class="time-selectors">
+                    <select id="h1" onchange="savePlans()"></select> : <select id="m1" onchange="savePlans()"></select>
+                </div>
+                <input type="text" class="plan-text" id="p1" placeholder="予定1" oninput="savePlans()">
             </div>
             <div class="plan-row">
-                <input type="text" class="note-input plan-time" id="t2" placeholder="時間" oninput="savePlans()">
-                <input type="text" class="note-input plan-text" id="p2" placeholder="予定2" oninput="savePlans()">
+                <div class="time-selectors">
+                    <select id="h2" onchange="savePlans()"></select> : <select id="m2" onchange="savePlans()"></select>
+                </div>
+                <input type="text" class="plan-text" id="p2" placeholder="予定2" oninput="savePlans()">
             </div>
             <div class="plan-row">
-                <input type="text" class="note-input plan-time" id="t3" placeholder="時間" oninput="savePlans()">
-                <input type="text" class="note-input plan-text" id="p3" placeholder="予定3" oninput="savePlans()">
+                <div class="time-selectors">
+                    <select id="h3" onchange="savePlans()"></select> : <select id="m3" onchange="savePlans()"></select>
+                </div>
+                <input type="text" class="plan-text" id="p3" placeholder="予定3" oninput="savePlans()">
             </div>
-            
-            <div style="margin-top:10px; font-size:0.8rem; opacity:0.6;">※入力すると自動で保存されます</div>
         </div>
     </div>
 </div>
 
 <script>
-    let currentSelectedYMD = ""; // 現在選択中の日付 (YYYY-MM-DD)
+    let currentSelectedYMD = "";
 
     function startApp() {
+        initTimeDropdowns();
         tick(); setInterval(tick, 1000);
         fetchFinance(); setInterval(fetchFinance, 60000);
-        loadWeather(35.68, 139.69);
         
         const now = new Date();
         currentSelectedYMD = formatDate(now);
         drawCal();
-        selectDay(currentSelectedYMD); // 初期状態で今日を選択
+        selectDay(currentSelectedYMD);
+        loadWeather(35.68, 139.69); // 初期地点
     }
 
-    // 日付を YYYY-MM-DD 形式にする
-    function formatDate(date) {
-        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    // 時・分のプルダウン生成
+    function initTimeDropdowns() {
+        for(let i=1; i<=3; i++) {
+            const hSel = document.getElementById('h'+i);
+            const mSel = document.getElementById('m'+i);
+            hSel.innerHTML = '<option value="">時</option>';
+            mSel.innerHTML = '<option value="">分</option>';
+            for(let h=0; h<24; h++) hSel.innerHTML += `<option value="${String(h).padStart(2,'0')}">${h}</option>`;
+            for(let m=0; m<60; m+=5) mSel.innerHTML += `<option value="${String(m).padStart(2,'0')}">${String(m).padStart(2,'0')}</option>`;
+        }
     }
 
-    // カレンダーで日を選択した時の処理
     function selectDay(ymd) {
         currentSelectedYMD = ymd;
         document.getElementById('selected-date-label').innerText = ymd.replace(/-/g, '/');
-        
-        // 全マスの選択色を解除し、選んだ日だけ色をつける
         document.querySelectorAll('.d-cell').forEach(el => {
             el.classList.remove('selected-day');
             if(el.getAttribute('data-ymd') === ymd) el.classList.add('selected-day');
         });
-
-        // その日のデータを読み込む
         loadPlans(ymd);
     }
 
-    // 保存と読み込み
     function savePlans() {
         if(!currentSelectedYMD) return;
         const data = {
-            t1: document.getElementById('t1').value, p1: document.getElementById('p1').value,
-            t2: document.getElementById('t2').value, p2: document.getElementById('p2').value,
-            t3: document.getElementById('t3').value, p3: document.getElementById('p3').value
+            h1: document.getElementById('h1').value, m1: document.getElementById('m1').value, p1: document.getElementById('p1').value,
+            h2: document.getElementById('h2').value, m2: document.getElementById('m2').value, p2: document.getElementById('p2').value,
+            h3: document.getElementById('h3').value, m3: document.getElementById('m3').value, p3: document.getElementById('p3').value
         };
         localStorage.setItem('plans_' + currentSelectedYMD, JSON.stringify(data));
     }
 
     function loadPlans(ymd) {
         const saved = localStorage.getItem('plans_' + ymd);
-        if(saved) {
-            const data = JSON.parse(saved);
-            document.getElementById('t1').value = data.t1 || ""; document.getElementById('p1').value = data.p1 || "";
-            document.getElementById('t2').value = data.t2 || ""; document.getElementById('p2').value = data.p2 || "";
-            document.getElementById('t3').value = data.t3 || ""; document.getElementById('p3').value = data.p3 || "";
-        } else {
-            // データがない場合は空にする
-            document.getElementById('t1').value = ""; document.getElementById('p1').value = "";
-            document.getElementById('t2').value = ""; document.getElementById('p2').value = "";
-            document.getElementById('t3').value = ""; document.getElementById('p3').value = "";
+        const data = saved ? JSON.parse(saved) : {};
+        for(let i=1; i<=3; i++) {
+            document.getElementById('h'+i).value = data['h'+i] || "";
+            document.getElementById('m'+i).value = data['m'+i] || "";
+            document.getElementById('p'+i).value = data['p'+i] || "";
         }
     }
 
-    // --- 基本機能 ---
+    async function updateCity() {
+        const c = document.getElementById('in-city').value;
+        if(!c) return;
+        try {
+            const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
+            const d = await r.json();
+            if(d.results) {
+                const res = d.results[0];
+                document.getElementById('loc-label').innerText = res.name;
+                loadWeather(res.latitude, res.longitude);
+            } else { alert("都市名が見つかりませんでした"); }
+        } catch(e) { alert("通信エラーが発生しました"); }
+    }
+
+    async function loadWeather(lat, lon) {
+        const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+        const d = await r.json();
+        document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
+    }
+
+    // 以下、時計・為替・カレンダーの基本ロジック
     function tick() {
         const n = new Date();
         document.getElementById('s-ptr').style.transform = `rotate(${(n.getSeconds()/60)*360}deg)`;
@@ -251,63 +263,36 @@
             const bd = await b.json();
             const btcJpy = parseFloat(bd.price) * ud.rates.JPY;
             document.getElementById('rate-btc').innerText = '¥' + Math.floor(btcJpy).toLocaleString();
-        } catch(e) { document.getElementById('rate-btc').innerText = "error"; }
+        } catch(e) {}
     }
 
-    async function updateCity() {
-        const c = document.getElementById('in-city').value;
-        if(!c) return;
-        const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
-        const d = await r.json();
-        if(d.results) {
-            const res = d.results[0];
-            document.getElementById('loc-label').innerText = res.name;
-            loadWeather(res.latitude, res.longitude);
-        }
-    }
-
-    async function loadWeather(lat, lon) {
-        const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-        const d = await r.json();
-        document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
-    }
-
-    function goStock() {
-        const q = document.getElementById('in-stock').value;
-        if(q) window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`);
-    }
+    function formatDate(date) { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; }
 
     function drawCal() {
         const g = document.getElementById('calendar-grid');
-        const n = new Date();
-        const year = n.getFullYear();
-        const month = n.getMonth();
-        const last = new Date(year, month + 1, 0).getDate();
-        const first = new Date(year, month, 1).getDay();
+        const n = new Date(); const year = n.getFullYear(); const month = n.getMonth();
+        const last = new Date(year, month + 1, 0).getDate(); const first = new Date(year, month, 1).getDay();
         const todayYMD = formatDate(n);
-
         g.innerHTML = '';
         ['日','月','火','水','木','金','土'].forEach((w,i) => {
-            const e = document.createElement('div');
-            e.className = 'd-cell ' + (i===0?'sun':i===6?'sat':'');
+            const e = document.createElement('div'); e.className = 'd-cell ' + (i===0?'sun':i===6?'sat':'');
             e.innerText = w; e.style.fontSize = '0.7rem'; g.appendChild(e);
         });
-
         for(let i=0; i<first; i++) g.appendChild(document.createElement('div'));
         for(let i=1; i<=last; i++) {
             const e = document.createElement('div');
             const ymd = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-            e.className = 'd-cell';
-            e.setAttribute('data-ymd', ymd);
+            e.className = 'd-cell'; e.setAttribute('data-ymd', ymd);
             const dow = new Date(year, month, i).getDay();
-            if(dow===0) e.classList.add('sun');
-            if(dow===6) e.classList.add('sat');
+            if(dow===0) e.classList.add('sun'); if(dow===6) e.classList.add('sat');
             if(ymd === todayYMD) e.classList.add('today');
-            
-            e.innerText = i;
-            e.onclick = () => selectDay(ymd);
+            e.innerText = i; e.onclick = () => selectDay(ymd);
             g.appendChild(e);
         }
+    }
+    function goStock() {
+        const q = document.getElementById('in-stock').value;
+        if(q) window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`);
     }
 </script>
 </body>
