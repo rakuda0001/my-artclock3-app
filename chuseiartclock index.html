@@ -3,176 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Museum Executive Clock</title>
+    <title>Stellar Save-Enabled Dash</title>
     <style>
         :root {
-            --gold: linear-gradient(145deg, #f9e17d, #bf953f, #8a6e2f, #bf953f, #f9e17d);
-            --marble: radial-gradient(circle at center, #ffffff 0%, #dcdcdc 70%, #c0c0c0 100%);
-            --bg-dark: #0a0805;
+            --panel-bg: rgba(5, 10, 20, 0.15); 
+            --accent-gold: #f9e17d;
+            --text-main: #ffffff;
         }
 
         body {
-            background: var(--bg-dark);
-            color: #d4b483;
-            font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', sans-serif;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            background: #050a15;
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             overflow: hidden;
         }
 
-        /* --- 上部セクション --- */
-        .top-section {
-            flex: none;
-            height: 45vh;
-            display: flex;
-            background: radial-gradient(circle at 0% 50%, #2a1b0a 0%, #0a0805 100%);
-            border-bottom: 3px double #5c441a;
-            padding: 15px;
-            box-sizing: border-box;
-        }
-
-        .museum-frame {
-            position: relative;
-            width: 130px;
-            height: 130px;
-            padding: 10px;
-            background: var(--gold);
-            border-radius: 50%;
-            align-self: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-        }
-
-        .clock-face {
-            width: 100%; height: 100%;
-            background: var(--marble);
-            border-radius: 50%;
-            border: 5px solid #2a1b0a;
-            position: relative;
-        }
-
-        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: #1a120b; border-radius: 2px; }
-        .hour { width: 5px; height: 35px; margin-left: -2.5px; z-index: 3; }
-        .minute { width: 3px; height: 50px; margin-left: -1.5px; z-index: 4; }
-        .second { width: 1.5px; height: 55px; margin-left: -0.75px; background: #a52a2a; z-index: 5; }
-
-        .info-panel {
-            flex: 1;
+        .main-container {
+            width: 94vw;
+            height: 92vh;
+            background: var(--panel-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(249, 225, 125, 0.5);
+            border-radius: 25px;
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
-            gap: 6px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            overflow: hidden;
         }
 
-        #digital-clock { font-size: 2rem; font-weight: bold; color: #f9e17d; text-shadow: 0 0 10px rgba(249,225,125,0.3); }
-        #digital-date { font-size: 0.9rem; opacity: 0.8; margin-bottom: 5px; }
-
-        .market-panel {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .data-row {
-            background: rgba(255,255,255,0.07);
-            padding: 6px 10px;
-            border-radius: 6px;
-            border: 1px solid rgba(212, 180, 131, 0.3);
+        .header-section {
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(249, 225, 125, 0.2);
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        .search-container {
+        .clock-box { display: flex; align-items: center; gap: 15px; }
+        .analog-clock {
+            width: 90px; height: 90px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            border: 3px solid #bf953f;
+            position: relative;
+        }
+        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: #333; border-radius: 2px; }
+        .hour { width: 4px; height: 28px; margin-left: -2px; }
+        .minute { width: 3px; height: 40px; margin-left: -1.5px; }
+        .second { width: 1px; height: 43px; background: #ff4757; }
+
+        .digital-info { text-align: left; text-shadow: 2px 2px 10px rgba(0,0,0,1); }
+        #time-digit { font-size: 2.5rem; font-weight: bold; color: var(--accent-gold); margin: 0; }
+        #date-digit { font-size: 1rem; opacity: 1; font-weight: bold; }
+
+        .market-info { display: flex; gap: 20px; font-size: 0.95rem; text-shadow: 2px 2px 5px rgba(0,0,0,1); }
+        .val { display: block; color: var(--accent-gold); font-weight: bold; font-size: 1.2rem; }
+
+        .search-bar {
+            padding: 15px 20px;
             display: flex;
-            flex-direction: column;
-            gap: 8px;
-            width: 100%;
-            margin-top: 5px;
+            gap: 15px;
+            background: rgba(0,0,0,0.2);
         }
-
-        .input-group {
-            display: flex;
-            gap: 5px;
-            width: 100%;
-            justify-content: flex-end;
-        }
-
+        .input-group { flex: 1; display: flex; gap: 10px; }
         input {
-            background: #1a120b;
-            border: 1px solid #8a6e2f;
-            color: #fff;
-            font-size: 1rem; /* スマホでズームされないサイズ */
-            padding: 8px;
-            border-radius: 5px;
-            width: 120px; /* 入力欄を大きく */
-        }
-
-        .action-btn {
-            background: #8a6e2f;
-            color: #fff;
-            border: none;
-            font-size: 0.8rem;
-            padding: 8px 12px;
-            border-radius: 5px;
-            white-space: nowrap;
-        }
-
-        /* --- 下部セクション --- */
-        .schedule-section {
             flex: 1;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            background: #0f0a05;
-            gap: 10px;
-        }
-
-        .calendar-card {
-            background: rgba(42, 27, 10, 0.5);
-            border: 1px solid #5c441a;
-            padding: 8px;
-            border-radius: 10px;
-        }
-
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
-        .day { padding: 8px 0; font-size: 1rem; cursor: pointer; border-radius: 4px; }
-        .sun { color: #ff6b6b; font-weight: bold; } 
-        .sat { color: #6ba6ff; font-weight: bold; }
-        .today { background: #8a6e2f; color: white; }
-
-        #note-area {
-            flex: 1;
-            background: #1a120b;
-            color: #f4e4bc;
-            border: 1px solid #3d2b1f;
-            padding: 15px;
-            font-size: 1.1rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(249, 225, 125, 0.4);
             border-radius: 8px;
+            color: #fff;
+            padding: 10px;
+            font-size: 1rem;
             outline: none;
+        }
+        
+        button {
+            background: linear-gradient(145deg, #bf953f, #8a6e2f);
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .content-section { flex: 1; display: flex; padding: 20px; gap: 20px; overflow: hidden; }
+        .cal-box { flex: 1.2; background: rgba(0,0,0,0.2); border-radius: 15px; padding: 15px; }
+        
+        #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
+        .d-cell { padding: 12px 0; font-size: 1.1rem; border-radius: 8px; text-shadow: 1px 1px 3px #000; }
+        .sun { color: #ffb3b3; font-weight: bold; } 
+        .sat { color: #b3d9ff; font-weight: bold; }
+        .today { background: var(--accent-gold); color: #000; font-weight: bold; }
+
+        /* スケジュール入力欄 */
+        textarea {
+            flex: 1;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(249, 225, 125, 0.4);
+            border-radius: 15px;
+            color: #ffffff;
+            padding: 20px;
+            font-size: 1.2rem;
             resize: none;
+            outline: none;
+            text-shadow: 1px 1px 3px #000;
+            line-height: 1.5;
+        }
+
+        #alert-msg {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 71, 87, 0.9); color: white;
+            padding: 10px 20px; border-radius: 10px; display: none; z-index: 1000;
+        }
+
+        @media (max-width: 800px) {
+            .main-container { height: 96vh; width: 96vw; }
+            .content-section { flex-direction: column; overflow-y: auto; }
+            .header-section { flex-direction: column; align-items: flex-end; }
         }
     </style>
 </head>
-<body onload="initAll()">
+<body onload="startApp()">
 
-<div class="top-section">
-    <div class="museum-frame">
-        <div class="clock-face">
-            <div class="hand hour" id="hour"></div>
-            <div class="hand minute" id="minute"></div>
-            <div class="hand second" id="second"></div>
+<div id="alert-msg"></div>
+
+<div class="main-container">
+    <div class="header-section">
+        <div class="clock-box">
+            <div class="analog-clock">
+                <div class="hand hour" id="h-ptr"></div>
+                <div class="hand minute" id="m-ptr"></div>
+                <div class="hand second" id="s-ptr"></div>
+            </div>
+            <div class="digital-info">
+                <p id="time-digit">00:00</p>
+                <p id="date-digit">----.--.-- ---</p>
+            </div>
+        </div>
+        <div class="market-info">
+            <div class="market-item">USD/JPY <span class="val" id="rate-usd">---.--</span></div>
+            <div class="market-item">BTC/JPY <span class="val" id="rate-btc">読み込み中</span></div>
+            <div class="market-item"><span id="loc-label">東京</span> <span class="val" id="weather-val">--°C</span></div>
         </div>
     </div>
 
-    <div class="info-panel">
-        <div id="digital-clock">--:--</div>
-        <div id="digital-date">----/--/--</div>
-        
+    <div class="search-bar">
+        <div class="input-group">
+            <input type="text" id="in-city" placeholder="市町村名">
+            <button onclick="updateCity()">天気設定</button>
+        </div>
+        <div class="input-group">
+            <input type="text" id="in-stock" placeholder="銘柄検索">
+            <button onclick="goStock()">株価検索</button>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="cal-box">
+            <div id="calendar-grid"></div>
+        </div>
+        <div class="note-box" style="flex:1; display:flex;">
+            <textarea id="main-note" placeholder="今日の予定やメモを書き込んでください..." oninput="saveNote()"></textarea>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showAlert(text) {
+        const el = document.getElementById('alert-msg');
+        el.innerText = text; el.style.display = 'block';
+        setTimeout(() => { el.style.display = 'none'; }, 3000);
+    }
+
+    function startApp() {
+        tick(); setInterval(tick, 1000);
+        fetchFinance(); setInterval(fetchFinance, 60000);
+        loadWeather(35.68, 139.69);
+        drawCal();
+        loadNote(); // 保存されたメモを読み込む
+    }
+
+    // --- メモの保存・読み込み機能 ---
+    function saveNote() {
+        const noteText = document.getElementById('main-note').value;
+        localStorage.setItem('user_schedule', noteText);
+    }
+
+    function loadNote() {
+        const savedText = localStorage.getItem('user_schedule');
+        if (savedText) {
+            document.getElementById('main-note').value = savedText;
+        }
+    }
+
+    function tick() {
+        const n = new Date();
+        document.getElementById('s-ptr').style.transform = `rotate(${(n.getSeconds()/60)*360}deg)`;
+        document.getElementById('m-ptr').style.transform = `rotate(${(n.getMinutes()/60)*360}deg)`;
+        document.getElementById('h-ptr').style.transform = `rotate(${(n.getHours()%12/12)*360 + (n.getMinutes()/60)*30}deg)`;
+        document.getElementById('time-digit').innerText = n.toTimeString().split(' ')[0].substring(0,5);
+        document.getElementById('date-digit').innerText = n.toLocaleDateString('ja-JP', { year:'numeric', month:'2-digit', day:'2-digit', weekday:'short' });
+    }
+
+    async function fetchFinance() {
+        try {
+            const u = await fetch('https://open.er-api.com/v6/latest/USD');
+            const ud = await u.json();
+            document.getElementById('rate-usd').innerText = ud.rates.JPY.toFixed(2);
+            const b = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+            const bd = await b.json();
+            const btcJpy = parseFloat(bd.price) * ud.rates.JPY;
+            document.getElementById('rate-btc').innerText = '¥' + Math.floor(btcJpy).toLocaleString();
+        } catch(e) { document.getElementById('rate-btc').innerText = "エラー"; }
+    }
+
+    async function updateCity() {
+        const c = document.getElementById('in-city').value;
+        if(!c) return;
+        try {
+            const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
+            const d = await r.json();
+            if(d.results) {
+                const res = d.results[0];
+                document.getElementById('loc-label').innerText = res.name;
+                loadWeather(res.latitude, res.longitude);
+            } else { showAlert("場所が見つかりません"); }
+        } catch(e) { showAlert("エラーが発生しました"); }
+    }
+
+    async function loadWeather(lat, lon) {
+        try {
+            const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+            const d = await r.json();
+            document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
+        } catch(e) {}
+    }
+
+    function goStock() {
+        const q = document.getElementById('in-stock').value;
+        if(q) window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`);
+    }
+
+    function drawCal() {
+        const g = document.getElementById('calendar-grid');
+        const n = new Date();
+        const last = new Date(n.getFullYear(), n.getMonth()+1, 0).getDate();
+        g.innerHTML = '';
+        ['日','月','火','水','木','金','土'].forEach((w,i) => {
+            const e = document.createElement('div');
+            e.className = 'd-cell ' + (i===0?'sun':i===6?'sat':'');
+            e.innerText = w; e.style.fontSize = '0.8rem';
+            g.appendChild(e);
+        });
+        const first = new Date(n.getFullYear(), n.getMonth(), 1).getDay();
+        for(let i=0; i<first; i++) g.appendChild(document.createElement('div'));
+        for(let i=1; i<=last; i++) {
+            const e = document.createElement('div'); e.className = 'd-cell';
+            const dow = new Date(n.getFullYear(), n.getMonth(), i).getDay();
+            if(dow===0) e.classList.add('sun');
+            if(dow===6) e.classList.add('sat');
+            if(i===n.getDate()) e.classList.add('today');
+            e.innerText = i; g.appendChild(e);
+        }
+    }
+</script>
+</body>
+</html>
         <div class="market-panel">
             <div class="data-row"><span>USD/円</span><span id="usd-jpy">---.--</span></div>
             <div class="data-row"><span>ビットコイン</span><span id="btc-jpy">---,---</span></div>
@@ -301,3 +408,4 @@
 </script>
 </body>
 </html>
+
