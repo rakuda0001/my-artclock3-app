@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stellar Jewelry Executive Dash</title>
+    <title>Stellar Crystal Multi-Dash v5</title>
     <style>
         :root {
             --panel-bg: rgba(5, 10, 20, 0.2); 
@@ -29,7 +29,7 @@
             display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* --- Jewelry Clock --- */
+        /* --- Jewelry Clock Section --- */
         .header-section {
             padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid rgba(249, 225, 125, 0.3);
@@ -55,39 +55,41 @@
         .second { width: 1px; height: 35px; background: var(--gem-red); }
 
         .time-display-group { text-align: center; margin-left: 15px; }
-        #time-digit { font-size: 2.2rem; font-weight: bold; color: var(--accent-gold); margin: 0; text-shadow: 0 0 10px rgba(249,225,125,0.5); }
+        #time-digit { font-size: 2.2rem; font-weight: bold; color: var(--accent-gold); margin: 0; }
         #date-digit { font-size: 0.9rem; margin: 0; opacity: 0.8; }
 
         /* --- Financial Dashboard --- */
         .finance-panel {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; flex: 1; padding: 0 20px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; flex: 1; padding: 0 20px;
         }
         .f-item { background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 6px; border-left: 3px solid var(--accent-gold); }
         .f-label { font-size: 0.65rem; color: var(--accent-gold); display: block; }
         .f-val { font-size: 0.85rem; font-weight: bold; }
 
-        /* --- Search Bar (Weather & Stock) --- */
-        .search-row {
-            padding: 10px 20px; background: rgba(0,0,0,0.3); display: flex; gap: 15px;
-        }
-        .search-group { display: flex; gap: 5px; align-items: center; flex: 1; }
-        input { background: rgba(0,0,0,0.5); border: 1px solid var(--accent-gold); color: #fff; padding: 6px 10px; border-radius: 5px; }
+        /* --- Search & Tool Bar --- */
+        .tool-bar { padding: 8px 20px; background: rgba(0,0,0,0.3); display: flex; gap: 15px; flex-wrap: wrap; }
+        .tool-group { display: flex; gap: 5px; align-items: center; border-right: 1px solid rgba(255,255,255,0.2); padding-right: 15px; }
+        input, select { background: rgba(0,0,0,0.5); border: 1px solid var(--accent-gold); color: #fff; padding: 4px; border-radius: 4px; }
 
-        /* --- Main Content --- */
+        /* --- Main Layout --- */
         .content-section { flex: 1; display: flex; padding: 15px; gap: 15px; overflow: hidden; }
         .left-col { flex: 1.6; display: flex; flex-direction: column; gap: 12px; }
         
-        .shortcut-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        /* Shortcuts */
+        .shortcut-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .jump-btn {
-            border: 1px solid var(--accent-gold); padding: 10px; border-radius: 8px; color: #fff;
+            border: 1px solid var(--accent-gold); padding: 8px; border-radius: 8px; color: #fff;
             font-size: 0.75rem; font-weight: bold; cursor: pointer; background: rgba(255,255,255,0.1);
-            transition: 0.1s; display: flex; align-items: center; justify-content: center; text-align: center;
         }
-        .jump-btn:active { transform: scale(0.92); filter: brightness(1.5); box-shadow: 0 0 10px var(--accent-gold); }
+        .jump-btn:active { transform: scale(0.95); box-shadow: 0 0 10px var(--accent-gold); }
 
-        .cal-box { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 10px; flex: 1; overflow: auto; }
+        /* Alarm/Timer UI */
+        .timer-card { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 12px; border: 1px solid var(--gem-blue); display: flex; flex-direction: column; gap: 8px; }
+        .audio-input { font-size: 0.6rem; width: 100%; }
+
+        .cal-box { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 10px; flex: 1; }
         #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
-        .d-cell { padding: 8px 0; font-size: 0.9rem; border-radius: 5px; }
+        .d-cell { padding: 6px 0; font-size: 0.85rem; border-radius: 4px; }
         .sun { color: var(--gem-red); font-weight: bold; }
         .sat { color: var(--gem-blue); font-weight: bold; }
         .today { border: 1px solid var(--accent-gold); background: rgba(249, 225, 125, 0.1); }
@@ -95,16 +97,15 @@
 
         .right-col { flex: 1.2; display: flex; flex-direction: column; gap: 10px; }
         .calc-box { background: rgba(0,0,0,0.5); border-radius: 12px; padding: 8px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
-        #calc-display { grid-column: span 4; background: #000; color: var(--accent-gold); text-align: right; padding: 10px; font-size: 1.2rem; border-radius: 5px; height: 1.5rem; margin-bottom: 5px; }
-        .calc-btn { background: #333; border: 1px solid #555; color: #fff; padding: 12px; border-radius: 5px; font-weight: bold; }
-        .calc-btn.op { background: #8a6e2f; }
-
+        #calc-display { grid-column: span 4; background: #000; color: var(--accent-gold); text-align: right; padding: 10px; font-size: 1.1rem; border-radius: 5px; height: 1.2rem; }
+        .calc-btn { background: #333; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-weight: bold; }
+        
         .note-box { flex: 1; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-        .plan-row { display: flex; gap: 5px; }
-        .plan-text { flex: 1; background: rgba(0,0,0,0.4); border: 1px solid #555; color: #fff; border-radius: 4px; padding: 5px; font-size: 0.85rem; }
     </style>
 </head>
 <body onload="startApp()">
+
+<audio id="alarm-sound" loop></audio>
 
 <div class="main-container">
     <div class="header-section">
@@ -123,8 +124,6 @@
         <div class="finance-panel">
             <div class="f-item"><span class="f-label">USD/JPY</span><span class="f-val" id="usd-jpy">---</span></div>
             <div class="f-item"><span class="f-label">EUR/JPY</span><span class="f-val" id="eur-jpy">---</span></div>
-            <div class="f-item"><span class="f-label">日経平均</span><span class="f-val">¥38,420</span></div>
-            <div class="f-item"><span class="f-label">S&P500</span><span class="f-val">5,980</span></div>
             <div class="f-item"><span class="f-label">BTC</span><span class="f-val" id="btc-val">---</span></div>
             <div class="f-item"><span class="f-label">ETH</span><span class="f-val" id="eth-val">---</span></div>
             <div class="f-item"><span class="f-label">XRP</span><span class="f-val" id="xrp-val">---</span></div>
@@ -132,18 +131,22 @@
         </div>
     </div>
 
-    <div class="search-row">
-        <div class="search-group">
+    <div class="tool-bar">
+        <div class="tool-group">
             <span style="font-size:0.7rem;">天気:</span>
-            <input type="text" id="in-city" placeholder="市町村名" style="width:100px;">
-            <button onclick="updateWeather()" style="background:#444; color:#fff; border:none; padding:5px 10px; border-radius:4px;">検索</button>
-            <span id="loc-label" style="font-size:0.8rem; margin-left:10px;">多治見</span>
-            <span id="weather-val" style="color:var(--accent-gold); font-weight:bold;">--°C</span>
+            <input type="text" id="in-city" placeholder="市町村" style="width:70px;">
+            <button onclick="updateWeather()">🔍</button>
+            <span id="loc-label" style="font-size:0.7rem;">多治見</span>
+            <span id="weather-val" style="color:var(--accent-gold);">--°C</span>
         </div>
-        <div class="search-group">
+        <div class="tool-group">
             <span style="font-size:0.7rem;">株価:</span>
-            <input type="text" id="in-stock" placeholder="銘柄検索" style="flex:1;">
-            <button onclick="goStock()" style="background:var(--accent-gold); color:#000; border:none; padding:5px 15px; border-radius:4px; font-weight:bold;">検索</button>
+            <input type="text" id="in-stock" placeholder="銘柄履歴..." style="width:100px;">
+            <button onclick="goStock()">🔍</button>
+        </div>
+        <div class="tool-group" style="border:none;">
+            <span style="font-size:0.7rem; color:var(--gem-red);">Alarm音:</span>
+            <input type="file" id="audio-file" accept="audio/*" class="audio-input" onchange="loadAudio(this)">
         </div>
     </div>
 
@@ -156,9 +159,28 @@
                 <button class="jump-btn" onclick="openL('yshop')">Shopping</button>
                 <button class="jump-btn" onclick="openL('yauc')">ヤフオク</button>
                 <button class="jump-btn" onclick="openL('gmap')">GoogleMap</button>
-                <button class="jump-btn" style="background:#ff0000;" onclick="openL('yt')">YouTube</button>
-                <button class="jump-btn" style="background:#000;" onclick="openL('x')">X (Twitter)</button>
             </div>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div class="timer-card">
+                    <div style="font-size:0.75rem; color:var(--gem-blue); font-weight:bold;">TIMER</div>
+                    <div style="display:flex; gap:3px;">
+                        <input type="number" id="t-min" placeholder="分" style="width:40px;" min="0">
+                        <input type="number" id="t-sec" placeholder="秒" style="width:40px;" min="0" max="59">
+                        <button id="t-btn" onclick="toggleTimer()" style="background:var(--gem-blue); border:none; color:#000; font-weight:bold; border-radius:4px;">START</button>
+                    </div>
+                    <div id="t-disp" style="text-align:center; font-family:monospace; font-size:1.2rem; color:var(--gem-blue);">00:00</div>
+                </div>
+                <div class="timer-card" style="border-color:var(--gem-red);">
+                    <div style="font-size:0.75rem; color:var(--gem-red); font-weight:bold;">ALARM</div>
+                    <div style="display:flex; gap:3px;">
+                        <input type="time" id="a-time" style="flex:1;">
+                        <button id="a-btn" onclick="toggleAlarm()" style="background:var(--gem-red); border:none; color:#fff; font-weight:bold; border-radius:4px;">SET</button>
+                    </div>
+                    <div id="a-status" style="font-size:0.6rem; text-align:center;">OFF</div>
+                </div>
+            </div>
+
             <div class="cal-box"><div id="calendar-grid"></div></div>
         </div>
 
@@ -168,19 +190,19 @@
                 <button class="calc-btn" onclick="calcI('7')">7</button>
                 <button class="calc-btn" onclick="calcI('8')">8</button>
                 <button class="calc-btn" onclick="calcI('9')">9</button>
-                <button class="calc-btn op" onclick="calcI('/')">/</button>
+                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcI('/')">/</button>
                 <button class="calc-btn" onclick="calcI('4')">4</button>
                 <button class="calc-btn" onclick="calcI('5')">5</button>
                 <button class="calc-btn" onclick="calcI('6')">6</button>
-                <button class="calc-btn op" onclick="calcI('*')">*</button>
+                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcI('*')">*</button>
                 <button class="calc-btn" onclick="calcI('1')">1</button>
                 <button class="calc-btn" onclick="calcI('2')">2</button>
                 <button class="calc-btn" onclick="calcI('3')">3</button>
-                <button class="calc-btn op" onclick="calcI('-')">-</button>
+                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcI('-')">-</button>
                 <button class="calc-btn" onclick="calcI('0')">0</button>
                 <button class="calc-btn" onclick="calcC()">C</button>
-                <button class="calc-btn op" onclick="calcS()">=</button>
-                <button class="calc-btn op" onclick="calcI('+')">+</button>
+                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcS()">=</button>
+                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcI('+')">+</button>
             </div>
             <div class="note-box">
                 <div id="sel-date" style="font-weight:bold; color:var(--accent-gold); font-size:0.8rem;">日付選択</div>
@@ -193,19 +215,71 @@
 </div>
 
 <script>
-    let curYMD = "";
-    let cBuf = "";
+    let curYMD = ""; let cBuf = "";
+    let timerInterval; let timerLeft = 0;
+    let alarmTime = null; let isAlarmSet = false;
 
     function startApp() {
-        createJewels();
-        initT();
-        tick(); setInterval(tick, 1000);
+        createJewels(); initT(); tick(); setInterval(tick, 1000);
         fetchF(); setInterval(fetchF, 60000);
         const now = new Date(); curYMD = formatD(now);
-        drawC(); selectD(curYMD);
-        loadW(35.33, 137.12);
+        drawC(); selectD(curYMD); loadW(35.33, 137.12);
     }
 
+    // --- Audio Control ---
+    function loadAudio(input) {
+        const file = input.files[0];
+        if (file) {
+            const url = URL.createObjectURL(file);
+            document.getElementById('alarm-sound').src = url;
+            alert("アラーム音を設定しました。");
+        }
+    }
+
+    function playAlarm() { document.getElementById('alarm-sound').play(); }
+    function stopAlarm() { 
+        document.getElementById('alarm-sound').pause(); 
+        document.getElementById('alarm-sound').currentTime = 0;
+    }
+
+    // --- Timer ---
+    function toggleTimer() {
+        const btn = document.getElementById('t-btn');
+        if (timerInterval) {
+            clearInterval(timerInterval); timerInterval = null;
+            btn.innerText = "START"; stopAlarm(); return;
+        }
+        const m = parseInt(document.getElementById('t-min').value) || 0;
+        const s = parseInt(document.getElementById('t-sec').value) || 0;
+        timerLeft = m * 60 + s;
+        if (timerLeft <= 0) return;
+        btn.innerText = "STOP";
+        timerInterval = setInterval(() => {
+            timerLeft--;
+            const rm = Math.floor(timerLeft / 60); const rs = timerLeft % 60;
+            document.getElementById('t-disp').innerText = `${String(rm).padStart(2,'0')}:${String(rs).padStart(2,'0')}`;
+            if (timerLeft <= 0) {
+                clearInterval(timerInterval); timerInterval = null;
+                btn.innerText = "STOP ALARM"; playAlarm();
+            }
+        }, 1000);
+    }
+
+    // --- Alarm ---
+    function toggleAlarm() {
+        isAlarmSet = !isAlarmSet;
+        const btn = document.getElementById('a-btn');
+        const status = document.getElementById('a-status');
+        if (isAlarmSet) {
+            alarmTime = document.getElementById('a-time').value;
+            if (!alarmTime) { isAlarmSet = false; return; }
+            btn.innerText = "CANCEL"; status.innerText = "SET: " + alarmTime;
+        } else {
+            btn.innerText = "SET"; status.innerText = "OFF"; stopAlarm();
+        }
+    }
+
+    // --- Jewelry Clock ---
     function createJewels() {
         const ring = document.getElementById('gem-ring');
         for(let i=0; i<12; i++) {
@@ -218,14 +292,27 @@
         }
     }
 
+    function tick() {
+        const n = new Date();
+        document.getElementById('s-ptr').style.transform = `rotate(${(n.getSeconds()/60)*360}deg)`;
+        document.getElementById('m-ptr').style.transform = `rotate(${(n.getMinutes()/60)*360}deg)`;
+        document.getElementById('h-ptr').style.transform = `rotate(${(n.getHours()%12/12)*360 + (n.getMinutes()/60)*30}deg)`;
+        document.getElementById('time-digit').innerText = n.toTimeString().substring(0,5);
+        document.getElementById('date-digit').innerText = n.toLocaleDateString();
+        
+        // Check Alarm
+        if (isAlarmSet && alarmTime === n.toTimeString().substring(0,5) && n.getSeconds() === 0) {
+            playAlarm();
+        }
+    }
+
+    // --- Finance ---
     async function fetchF() {
         try {
             const r = await fetch('https://open.er-api.com/v6/latest/USD');
-            const d = await r.json();
-            const jpy = d.rates.JPY;
+            const d = await r.json(); const jpy = d.rates.JPY;
             document.getElementById('usd-jpy').innerText = jpy.toFixed(2);
             document.getElementById('eur-jpy').innerText = (d.rates.EUR * jpy).toFixed(2);
-            
             const crypto = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT","XRPUSDT","SOLUSDT"]');
             const cd = await crypto.json();
             const cMap = { "BTCUSDT": "btc-val", "ETHUSDT": "eth-val", "XRPUSDT": "xrp-val", "SOLUSDT": "sol-val" };
@@ -236,6 +323,7 @@
         } catch(e) {}
     }
 
+    // --- Others ---
     function openL(t) {
         const links = {
             yahoo: "https://transit.yahoo.co.jp/search/result?from=%E6%96%B0%E5%AE%88%E5%B1%B1&to=%E5%B0%8F%E6%B3%89(%E5%B2%90%E9%98%9C%E7%9C%8C)",
@@ -243,24 +331,9 @@
             ipat: "https://www.ipat.jra.go.jp/",
             yshop: "https://shopping.yahoo.co.jp/",
             yauc: "https://auctions.yahoo.co.jp/",
-            gmap: "https://www.google.com/maps",
-            yt: "youtube://", // アプリ版
-            x: "twitter://"   // アプリ版
+            gmap: "https://www.google.com/maps"
         };
-        // アプリ版リンクが動作しない場合のためにWeb版をフォールバックに設定
-        const webLinks = { yt: "https://www.youtube.com", x: "https://x.com" };
-        const url = links[t];
-        window.location.href = url;
-        setTimeout(() => { if(webLinks[t]) window.open(webLinks[t], '_blank'); }, 500);
-    }
-
-    function tick() {
-        const n = new Date();
-        document.getElementById('s-ptr').style.transform = `rotate(${(n.getSeconds()/60)*360}deg)`;
-        document.getElementById('m-ptr').style.transform = `rotate(${(n.getMinutes()/60)*360}deg)`;
-        document.getElementById('h-ptr').style.transform = `rotate(${(n.getHours()%12/12)*360 + (n.getMinutes()/60)*30}deg)`;
-        document.getElementById('time-digit').innerText = n.toTimeString().substring(0,5);
-        document.getElementById('date-digit').innerText = n.toLocaleDateString();
+        window.open(links[t], '_blank');
     }
 
     async function updateWeather() {
@@ -286,7 +359,7 @@
         g.innerHTML = '';
         ['日','月','火','水','木','金','土'].forEach((w,i) => {
             const e = document.createElement('div'); e.innerText = w; e.className = 'd-cell ' + (i===0?'sun':i===6?'sat':'');
-            e.style.fontSize = '0.7rem'; g.appendChild(e);
+            g.appendChild(e);
         });
         for(let i=0; i<first; i++) g.appendChild(document.createElement('div'));
         for(let i=1; i<=last; i++) {
@@ -304,7 +377,6 @@
             h.innerHTML = '<option value="">H</option>'; m.innerHTML = '<option value="">M</option>';
             for(let x=0; x<24; x++) h.innerHTML += `<option value="${x}">${x}</option>`;
             for(let x=0; x<60; x+=5) m.innerHTML += `<option value="${x}">${String(x).padStart(2,'0')}</option>`;
-            h.onchange = saveP; m.onchange = saveP;
         }
     }
     function calcI(v) { cBuf += v; document.getElementById('calc-display').innerText = cBuf; }
