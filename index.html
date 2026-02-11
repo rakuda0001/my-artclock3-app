@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stellar Executive Multi-Dash</title>
+    <title>Stellar Ultimate Executive Dash</title>
     <style>
         :root {
             --panel-bg: rgba(5, 10, 20, 0.15); 
@@ -42,22 +42,27 @@
 
         .market-info { display: flex; gap: 15px; font-size: 0.8rem; text-align: right; }
 
-        /* --- Train & Search Bar --- */
+        /* --- Search Bar --- */
         .search-bar { padding: 10px 20px; display: flex; gap: 10px; background: rgba(0,0,0,0.3); }
         input, select { background: rgba(0,0,0,0.5); border: 1px solid #8a6e2f; color: #fff; border-radius: 5px; padding: 5px; }
 
-        /* --- Main Content Layout --- */
+        /* --- Main Layout --- */
         .content-section { flex: 1; display: flex; padding: 15px; gap: 15px; overflow: hidden; }
         
-        /* Left: Calendar & Train */
         .left-col { flex: 1.5; display: flex; flex-direction: column; gap: 10px; }
         
-        .train-card {
-            background: rgba(255,255,255,0.08); border: 1px solid var(--accent-gold); border-radius: 10px; padding: 10px;
-            font-size: 0.85rem;
+        /* ショートカットエリア */
+        .shortcut-card {
+            background: rgba(255,255,255,0.08); border: 1px solid var(--accent-gold); border-radius: 10px; padding: 15px;
         }
-        .train-title { color: var(--accent-gold); font-weight: bold; margin-bottom: 5px; display: flex; justify-content: space-between; }
-        .train-row { display: flex; justify-content: space-around; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 5px; margin-top: 3px; }
+        .shortcut-title { color: var(--accent-gold); font-weight: bold; font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-group { display: flex; gap: 10px; }
+        .jump-btn {
+            flex: 1; border: none; padding: 10px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight: bold; color: #fff; transition: 0.3s;
+        }
+        .yahoo-btn { background: #ff0000; box-shadow: 0 0 10px rgba(255,0,0,0.3); }
+        .gemini-btn { background: #4285f4; box-shadow: 0 0 10px rgba(66,133,244,0.3); }
+        .jump-btn:hover { filter: brightness(1.2); transform: translateY(-2px); }
 
         .cal-box { background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; flex: 1; }
         #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
@@ -65,7 +70,6 @@
         .selected-day { background: var(--select-blue) !important; }
         .today { border: 1px solid var(--accent-gold); }
 
-        /* Right: Schedule & Calc */
         .right-col { flex: 1.2; display: flex; flex-direction: column; gap: 10px; }
         
         .calc-box {
@@ -107,20 +111,16 @@
         <input type="text" id="in-city" placeholder="都市名" style="width:100px;">
         <button onclick="updateCity()">天気設定</button>
         <input type="text" id="in-stock" placeholder="銘柄検索" style="flex:1;">
-        <button onclick="goStock()">株価</button>
+        <button onclick="goStock()">株価検索</button>
     </div>
 
     <div class="content-section">
         <div class="left-col">
-            <div class="train-card">
-                <div class="train-title">JR新守山 ➔ 小泉（多治見経由）<span>● 運行目安</span></div>
-                <div class="train-row">
-                    <span>次：<strong id="train-1">--:--</strong></span>
-                    <span>着：<span id="arr-1">--:--</span></span>
-                </div>
-                <div class="train-row">
-                    <span>後：<strong id="train-2">--:--</strong></span>
-                    <span>着：<span id="arr-2">--:--</span></span>
+            <div class="shortcut-card">
+                <div class="shortcut-title">QUICK ACCESS</div>
+                <div class="btn-group">
+                    <button class="jump-btn yahoo-btn" onclick="openYahooTransit()">Yahoo! 路線 (新守山→小泉)</button>
+                    <button class="jump-btn gemini-btn" onclick="openGemini()">Google Gemini</button>
                 </div>
             </div>
             <div class="cal-box">
@@ -150,10 +150,10 @@
             </div>
 
             <div class="note-box">
-                <div style="font-size:0.9rem; color:var(--accent-gold); font-weight:bold;"><span id="sel-date">日付選択</span></div>
-                <div class="plan-row"><select id="h1" onchange="savePlans()"></select>:<select id="m1" onchange="savePlans()"></select><input type="text" id="p1" class="plan-text" oninput="savePlans()"></div>
-                <div class="plan-row"><select id="h2" onchange="savePlans()"></select>:<select id="m2" onchange="savePlans()"></select><input type="text" id="p2" class="plan-text" oninput="savePlans()"></div>
-                <div class="plan-row"><select id="h3" onchange="savePlans()"></select>:<select id="m3" onchange="savePlans()"></select><input type="text" id="p3" class="plan-text" oninput="savePlans()"></div>
+                <div style="font-size:0.9rem; color:var(--accent-gold); font-weight:bold;"><span id="sel-date">日付選択</span> の予定</div>
+                <div class="plan-row"><select id="h1" onchange="savePlans()"></select>:<select id="m1" onchange="savePlans()"></select><input type="text" id="p1" class="plan-text" placeholder="予定1" oninput="savePlans()"></div>
+                <div class="plan-row"><select id="h2" onchange="savePlans()"></select>:<select id="m2" onchange="savePlans()"></select><input type="text" id="p2" class="plan-text" placeholder="予定2" oninput="savePlans()"></div>
+                <div class="plan-row"><select id="h3" onchange="savePlans()"></select>:<select id="m3" onchange="savePlans()"></select><input type="text" id="p3" class="plan-text" placeholder="予定3" oninput="savePlans()"></div>
             </div>
         </div>
     </div>
@@ -166,12 +166,19 @@
     function startApp() {
         initTimeDropdowns();
         tick(); setInterval(tick, 1000);
-        updateTrainTime(); setInterval(updateTrainTime, 30000);
         fetchFinance(); setInterval(fetchFinance, 60000);
         const now = new Date();
         currentYMD = formatDate(now);
         drawCal(); selectDay(currentYMD);
-        loadWeather(35.33, 137.12); // 多治見
+        loadWeather(35.33, 137.12);
+    }
+
+    // ショートカット機能
+    function openYahooTransit() {
+        window.open("https://transit.yahoo.co.jp/search/result?from=%E6%96%B0%E5%AE%88%E5%B1%B1&to=%E5%B0%8F%E6%B3%89(%E5%B2%90%E9%98%9C%E7%9C%8C)&type=1", '_blank');
+    }
+    function openGemini() {
+        window.open("https://gemini.google.com/", '_blank');
     }
 
     // --- 計算機機能 ---
@@ -179,24 +186,7 @@
     function calcClear() { calcBuffer = ""; document.getElementById('calc-display').innerText = "0"; }
     function calcSolve() { try { calcBuffer = eval(calcBuffer).toString(); document.getElementById('calc-display').innerText = calcBuffer; } catch(e) { calcClear(); } }
 
-    // --- 鉄道時刻シミュレーション (新守山->小泉) ---
-    // 中央線(15分おき想定) + 乗り換え待ち
-    function updateTrainTime() {
-        const now = new Date();
-        const m = now.getMinutes();
-        const nextM = [0, 15, 30, 45].find(v => v > m) || 0;
-        const h = nextM === 0 ? now.getHours() + 1 : now.getHours();
-        
-        document.getElementById('train-1').innerText = `${String(h).padStart(2,'0')}:${String(nextM).padStart(2,'0')}`;
-        document.getElementById('arr-1').innerText = `${String(h).padStart(2,'0')}:${String((nextM+35)%60).padStart(2,'0')}`;
-        
-        const nextM2 = (nextM + 15) % 60;
-        const h2 = nextM2 < nextM ? h + 1 : h;
-        document.getElementById('train-2').innerText = `${String(h2).padStart(2,'0')}:${String(nextM2).padStart(2,'0')}`;
-        document.getElementById('arr-2').innerText = `${String(h2).padStart(2,'0')}:${String((nextM2+35)%60).padStart(2,'0')}`;
-    }
-
-    // --- 基本機能 (以前のものを最適化) ---
+    // --- 基本ロジック ---
     function initTimeDropdowns() {
         for(let i=1; i<=3; i++) {
             const hSel = document.getElementById('h'+i); const mSel = document.getElementById('m'+i);
@@ -287,7 +277,6 @@
             g.appendChild(e);
         }
     }
-
     function goStock() { const q = document.getElementById('in-stock').value; if(q) window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`); }
 </script>
 </body>
