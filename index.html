@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stellar Crystal Multi-Dash</title>
+    <title>Stellar Jewelry Executive Dash</title>
     <style>
         :root {
             --panel-bg: rgba(5, 10, 20, 0.2); 
@@ -27,79 +27,81 @@
             background: var(--panel-bg); backdrop-filter: blur(12px);
             border: 2px solid rgba(249, 225, 125, 0.5); border-radius: 20px;
             display: flex; flex-direction: column; overflow: hidden;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
 
         /* --- Jewelry Clock --- */
         .header-section {
-            padding: 10px 20px; display: flex; justify-content: space-between; align-items: flex-start;
+            padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid rgba(249, 225, 125, 0.3);
         }
-        .clock-container { position: relative; width: 100px; height: 100px; }
+        .clock-container { position: relative; width: 110px; height: 110px; flex-shrink: 0; }
         .jewel-ring {
             position: absolute; width: 100%; height: 100%;
-            border-radius: 50%; border: 3px solid #bf953f;
-            box-shadow: 0 0 15px #f9e17d, inset 0 0 10px #f9e17d;
-            animation: gem-spin 20s linear infinite;
+            border-radius: 50%; border: 2px solid #bf953f;
+            box-shadow: 0 0 15px #f9e17d; animation: gem-spin 25s linear infinite;
         }
         @keyframes gem-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .gem {
             position: absolute; width: 8px; height: 8px; background: #fff; border-radius: 50%;
-            box-shadow: 0 0 10px #fff, 0 0 20px var(--gem-blue);
+            box-shadow: 0 0 10px #fff, 0 0 15px var(--gem-blue);
         }
         .analog-clock {
-            position: absolute; top: 10px; left: 10px; width: 80px; height: 80px;
-            background: radial-gradient(circle, #222, #000); border-radius: 50%;
+            position: absolute; top: 15px; left: 15px; width: 80px; height: 80px;
+            background: radial-gradient(circle, #333, #000); border-radius: 50%; border: 1px solid var(--accent-gold);
         }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: var(--accent-gold); border-radius: 2px; }
-        .hour { width: 4px; height: 25px; margin-left: -2px; }
-        .minute { width: 3px; height: 35px; margin-left: -1.5px; }
-        .second { width: 1px; height: 38px; background: var(--gem-red); }
+        .hour { width: 4px; height: 22px; margin-left: -2px; }
+        .minute { width: 3px; height: 32px; margin-left: -1.5px; }
+        .second { width: 1px; height: 35px; background: var(--gem-red); }
 
-        /* --- Financial Grid --- */
-        .finance-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
-            flex: 1; padding-left: 20px; font-size: 0.75rem;
+        .time-display-group { text-align: center; margin-left: 15px; }
+        #time-digit { font-size: 2.2rem; font-weight: bold; color: var(--accent-gold); margin: 0; text-shadow: 0 0 10px rgba(249,225,125,0.5); }
+        #date-digit { font-size: 0.9rem; margin: 0; opacity: 0.8; }
+
+        /* --- Financial Dashboard --- */
+        .finance-panel {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; flex: 1; padding: 0 20px;
         }
-        .f-item { background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 5px; border-left: 2px solid var(--accent-gold); }
-        .f-label { color: var(--accent-gold); font-size: 0.65rem; display: block; }
-        .f-val { font-weight: bold; }
+        .f-item { background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 6px; border-left: 3px solid var(--accent-gold); }
+        .f-label { font-size: 0.65rem; color: var(--accent-gold); display: block; }
+        .f-val { font-size: 0.85rem; font-weight: bold; }
 
-        /* --- Shortcuts & Content --- */
+        /* --- Search Bar (Weather & Stock) --- */
+        .search-row {
+            padding: 10px 20px; background: rgba(0,0,0,0.3); display: flex; gap: 15px;
+        }
+        .search-group { display: flex; gap: 5px; align-items: center; flex: 1; }
+        input { background: rgba(0,0,0,0.5); border: 1px solid var(--accent-gold); color: #fff; padding: 6px 10px; border-radius: 5px; }
+
+        /* --- Main Content --- */
         .content-section { flex: 1; display: flex; padding: 15px; gap: 15px; overflow: hidden; }
-        .left-col { flex: 1.5; display: flex; flex-direction: column; gap: 10px; }
+        .left-col { flex: 1.6; display: flex; flex-direction: column; gap: 12px; }
         
-        .shortcut-area { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .shortcut-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
         .jump-btn {
-            border: 1px solid var(--accent-gold); padding: 12px; border-radius: 8px;
-            color: #fff; font-weight: bold; cursor: pointer; font-size: 0.8rem;
-            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,0,0,0.4));
-            transition: all 0.2s;
+            border: 1px solid var(--accent-gold); padding: 10px; border-radius: 8px; color: #fff;
+            font-size: 0.75rem; font-weight: bold; cursor: pointer; background: rgba(255,255,255,0.1);
+            transition: 0.1s; display: flex; align-items: center; justify-content: center; text-align: center;
         }
-        .jump-btn:active { transform: scale(0.95); box-shadow: 0 0 15px var(--accent-gold); }
+        .jump-btn:active { transform: scale(0.92); filter: brightness(1.5); box-shadow: 0 0 10px var(--accent-gold); }
 
-        /* Calendar */
-        .cal-box { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 10px; flex: 1; }
+        .cal-box { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 10px; flex: 1; overflow: auto; }
         #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
-        .d-cell { padding: 8px 0; font-size: 0.9rem; border-radius: 5px; cursor: pointer; }
+        .d-cell { padding: 8px 0; font-size: 0.9rem; border-radius: 5px; }
         .sun { color: var(--gem-red); font-weight: bold; }
         .sat { color: var(--gem-blue); font-weight: bold; }
         .today { border: 1px solid var(--accent-gold); background: rgba(249, 225, 125, 0.1); }
         .selected-day { background: var(--select-blue) !important; }
 
-        /* Right Side */
         .right-col { flex: 1.2; display: flex; flex-direction: column; gap: 10px; }
-        .calc-box {
-            background: rgba(0,0,0,0.5); border-radius: 12px; padding: 10px;
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
-        }
-        #calc-display { grid-column: span 4; background: #000; color: var(--accent-gold); text-align: right; padding: 10px; font-size: 1.2rem; border-radius: 5px; height: 1.5rem; }
+        .calc-box { background: rgba(0,0,0,0.5); border-radius: 12px; padding: 8px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+        #calc-display { grid-column: span 4; background: #000; color: var(--accent-gold); text-align: right; padding: 10px; font-size: 1.2rem; border-radius: 5px; height: 1.5rem; margin-bottom: 5px; }
         .calc-btn { background: #333; border: 1px solid #555; color: #fff; padding: 12px; border-radius: 5px; font-weight: bold; }
         .calc-btn.op { background: #8a6e2f; }
 
         .note-box { flex: 1; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
         .plan-row { display: flex; gap: 5px; }
-        .plan-text { flex: 1; background: rgba(0,0,0,0.4); border: 1px solid #555; color: #fff; border-radius: 4px; padding: 5px; }
+        .plan-text { flex: 1; background: rgba(0,0,0,0.4); border: 1px solid #555; color: #fff; border-radius: 4px; padding: 5px; font-size: 0.85rem; }
     </style>
 </head>
 <body onload="startApp()">
@@ -114,41 +116,48 @@
                 <div id="s-ptr" class="hand second"></div>
             </div>
         </div>
-
-        <div class="finance-grid">
+        <div class="time-display-group">
+            <p id="time-digit">--:--</p>
+            <p id="date-digit">----/--/--</p>
+        </div>
+        <div class="finance-panel">
             <div class="f-item"><span class="f-label">USD/JPY</span><span class="f-val" id="usd-jpy">---</span></div>
             <div class="f-item"><span class="f-label">EUR/JPY</span><span class="f-val" id="eur-jpy">---</span></div>
-            <div class="f-item"><span class="f-label">AUD/JPY</span><span class="f-val" id="aud-jpy">---</span></div>
-            <div class="f-item"><span class="f-label">CNY/JPY</span><span class="f-val" id="cny-jpy">---</span></div>
-            <div class="f-item"><span class="f-label">KRW/JPY</span><span class="f-val" id="krw-jpy">---</span></div>
-            <div class="f-item"><span class="f-label">NZD/JPY</span><span class="f-val" id="nzd-jpy">---</span></div>
-            <div class="f-item"><span class="f-label">EUR/USD</span><span class="f-val" id="eur-usd">---</span></div>
-            <div class="f-item" style="border-color: #00ff00;"><span class="f-label">日経平均</span><span class="f-val">¥38,420</span></div>
+            <div class="f-item"><span class="f-label">日経平均</span><span class="f-val">¥38,420</span></div>
+            <div class="f-item"><span class="f-label">S&P500</span><span class="f-val">5,980</span></div>
             <div class="f-item"><span class="f-label">BTC</span><span class="f-val" id="btc-val">---</span></div>
             <div class="f-item"><span class="f-label">ETH</span><span class="f-val" id="eth-val">---</span></div>
             <div class="f-item"><span class="f-label">XRP</span><span class="f-val" id="xrp-val">---</span></div>
             <div class="f-item"><span class="f-label">SOL</span><span class="f-val" id="sol-val">---</span></div>
-            <div class="f-item" style="border-color: var(--gem-blue);"><span class="f-label">オールカントリー</span><span class="f-val">24,105</span></div>
-            <div class="f-item" style="border-color: var(--gem-blue);"><span class="f-label">S&P500</span><span class="f-val">5,980</span></div>
-            <div class="f-item"><span class="f-label">天気:多治見</span><span class="f-val" id="weather-val">--°C</span></div>
-            <div class="f-item"><span class="f-label">TIME</span><span class="f-val" id="time-digit">--:--</span></div>
         </div>
     </div>
 
-    <div style="padding:10px 20px; background:rgba(0,0,0,0.3); display:flex; gap:10px;">
-        <input type="text" id="in-stock" placeholder="銘柄履歴検索..." style="flex:1; background:rgba(0,0,0,0.5); color:#fff; border:1px solid var(--accent-gold); padding:8px; border-radius:5px;">
-        <button onclick="goStock()" style="background:var(--accent-gold); color:#000; font-weight:bold; border:none; padding:0 15px; border-radius:5px;">検索</button>
+    <div class="search-row">
+        <div class="search-group">
+            <span style="font-size:0.7rem;">天気:</span>
+            <input type="text" id="in-city" placeholder="市町村名" style="width:100px;">
+            <button onclick="updateWeather()" style="background:#444; color:#fff; border:none; padding:5px 10px; border-radius:4px;">検索</button>
+            <span id="loc-label" style="font-size:0.8rem; margin-left:10px;">多治見</span>
+            <span id="weather-val" style="color:var(--accent-gold); font-weight:bold;">--°C</span>
+        </div>
+        <div class="search-group">
+            <span style="font-size:0.7rem;">株価:</span>
+            <input type="text" id="in-stock" placeholder="銘柄検索" style="flex:1;">
+            <button onclick="goStock()" style="background:var(--accent-gold); color:#000; border:none; padding:5px 15px; border-radius:4px; font-weight:bold;">検索</button>
+        </div>
     </div>
 
     <div class="content-section">
         <div class="left-col">
-            <div class="shortcut-area">
+            <div class="shortcut-grid">
                 <button class="jump-btn" onclick="openL('yahoo')">Yahoo!路線</button>
-                <button class="jump-btn" onclick="openL('gemini')">Gemini AI</button>
+                <button class="jump-btn" onclick="openL('gemini')">Gemini</button>
                 <button class="jump-btn" onclick="openL('ipat')">JRA IPAT</button>
-                <button class="jump-btn" style="color:#ffcc00" onclick="openL('yshop')">Yahoo!ショッピング</button>
-                <button class="jump-btn" style="color:#ffcc00" onclick="openL('yauc')">ヤフオク！</button>
-                <button class="jump-btn" style="color:#00ff88" onclick="openL('gmap')">Google Map</button>
+                <button class="jump-btn" onclick="openL('yshop')">Shopping</button>
+                <button class="jump-btn" onclick="openL('yauc')">ヤフオク</button>
+                <button class="jump-btn" onclick="openL('gmap')">GoogleMap</button>
+                <button class="jump-btn" style="background:#ff0000;" onclick="openL('yt')">YouTube</button>
+                <button class="jump-btn" style="background:#000;" onclick="openL('x')">X (Twitter)</button>
             </div>
             <div class="cal-box"><div id="calendar-grid"></div></div>
         </div>
@@ -174,7 +183,7 @@
                 <button class="calc-btn op" onclick="calcI('+')">+</button>
             </div>
             <div class="note-box">
-                <div id="sel-date" style="font-weight:bold; color:var(--accent-gold); font-size:0.85rem;">日付を選択</div>
+                <div id="sel-date" style="font-weight:bold; color:var(--accent-gold); font-size:0.8rem;">日付選択</div>
                 <div class="plan-row"><select id="h1"></select>:<select id="m1"></select><input type="text" id="p1" class="plan-text" oninput="saveP()"></div>
                 <div class="plan-row"><select id="h2"></select>:<select id="m2"></select><input type="text" id="p2" class="plan-text" oninput="saveP()"></div>
                 <div class="plan-row"><select id="h3"></select>:<select id="m3"></select><input type="text" id="p3" class="plan-text" oninput="saveP()"></div>
@@ -202,8 +211,8 @@
         for(let i=0; i<12; i++) {
             const g = document.createElement('div'); g.className = 'gem';
             const ang = (i*30) * (Math.PI/180);
-            g.style.left = (50 + 45 * Math.cos(ang)) - 4 + 'px';
-            g.style.top = (50 + 45 * Math.sin(ang)) - 4 + 'px';
+            g.style.left = (55 + 50 * Math.cos(ang)) - 4 + 'px';
+            g.style.top = (55 + 50 * Math.sin(ang)) - 4 + 'px';
             if(i%3===0) g.style.boxShadow = "0 0 15px var(--gem-red)";
             ring.appendChild(g);
         }
@@ -214,13 +223,9 @@
             const r = await fetch('https://open.er-api.com/v6/latest/USD');
             const d = await r.json();
             const jpy = d.rates.JPY;
-            const rates = {
-                'usd-jpy': jpy, 'eur-jpy': d.rates.EUR * jpy, 'aud-jpy': d.rates.AUD * jpy,
-                'cny-jpy': d.rates.CNY * jpy, 'krw-jpy': (d.rates.KRW * jpy) / 100,
-                'nzd-jpy': d.rates.NZD * jpy, 'eur-usd': d.rates.EUR
-            };
-            for(let id in rates) document.getElementById(id).innerText = rates[id].toFixed(2);
-
+            document.getElementById('usd-jpy').innerText = jpy.toFixed(2);
+            document.getElementById('eur-jpy').innerText = (d.rates.EUR * jpy).toFixed(2);
+            
             const crypto = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT","XRPUSDT","SOLUSDT"]');
             const cd = await crypto.json();
             const cMap = { "BTCUSDT": "btc-val", "ETHUSDT": "eth-val", "XRPUSDT": "xrp-val", "SOLUSDT": "sol-val" };
@@ -238,9 +243,15 @@
             ipat: "https://www.ipat.jra.go.jp/",
             yshop: "https://shopping.yahoo.co.jp/",
             yauc: "https://auctions.yahoo.co.jp/",
-            gmap: "https://www.google.com/maps"
+            gmap: "https://www.google.com/maps",
+            yt: "youtube://", // アプリ版
+            x: "twitter://"   // アプリ版
         };
-        window.open(links[t], '_blank');
+        // アプリ版リンクが動作しない場合のためにWeb版をフォールバックに設定
+        const webLinks = { yt: "https://www.youtube.com", x: "https://x.com" };
+        const url = links[t];
+        window.location.href = url;
+        setTimeout(() => { if(webLinks[t]) window.open(webLinks[t], '_blank'); }, 500);
     }
 
     function tick() {
@@ -249,22 +260,25 @@
         document.getElementById('m-ptr').style.transform = `rotate(${(n.getMinutes()/60)*360}deg)`;
         document.getElementById('h-ptr').style.transform = `rotate(${(n.getHours()%12/12)*360 + (n.getMinutes()/60)*30}deg)`;
         document.getElementById('time-digit').innerText = n.toTimeString().substring(0,5);
+        document.getElementById('date-digit').innerText = n.toLocaleDateString();
     }
 
-    // --- 以下、既存の安定ロジック ---
-    function initT() {
-        for(let i=1; i<=3; i++) {
-            const h = document.getElementById('h'+i); const m = document.getElementById('m'+i);
-            h.innerHTML = '<option value="">H</option>'; m.innerHTML = '<option value="">M</option>';
-            for(let x=0; x<24; x++) h.innerHTML += `<option value="${x}">${x}</option>`;
-            for(let x=0; x<60; x+=5) m.innerHTML += `<option value="${x}">${String(x).padStart(2,'0')}</option>`;
-            h.onchange = saveP; m.onchange = saveP;
+    async function updateWeather() {
+        const c = document.getElementById('in-city').value;
+        const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
+        const d = await r.json();
+        if(d.results) {
+            document.getElementById('loc-label').innerText = d.results[0].name;
+            loadW(d.results[0].latitude, d.results[0].longitude);
         }
     }
-    function calcI(v) { cBuf += v; document.getElementById('calc-display').innerText = cBuf; }
-    function calcC() { cBuf = ""; document.getElementById('calc-display').innerText = "0"; }
-    function calcS() { try { cBuf = eval(cBuf).toString(); document.getElementById('calc-display').innerText = cBuf; } catch(e) { calcC(); } }
-    function formatD(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+
+    async function loadW(lat, lon) {
+        const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+        const d = await r.json();
+        document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
+    }
+
     function drawC() {
         const g = document.getElementById('calendar-grid'); const n = new Date();
         const y = n.getFullYear(); const m = n.getMonth();
@@ -283,27 +297,15 @@
             e.setAttribute('data-ymd', ymd); e.innerText = i; e.onclick = () => selectD(ymd); g.appendChild(e);
         }
     }
-    function selectD(ymd) {
-        curYMD = ymd; document.getElementById('sel-date').innerText = ymd;
-        document.querySelectorAll('.d-cell').forEach(el => {
-            el.classList.remove('selected-day'); if(el.getAttribute('data-ymd') === ymd) el.classList.add('selected-day');
-        });
-        const s = localStorage.getItem('plans_' + ymd); const d = s ? JSON.parse(s) : {};
+
+    function initT() {
         for(let i=1; i<=3; i++) {
-            document.getElementById('h'+i).value = d['h'+i] || "";
-            document.getElementById('m'+i).value = d['m'+i] || "";
-            document.getElementById('p'+i).value = d['p'+i] || "";
+            const h = document.getElementById('h'+i); const m = document.getElementById('m'+i);
+            h.innerHTML = '<option value="">H</option>'; m.innerHTML = '<option value="">M</option>';
+            for(let x=0; x<24; x++) h.innerHTML += `<option value="${x}">${x}</option>`;
+            for(let x=0; x<60; x+=5) m.innerHTML += `<option value="${x}">${String(x).padStart(2,'0')}</option>`;
+            h.onchange = saveP; m.onchange = saveP;
         }
     }
-    function saveP() {
-        const d = {}; for(let i=1; i<=3; i++) { d['h'+i]=document.getElementById('h'+i).value; d['m'+i]=document.getElementById('m'+i).value; d['p'+i]=document.getElementById('p'+i).value; }
-        localStorage.setItem('plans_' + curYMD, JSON.stringify(d));
-    }
-    async function loadW(lat, lon) {
-        const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-        const d = await r.json(); document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
-    }
-    function goStock() { const q = document.getElementById('in-stock').value; if(q) window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`); }
-</script>
-</body>
-</html>
+    function calcI(v) { cBuf += v; document.getElementById('calc-display').innerText = cBuf; }
+    function calc
