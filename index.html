@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stellar Executive Dash - Final</title>
+    <title>Stellar Executive Multi-Dash</title>
     <style>
         :root {
             --panel-bg: rgba(5, 10, 20, 0.15); 
@@ -15,243 +15,204 @@
         body {
             background: #050a15;
             background-image: url('background.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: var(--text-main);
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: var(--text-main); font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden;
         }
 
         .main-container {
-            width: 94vw; height: 92vh;
-            background: var(--panel-bg);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(249, 225, 125, 0.5);
-            border-radius: 25px;
-            display: flex; flex-direction: column;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            width: 96vw; height: 94vh;
+            background: var(--panel-bg); backdrop-filter: blur(8px);
+            border: 1px solid rgba(249, 225, 125, 0.4); border-radius: 20px;
+            display: flex; flex-direction: column; overflow: hidden;
         }
 
+        /* --- Header --- */
         .header-section {
-            padding: 15px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(249, 225, 125, 0.2);
-            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(249, 225, 125, 0.2); background: rgba(255, 255, 255, 0.05);
         }
+        .clock-box { display: flex; align-items: center; gap: 10px; }
+        .analog-clock { width: 60px; height: 60px; background: #eee; border-radius: 50%; border: 2px solid #bf953f; position: relative; }
+        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: #333; }
+        .hour { width: 3px; height: 18px; margin-left: -1.5px; }
+        .minute { width: 2px; height: 25px; margin-left: -1px; }
+        .second { width: 1px; height: 28px; background: red; }
+        #time-digit { font-size: 1.8rem; font-weight: bold; color: var(--accent-gold); margin: 0; }
 
-        .clock-box { display: flex; align-items: center; gap: 15px; }
-        .analog-clock {
-            width: 80px; height: 80px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%; border: 3px solid #bf953f; position: relative;
-        }
-        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: #333; border-radius: 2px; }
-        .hour { width: 4px; height: 25px; margin-left: -2px; }
-        .minute { width: 3px; height: 35px; margin-left: -1.5px; }
-        .second { width: 1px; height: 38px; background: #ff4757; }
+        .market-info { display: flex; gap: 15px; font-size: 0.8rem; text-align: right; }
 
-        #time-digit { font-size: 2.2rem; font-weight: bold; color: var(--accent-gold); margin: 0; text-shadow: 2px 2px 10px #000; }
-        #date-digit { font-size: 0.9rem; font-weight: bold; text-shadow: 1px 1px 5px #000; }
+        /* --- Train & Search Bar --- */
+        .search-bar { padding: 10px 20px; display: flex; gap: 10px; background: rgba(0,0,0,0.3); }
+        input, select { background: rgba(0,0,0,0.5); border: 1px solid #8a6e2f; color: #fff; border-radius: 5px; padding: 5px; }
 
-        .market-info { display: flex; gap: 15px; font-size: 0.85rem; text-shadow: 2px 2px 5px #000; }
-        .val { display: block; color: var(--accent-gold); font-weight: bold; font-size: 1.1rem; }
-
-        .search-bar { padding: 12px 20px; display: flex; gap: 15px; background: rgba(0,0,0,0.2); }
-        .input-group { flex: 1; display: flex; gap: 10px; }
+        /* --- Main Content Layout --- */
+        .content-section { flex: 1; display: flex; padding: 15px; gap: 15px; overflow: hidden; }
         
-        input, select {
-            background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(249, 225, 125, 0.4);
-            border-radius: 8px; color: #fff; padding: 8px; font-size: 0.9rem; outline: none;
-        }
-        select option { background: #1a120b; color: #fff; }
-
-        button {
-            background: linear-gradient(145deg, #bf953f, #8a6e2f); border: none;
-            color: #fff; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;
-        }
-
-        .content-section { flex: 1; display: flex; padding: 20px; gap: 20px; overflow: hidden; }
-        .cal-box { flex: 1.2; background: rgba(0,0,0,0.2); border-radius: 15px; padding: 15px; }
-        #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-        .d-cell { padding: 10px 0; font-size: 1rem; border-radius: 8px; cursor: pointer; text-shadow: 1px 1px 3px #000; }
-        .sun { color: #ffb3b3; } .sat { color: #b3d9ff; }
-        .today { border: 2px solid var(--accent-gold); }
-        .selected-day { background: var(--select-blue) !important; color: white !important; }
-
-        .note-box { flex: 1; display: flex; flex-direction: column; gap: 12px; }
-        .schedule-title { font-weight: bold; color: var(--accent-gold); border-left: 4px solid var(--accent-gold); padding-left: 10px; }
+        /* Left: Calendar & Train */
+        .left-col { flex: 1.5; display: flex; flex-direction: column; gap: 10px; }
         
-        .plan-row { display: flex; gap: 8px; align-items: center; }
-        .time-selectors { display: flex; align-items: center; gap: 3px; }
+        .train-card {
+            background: rgba(255,255,255,0.08); border: 1px solid var(--accent-gold); border-radius: 10px; padding: 10px;
+            font-size: 0.85rem;
+        }
+        .train-title { color: var(--accent-gold); font-weight: bold; margin-bottom: 5px; display: flex; justify-content: space-between; }
+        .train-row { display: flex; justify-content: space-around; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 5px; margin-top: 3px; }
+
+        .cal-box { background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; flex: 1; }
+        #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+        .d-cell { padding: 8px 0; font-size: 0.9rem; border-radius: 5px; cursor: pointer; }
+        .selected-day { background: var(--select-blue) !important; }
+        .today { border: 1px solid var(--accent-gold); }
+
+        /* Right: Schedule & Calc */
+        .right-col { flex: 1.2; display: flex; flex-direction: column; gap: 10px; }
+        
+        .calc-box {
+            background: rgba(0,0,0,0.4); border-radius: 10px; padding: 10px;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
+        }
+        #calc-display { grid-column: span 4; background: #000; color: var(--accent-gold); text-align: right; padding: 10px; font-size: 1.2rem; border-radius: 5px; margin-bottom: 5px; height: 1.5rem; }
+        .calc-btn { background: linear-gradient(#444, #222); border: 1px solid #666; color: #fff; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .calc-btn.op { background: linear-gradient(#bf953f, #8a6e2f); }
+
+        .note-box { flex: 1; background: rgba(255,255,255,0.05); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .plan-row { display: flex; gap: 5px; }
         .plan-text { flex: 1; }
-
-        #alert-msg {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 71, 87, 0.9); color: white; padding: 10px 20px; border-radius: 10px; display: none; z-index: 1000;
-        }
-
-        @media (max-width: 800px) {
-            .content-section { flex-direction: column; overflow-y: auto; }
-            .header-section { flex-direction: column; align-items: flex-end; }
-        }
     </style>
 </head>
 <body onload="startApp()">
-
-<div id="alert-msg"></div>
 
 <div class="main-container">
     <div class="header-section">
         <div class="clock-box">
             <div class="analog-clock">
-                <div class="hand hour" id="h-ptr"></div>
-                <div class="hand minute" id="m-ptr"></div>
-                <div class="hand second" id="s-ptr"></div>
+                <div id="h-ptr" class="hand hour"></div>
+                <div id="m-ptr" class="hand minute"></div>
+                <div id="s-ptr" class="hand second"></div>
             </div>
-            <div class="digital-info">
-                <p id="time-digit">00:00</p>
-                <p id="date-digit">----.--.-- ---</p>
+            <div>
+                <p id="time-digit">--:--</p>
+                <p id="date-digit" style="font-size:0.8rem; margin:0;">----/--/--</p>
             </div>
         </div>
         <div class="market-info">
-            <div class="market-item">USD/JPY <span class="val" id="rate-usd">---.--</span></div>
-            <div class="market-item">BTC/JPY <span class="val" id="rate-btc">...</span></div>
-            <div class="market-item"><span id="loc-label">東京</span> <span class="val" id="weather-val">--°C</span></div>
+            <div>USD/JPY <span id="rate-usd" style="color:var(--accent-gold)">---.--</span></div>
+            <div>BTC/JPY <span id="rate-btc" style="color:var(--accent-gold)">---</span></div>
+            <div><span id="loc-label">多治見</span> <span id="weather-val" style="color:var(--accent-gold)">--°C</span></div>
         </div>
     </div>
 
     <div class="search-bar">
-        <div class="input-group">
-            <input type="text" id="in-city" placeholder="市町村名 (例: 多治見市)">
-            <button onclick="updateCity()">天気設定</button>
-        </div>
-        <div class="input-group">
-            <input type="text" id="in-stock" placeholder="銘柄検索">
-            <button onclick="goStock()">株価検索</button>
-        </div>
+        <input type="text" id="in-city" placeholder="都市名" style="width:100px;">
+        <button onclick="updateCity()">天気設定</button>
+        <input type="text" id="in-stock" placeholder="銘柄検索" style="flex:1;">
+        <button onclick="goStock()">株価</button>
     </div>
 
     <div class="content-section">
-        <div class="cal-box">
-            <div id="calendar-grid"></div>
+        <div class="left-col">
+            <div class="train-card">
+                <div class="train-title">JR新守山 ➔ 小泉（多治見経由）<span>● 運行目安</span></div>
+                <div class="train-row">
+                    <span>次：<strong id="train-1">--:--</strong></span>
+                    <span>着：<span id="arr-1">--:--</span></span>
+                </div>
+                <div class="train-row">
+                    <span>後：<strong id="train-2">--:--</strong></span>
+                    <span>着：<span id="arr-2">--:--</span></span>
+                </div>
+            </div>
+            <div class="cal-box">
+                <div id="calendar-grid"></div>
+            </div>
         </div>
-        
-        <div class="note-box">
-            <div class="schedule-title"><span id="selected-date-label">日付を選択</span> の予定</div>
-            
-            <div class="plan-row">
-                <div class="time-selectors">
-                    <select id="h1" onchange="savePlans()"></select> : <select id="m1" onchange="savePlans()"></select>
-                </div>
-                <input type="text" class="plan-text" id="p1" placeholder="予定1" oninput="savePlans()">
+
+        <div class="right-col">
+            <div class="calc-box">
+                <div id="calc-display">0</div>
+                <button class="calc-btn" onclick="calcInput('7')">7</button>
+                <button class="calc-btn" onclick="calcInput('8')">8</button>
+                <button class="calc-btn" onclick="calcInput('9')">9</button>
+                <button class="calc-btn op" onclick="calcInput('/')">÷</button>
+                <button class="calc-btn" onclick="calcInput('4')">4</button>
+                <button class="calc-btn" onclick="calcInput('5')">5</button>
+                <button class="calc-btn" onclick="calcInput('6')">6</button>
+                <button class="calc-btn op" onclick="calcInput('*')">×</button>
+                <button class="calc-btn" onclick="calcInput('1')">1</button>
+                <button class="calc-btn" onclick="calcInput('2')">2</button>
+                <button class="calc-btn" onclick="calcInput('3')">3</button>
+                <button class="calc-btn op" onclick="calcInput('-')">-</button>
+                <button class="calc-btn" onclick="calcInput('0')">0</button>
+                <button class="calc-btn" onclick="calcClear()">C</button>
+                <button class="calc-btn op" onclick="calcSolve()">=</button>
+                <button class="calc-btn op" onclick="calcInput('+')">+</button>
             </div>
-            <div class="plan-row">
-                <div class="time-selectors">
-                    <select id="h2" onchange="savePlans()"></select> : <select id="m2" onchange="savePlans()"></select>
-                </div>
-                <input type="text" class="plan-text" id="p2" placeholder="予定2" oninput="savePlans()">
-            </div>
-            <div class="plan-row">
-                <div class="time-selectors">
-                    <select id="h3" onchange="savePlans()"></select> : <select id="m3" onchange="savePlans()"></select>
-                </div>
-                <input type="text" class="plan-text" id="p3" placeholder="予定3" oninput="savePlans()">
+
+            <div class="note-box">
+                <div style="font-size:0.9rem; color:var(--accent-gold); font-weight:bold;"><span id="sel-date">日付選択</span></div>
+                <div class="plan-row"><select id="h1" onchange="savePlans()"></select>:<select id="m1" onchange="savePlans()"></select><input type="text" id="p1" class="plan-text" oninput="savePlans()"></div>
+                <div class="plan-row"><select id="h2" onchange="savePlans()"></select>:<select id="m2" onchange="savePlans()"></select><input type="text" id="p2" class="plan-text" oninput="savePlans()"></div>
+                <div class="plan-row"><select id="h3" onchange="savePlans()"></select>:<select id="m3" onchange="savePlans()"></select><input type="text" id="p3" class="plan-text" oninput="savePlans()"></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    let currentSelectedYMD = "";
+    let currentYMD = "";
+    let calcBuffer = "";
 
     function startApp() {
         initTimeDropdowns();
         tick(); setInterval(tick, 1000);
+        updateTrainTime(); setInterval(updateTrainTime, 30000);
         fetchFinance(); setInterval(fetchFinance, 60000);
-        
         const now = new Date();
-        currentSelectedYMD = formatDate(now);
-        drawCal();
-        selectDay(currentSelectedYMD);
-        loadWeather(35.68, 139.69); // 初期地点
+        currentYMD = formatDate(now);
+        drawCal(); selectDay(currentYMD);
+        loadWeather(35.33, 137.12); // 多治見
     }
 
-    // 時・分のプルダウン生成
+    // --- 計算機機能 ---
+    function calcInput(v) { calcBuffer += v; document.getElementById('calc-display').innerText = calcBuffer; }
+    function calcClear() { calcBuffer = ""; document.getElementById('calc-display').innerText = "0"; }
+    function calcSolve() { try { calcBuffer = eval(calcBuffer).toString(); document.getElementById('calc-display').innerText = calcBuffer; } catch(e) { calcClear(); } }
+
+    // --- 鉄道時刻シミュレーション (新守山->小泉) ---
+    // 中央線(15分おき想定) + 乗り換え待ち
+    function updateTrainTime() {
+        const now = new Date();
+        const m = now.getMinutes();
+        const nextM = [0, 15, 30, 45].find(v => v > m) || 0;
+        const h = nextM === 0 ? now.getHours() + 1 : now.getHours();
+        
+        document.getElementById('train-1').innerText = `${String(h).padStart(2,'0')}:${String(nextM).padStart(2,'0')}`;
+        document.getElementById('arr-1').innerText = `${String(h).padStart(2,'0')}:${String((nextM+35)%60).padStart(2,'0')}`;
+        
+        const nextM2 = (nextM + 15) % 60;
+        const h2 = nextM2 < nextM ? h + 1 : h;
+        document.getElementById('train-2').innerText = `${String(h2).padStart(2,'0')}:${String(nextM2).padStart(2,'0')}`;
+        document.getElementById('arr-2').innerText = `${String(h2).padStart(2,'0')}:${String((nextM2+35)%60).padStart(2,'0')}`;
+    }
+
+    // --- 基本機能 (以前のものを最適化) ---
     function initTimeDropdowns() {
         for(let i=1; i<=3; i++) {
-            const hSel = document.getElementById('h'+i);
-            const mSel = document.getElementById('m'+i);
-            hSel.innerHTML = '<option value="">時</option>';
-            mSel.innerHTML = '<option value="">分</option>';
-            for(let h=0; h<24; h++) hSel.innerHTML += `<option value="${String(h).padStart(2,'0')}">${h}</option>`;
+            const hSel = document.getElementById('h'+i); const mSel = document.getElementById('m'+i);
+            hSel.innerHTML = '<option value="">時</option>'; mSel.innerHTML = '<option value="">分</option>';
+            for(let h=0; h<24; h++) hSel.innerHTML += `<option value="${h}">${h}</option>`;
             for(let m=0; m<60; m+=5) mSel.innerHTML += `<option value="${String(m).padStart(2,'0')}">${String(m).padStart(2,'0')}</option>`;
         }
     }
 
-    function selectDay(ymd) {
-        currentSelectedYMD = ymd;
-        document.getElementById('selected-date-label').innerText = ymd.replace(/-/g, '/');
-        document.querySelectorAll('.d-cell').forEach(el => {
-            el.classList.remove('selected-day');
-            if(el.getAttribute('data-ymd') === ymd) el.classList.add('selected-day');
-        });
-        loadPlans(ymd);
-    }
-
-    function savePlans() {
-        if(!currentSelectedYMD) return;
-        const data = {
-            h1: document.getElementById('h1').value, m1: document.getElementById('m1').value, p1: document.getElementById('p1').value,
-            h2: document.getElementById('h2').value, m2: document.getElementById('m2').value, p2: document.getElementById('p2').value,
-            h3: document.getElementById('h3').value, m3: document.getElementById('m3').value, p3: document.getElementById('p3').value
-        };
-        localStorage.setItem('plans_' + currentSelectedYMD, JSON.stringify(data));
-    }
-
-    function loadPlans(ymd) {
-        const saved = localStorage.getItem('plans_' + ymd);
-        const data = saved ? JSON.parse(saved) : {};
-        for(let i=1; i<=3; i++) {
-            document.getElementById('h'+i).value = data['h'+i] || "";
-            document.getElementById('m'+i).value = data['m'+i] || "";
-            document.getElementById('p'+i).value = data['p'+i] || "";
-        }
-    }
-
-    async function updateCity() {
-        const c = document.getElementById('in-city').value;
-        if(!c) return;
-        try {
-            const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
-            const d = await r.json();
-            if(d.results) {
-                const res = d.results[0];
-                document.getElementById('loc-label').innerText = res.name;
-                loadWeather(res.latitude, res.longitude);
-            } else { alert("都市名が見つかりませんでした"); }
-        } catch(e) { alert("通信エラーが発生しました"); }
-    }
-
-    async function loadWeather(lat, lon) {
-        const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-        const d = await r.json();
-        document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
-    }
-
-    // 以下、時計・為替・カレンダーの基本ロジック
     function tick() {
         const n = new Date();
         document.getElementById('s-ptr').style.transform = `rotate(${(n.getSeconds()/60)*360}deg)`;
         document.getElementById('m-ptr').style.transform = `rotate(${(n.getMinutes()/60)*360}deg)`;
         document.getElementById('h-ptr').style.transform = `rotate(${(n.getHours()%12/12)*360 + (n.getMinutes()/60)*30}deg)`;
         document.getElementById('time-digit').innerText = n.toTimeString().split(' ')[0].substring(0,5);
-        document.getElementById('date-digit').innerText = n.toLocaleDateString('ja-JP', { year:'numeric', month:'2-digit', day:'2-digit', weekday:'short' });
+        document.getElementById('date-digit').innerText = n.toLocaleDateString();
     }
 
     async function fetchFinance() {
@@ -261,39 +222,73 @@
             document.getElementById('rate-usd').innerText = ud.rates.JPY.toFixed(2);
             const b = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
             const bd = await b.json();
-            const btcJpy = parseFloat(bd.price) * ud.rates.JPY;
-            document.getElementById('rate-btc').innerText = '¥' + Math.floor(btcJpy).toLocaleString();
+            document.getElementById('rate-btc').innerText = '¥' + Math.floor(parseFloat(bd.price) * ud.rates.JPY).toLocaleString();
         } catch(e) {}
     }
 
-    function formatDate(date) { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; }
+    async function updateCity() {
+        const c = document.getElementById('in-city').value;
+        const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(c)}&count=1&language=ja`);
+        const d = await r.json();
+        if(d.results) {
+            document.getElementById('loc-label').innerText = d.results[0].name;
+            loadWeather(d.results[0].latitude, d.results[0].longitude);
+        }
+    }
+
+    async function loadWeather(lat, lon) {
+        const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+        const d = await r.json();
+        document.getElementById('weather-val').innerText = d.current_weather.temperature + '°C';
+    }
+
+    function selectDay(ymd) {
+        currentYMD = ymd; document.getElementById('sel-date').innerText = ymd;
+        document.querySelectorAll('.d-cell').forEach(el => {
+            el.classList.remove('selected-day'); if(el.getAttribute('data-ymd') === ymd) el.classList.add('selected-day');
+        });
+        loadPlans(ymd);
+    }
+
+    function savePlans() {
+        const data = {
+            h1: document.getElementById('h1').value, m1: document.getElementById('m1').value, p1: document.getElementById('p1').value,
+            h2: document.getElementById('h2').value, m2: document.getElementById('m2').value, p2: document.getElementById('p2').value,
+            h3: document.getElementById('h3').value, m3: document.getElementById('m3').value, p3: document.getElementById('p3').value
+        };
+        localStorage.setItem('plans_' + currentYMD, JSON.stringify(data));
+    }
+
+    function loadPlans(ymd) {
+        const s = localStorage.getItem('plans_' + ymd); const d = s ? JSON.parse(s) : {};
+        for(let i=1; i<=3; i++) {
+            document.getElementById('h'+i).value = d['h'+i] || "";
+            document.getElementById('m'+i).value = d['m'+i] || "";
+            document.getElementById('p'+i).value = d['p'+i] || "";
+        }
+    }
+
+    function formatDate(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 
     function drawCal() {
-        const g = document.getElementById('calendar-grid');
-        const n = new Date(); const year = n.getFullYear(); const month = n.getMonth();
-        const last = new Date(year, month + 1, 0).getDate(); const first = new Date(year, month, 1).getDay();
-        const todayYMD = formatDate(n);
+        const g = document.getElementById('calendar-grid'); const n = new Date();
+        const y = n.getFullYear(); const m = n.getMonth();
+        const last = new Date(y, m+1, 0).getDate(); const first = new Date(y, m, 1).getDay();
         g.innerHTML = '';
-        ['日','月','火','水','木','金','土'].forEach((w,i) => {
-            const e = document.createElement('div'); e.className = 'd-cell ' + (i===0?'sun':i===6?'sat':'');
-            e.innerText = w; e.style.fontSize = '0.7rem'; g.appendChild(e);
+        ['日','月','火','水','木','金','土'].forEach(w => {
+            const e = document.createElement('div'); e.innerText = w; e.style.fontSize = '0.7rem'; g.appendChild(e);
         });
         for(let i=0; i<first; i++) g.appendChild(document.createElement('div'));
         for(let i=1; i<=last; i++) {
-            const e = document.createElement('div');
-            const ymd = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+            const e = document.createElement('div'); const ymd = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
             e.className = 'd-cell'; e.setAttribute('data-ymd', ymd);
-            const dow = new Date(year, month, i).getDay();
-            if(dow===0) e.classList.add('sun'); if(dow===6) e.classList.add('sat');
-            if(ymd === todayYMD) e.classList.add('today');
+            if(ymd === formatDate(n)) e.classList.add('today');
             e.innerText = i; e.onclick = () => selectDay(ymd);
             g.appendChild(e);
         }
     }
-    function goStock() {
-        const q = document.getElementById('in-stock').value;
-        if(q) window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`);
-    }
+
+    function goStock() { const q = document.getElementById('in-stock').value; if(q) window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`); }
 </script>
 </body>
 </html>
