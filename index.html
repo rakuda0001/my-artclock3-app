@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stellar Pro Dash v8</title>
+    <title>Stellar Pro Dash v9</title>
     <style>
         :root {
             --panel-bg: rgba(5, 10, 20, 0.4); 
@@ -31,7 +31,6 @@
             box-sizing: border-box;
         }
 
-        /* --- Click Effects --- */
         button, .d-cell, .calc-btn, .jump-btn { transition: all 0.1s; cursor: pointer; }
         button:active, .d-cell:active, .calc-btn:active, .jump-btn:active { transform: scale(0.94); filter: brightness(1.4); }
 
@@ -65,31 +64,31 @@
         /* --- Main Content --- */
         .content-section { flex: 1; display: flex; padding: 8px; gap: 8px; overflow: hidden; }
 
-        /* Left side: Calendar + Schedule */
-        .left-col { flex: 1.2; display: flex; flex-direction: column; gap: 8px; }
-        .cal-box { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px; flex: 1.2; }
+        .left-col { flex: 1.2; display: flex; flex-direction: column; gap: 8px; height: 100%; }
+        .cal-box { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 8px; flex: 0 0 auto; }
         #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
-        .d-cell { padding: 10px 0; font-size: 0.9rem; border-radius: 4px; background: rgba(255,255,255,0.03); }
+        .d-cell { padding: 8px 0; font-size: 0.85rem; border-radius: 4px; background: rgba(255,255,255,0.03); }
         .sun, .holiday { color: var(--gem-red); font-weight: bold; }
         .sat { color: var(--gem-blue); font-weight: bold; }
         .today { border: 1px solid var(--accent-gold); background: rgba(249, 225, 125, 0.1); }
         .selected-day { background: var(--select-blue) !important; }
 
-        .schedule-box { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 12px; flex: 1; display: flex; flex-direction: column; gap: 8px; border: 1px solid rgba(255,255,255,0.1); }
-        .plan-row { display: flex; gap: 8px; align-items: center; }
-        .plan-row select { background: #111; color: #fff; border: 1px solid var(--accent-gold); padding: 5px; border-radius: 4px; font-size: 0.9rem; }
-        .plan-text { flex: 1; background: rgba(0,0,0,0.5); border: 1px solid #444; color: #fff; border-radius: 4px; padding: 8px; font-size: 1rem; }
+        /* Schedule 5 slots */
+        .schedule-box { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 8px; flex: 1; display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(255,255,255,0.1); overflow-y: auto; }
+        .plan-row { display: flex; gap: 4px; align-items: center; }
+        .plan-row select { background: #111; color: #fff; border: 1px solid var(--accent-gold); padding: 2px; border-radius: 3px; font-size: 0.8rem; }
+        .plan-text { flex: 1; background: rgba(0,0,0,0.5); border: 1px solid #444; color: #fff; border-radius: 3px; padding: 5px; font-size: 0.85rem; }
 
-        /* Right side: Shortcuts + Calc */
-        .right-col { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-        .shortcut-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-        .jump-btn { border: 1px solid var(--accent-gold); padding: 10px; border-radius: 8px; color: #fff; font-size: 0.85rem; font-weight: bold; background: rgba(255,255,255,0.1); text-align: center; }
+        .right-col { flex: 1; display: flex; flex-direction: column; gap: 8px; height: 100%; }
+        .shortcut-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; flex: 0 0 auto; }
+        .jump-btn { border: 1px solid var(--accent-gold); padding: 8px; border-radius: 6px; color: #fff; font-size: 0.8rem; font-weight: bold; background: rgba(255,255,255,0.1); text-align: center; }
 
-        .alarm-card { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; border: 1px solid var(--gem-red); display: flex; align-items: center; gap: 8px; justify-content: center; }
+        .alarm-card { background: rgba(255,255,255,0.05); padding: 6px; border-radius: 8px; border: 1px solid var(--gem-red); display: flex; align-items: center; gap: 8px; justify-content: center; flex: 0 0 auto; }
 
-        .calc-box { background: rgba(0,0,0,0.6); border-radius: 10px; padding: 10px; flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-        #calc-display { grid-column: span 4; background: #000; color: var(--accent-gold); text-align: right; padding: 15px; font-size: 1.5rem; border-radius: 6px; height: 1.8rem; margin-bottom: 5px; border: 1px solid #333; }
-        .calc-btn { background: #333; border: 1px solid #555; color: #fff; padding: 0; border-radius: 8px; font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
+        /* Calc box adjustment */
+        .calc-box { background: rgba(0,0,0,0.6); border-radius: 10px; padding: 8px; flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: auto repeat(4, 1fr); gap: 5px; min-height: 0; }
+        #calc-display { grid-column: span 4; background: #000; color: var(--accent-gold); text-align: right; padding: 10px; font-size: 1.4rem; border-radius: 6px; border: 1px solid #333; display: flex; align-items: center; justify-content: flex-end; }
+        .calc-btn { background: #333; border: 1px solid #555; color: #fff; border-radius: 8px; font-weight: bold; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; height: 100%; }
     </style>
 </head>
 <body onload="startApp()">
@@ -122,17 +121,17 @@
 
     <div class="tool-bar">
         <div class="tool-group">
-            <span>天気:</span><input type="text" id="in-city" placeholder="市町村" style="width:70px;">
-            <button onclick="updateWeather()">検索</button>
+            <span>天気:</span><input type="text" id="in-city" placeholder="市町村" style="width:60px;">
+            <button onclick="updateWeather()">🔍</button>
             <span id="loc-label" style="color:var(--accent-gold); margin-left:5px;">多治見</span>
             <span id="weather-val">--°C</span>
         </div>
         <div class="tool-group">
-            <span>株価:</span><input type="text" id="in-stock" placeholder="銘柄..." style="width:100px;">
-            <button onclick="goStock()">検索</button>
+            <span>株価:</span><input type="text" id="in-stock" placeholder="銘柄..." style="width:90px;">
+            <button onclick="goStock()">🔍</button>
         </div>
         <div class="tool-group" style="border:none;">
-            <span style="color:var(--gem-red); font-size:0.7rem;">Alarm音:</span>
+            <span style="color:var(--gem-red); font-size:0.7rem;">音設定:</span>
             <input type="file" id="audio-file" accept="audio/*" onchange="loadAudio(this)" style="width:110px;">
         </div>
     </div>
@@ -141,10 +140,12 @@
         <div class="left-col">
             <div class="cal-box"><div id="calendar-grid"></div></div>
             <div class="schedule-box">
-                <div id="sel-date" style="font-weight:bold; color:var(--accent-gold); font-size:1rem;">日付選択</div>
+                <div id="sel-date" style="font-weight:bold; color:var(--accent-gold); font-size:0.9rem; margin-bottom:2px;">日付選択</div>
                 <div class="plan-row"><select id="h1"></select>:<select id="m1"></select><input type="text" id="p1" class="plan-text" oninput="saveP()" placeholder="予定 1"></div>
                 <div class="plan-row"><select id="h2"></select>:<select id="m2"></select><input type="text" id="p2" class="plan-text" oninput="saveP()" placeholder="予定 2"></div>
                 <div class="plan-row"><select id="h3"></select>:<select id="m3"></select><input type="text" id="p3" class="plan-text" oninput="saveP()" placeholder="予定 3"></div>
+                <div class="plan-row"><select id="h4"></select>:<select id="m4"></select><input type="text" id="p4" class="plan-text" oninput="saveP()" placeholder="予定 4"></div>
+                <div class="plan-row"><select id="h5"></select>:<select id="m5"></select><input type="text" id="p5" class="plan-text" oninput="saveP()" placeholder="予定 5"></div>
             </div>
         </div>
 
@@ -153,16 +154,16 @@
                 <button class="jump-btn" onclick="openL('yahoo')">Yahoo!路線</button>
                 <button class="jump-btn" onclick="openL('gemini')">Gemini</button>
                 <button class="jump-btn" onclick="openL('ipat')">JRA IPAT</button>
-                <button class="jump-btn" onclick="openL('yshop')">Yahoo!ショッピング</button>
+                <button class="jump-btn" onclick="openL('yshop')">ショッピング</button>
                 <button class="jump-btn" onclick="openL('yauc')">ヤフオク</button>
                 <button class="jump-btn" onclick="openL('gmap')">Google Map</button>
             </div>
             
             <div class="alarm-card">
-                <span style="color:var(--gem-red); font-weight:bold; font-size:0.8rem;">ALARM</span>
-                <input type="time" id="a-time" style="padding:2px;">
-                <button id="a-btn" onclick="toggleAlarm()" style="background:var(--gem-red); border:none; color:#fff; font-size:0.8rem; padding:4px 10px;">SET</button>
-                <span id="a-status" style="font-size:0.7rem; min-width:30px;">OFF</span>
+                <span style="color:var(--gem-red); font-weight:bold; font-size:0.75rem;">ALARM</span>
+                <input type="time" id="a-time" style="padding:1px; font-size:0.8rem;">
+                <button id="a-btn" onclick="toggleAlarm()" style="background:var(--gem-red); border:none; color:#fff; font-size:0.75rem; padding:4px 8px; border-radius:4px;">SET</button>
+                <span id="a-status" style="font-size:0.7rem;">OFF</span>
             </div>
 
             <div class="calc-box">
@@ -271,7 +272,7 @@
     }
 
     function initT() {
-        for(let i=1; i<=3; i++) {
+        for(let i=1; i<=5; i++) {
             const h = document.getElementById('h'+i); const m = document.getElementById('m'+i);
             h.innerHTML = '<option value="">H</option>'; m.innerHTML = '<option value="">M</option>';
             for(let x=0; x<24; x++) h.innerHTML += `<option value="${x}">${x}</option>`;
@@ -286,10 +287,10 @@
         curYMD = ymd; document.getElementById('sel-date').innerText = ymd;
         document.querySelectorAll('.d-cell').forEach(el => { el.classList.remove('selected-day'); if(el.getAttribute('data-ymd') === ymd) el.classList.add('selected-day'); });
         const s = localStorage.getItem('plans_' + ymd); const d = s ? JSON.parse(s) : {};
-        for(let i=1; i<=3; i++) { document.getElementById('h'+i).value = d['h'+i] || ""; document.getElementById('m'+i).value = d['m'+i] || ""; document.getElementById('p'+i).value = d['p'+i] || ""; }
+        for(let i=1; i<=5; i++) { document.getElementById('h'+i).value = d['h'+i] || ""; document.getElementById('m'+i).value = d['m'+i] || ""; document.getElementById('p'+i).value = d['p'+i] || ""; }
     }
     function saveP() {
-        const d = {}; for(let i=1; i<=3; i++) { d['h'+i]=document.getElementById('h'+i).value; d['m'+i]=document.getElementById('m'+i).value; d['p'+i]=document.getElementById('p'+i).value; }
+        const d = {}; for(let i=1; i<=5; i++) { d['h'+i]=document.getElementById('h'+i).value; d['m'+i]=document.getElementById('m'+i).value; d['p'+i]=document.getElementById('p'+i).value; }
         localStorage.setItem('plans_' + curYMD, JSON.stringify(d));
     }
     function openL(t) {
@@ -309,5 +310,4 @@
     function goStock() { const q = document.getElementById('in-stock').value; if(q) window.open(`https://www.google.com/search?q=株価+${encodeURIComponent(q)}`); }
 </script>
 </body>
-</html>
 </html>
