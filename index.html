@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stellar Pro Dash v9</title>
+    <title>Stellar Pro Dash v10</title>
     <style>
         :root {
             --panel-bg: rgba(5, 10, 20, 0.4); 
@@ -27,14 +27,12 @@
             width: 98vw; height: 98vh;
             background: var(--panel-bg); backdrop-filter: blur(15px);
             border: 1px solid rgba(249, 225, 125, 0.4); border-radius: 12px;
-            display: flex; flex-direction: column; overflow: hidden;
-            box-sizing: border-box;
+            display: flex; flex-direction: column; overflow: hidden; box-sizing: border-box;
         }
 
-        button, .d-cell, .calc-btn, .jump-btn { transition: all 0.1s; cursor: pointer; }
-        button:active, .d-cell:active, .calc-btn:active, .jump-btn:active { transform: scale(0.94); filter: brightness(1.4); }
+        button, .d-cell, .calc-btn, .jump-btn, .nav-btn { transition: all 0.1s; cursor: pointer; border: 1px solid var(--accent-gold); border-radius: 6px; background: rgba(255,255,255,0.1); color: #fff; }
+        button:active, .d-cell:active, .calc-btn:active, .jump-btn:active, .nav-btn:active { transform: scale(0.92); filter: brightness(1.5); }
 
-        /* --- Header --- */
         .header-section {
             padding: 5px 15px; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid rgba(249, 225, 125, 0.2); background: rgba(0,0,0,0.5);
@@ -47,8 +45,7 @@
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: var(--accent-gold); }
         .hour { width: 3px; height: 15px; } .minute { width: 2px; height: 22px; } .second { width: 1px; height: 25px; background: var(--gem-red); }
 
-        .time-display-group { text-align: center; }
-        #time-digit { font-size: 2rem; font-weight: bold; color: var(--accent-gold); margin: 0; line-height: 1; }
+        #time-digit { font-size: 2rem; font-weight: bold; color: var(--accent-gold); margin: 0; }
         #date-digit { font-size: 0.8rem; margin: 0; opacity: 0.8; }
 
         .finance-panel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; flex: 1; padding: 0 15px; }
@@ -56,39 +53,40 @@
         .f-label { font-size: 0.6rem; color: var(--accent-gold); display: block; }
         .f-val { font-size: 0.75rem; font-weight: bold; }
 
-        /* --- Toolbar --- */
         .tool-bar { padding: 4px 15px; background: rgba(0,0,0,0.6); display: flex; gap: 10px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .tool-group { display: flex; gap: 5px; align-items: center; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 10px; }
-        input { background: rgba(0,0,0,0.5); border: 1px solid var(--accent-gold); color: #fff; padding: 4px; border-radius: 4px; font-size: 0.8rem; }
+        input { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-gold); color: #fff; padding: 4px; border-radius: 4px; font-size: 0.8rem; }
 
-        /* --- Main Content --- */
         .content-section { flex: 1; display: flex; padding: 8px; gap: 8px; overflow: hidden; }
-
         .left-col { flex: 1.2; display: flex; flex-direction: column; gap: 8px; height: 100%; }
+
+        /* Calendar Navigation */
+        .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .nav-btn { padding: 2px 10px; background: rgba(255,255,255,0.05); font-weight: bold; }
+
         .cal-box { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 8px; flex: 0 0 auto; }
         #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
-        .d-cell { padding: 8px 0; font-size: 0.85rem; border-radius: 4px; background: rgba(255,255,255,0.03); }
+        .d-cell { padding: 8px 0; font-size: 0.85rem; border: none; background: rgba(255,255,255,0.03); }
         .sun, .holiday { color: var(--gem-red); font-weight: bold; }
         .sat { color: var(--gem-blue); font-weight: bold; }
         .today { border: 1px solid var(--accent-gold); background: rgba(249, 225, 125, 0.1); }
-        .selected-day { background: var(--select-blue) !important; }
+        .selected-day { background: var(--select-blue) !important; border-radius: 4px; }
 
-        /* Schedule 5 slots */
-        .schedule-box { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 8px; flex: 1; display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(255,255,255,0.1); overflow-y: auto; }
+        .schedule-box { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 8px; flex: 1; display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(255,255,255,0.1); }
         .plan-row { display: flex; gap: 4px; align-items: center; }
-        .plan-row select { background: #111; color: #fff; border: 1px solid var(--accent-gold); padding: 2px; border-radius: 3px; font-size: 0.8rem; }
-        .plan-text { flex: 1; background: rgba(0,0,0,0.5); border: 1px solid #444; color: #fff; border-radius: 3px; padding: 5px; font-size: 0.85rem; }
+        .plan-row select { background: rgba(0,0,0,0.4); color: #fff; border: 1px solid var(--accent-gold); padding: 2px; border-radius: 3px; font-size: 0.8rem; }
+        .plan-text { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid #555; color: #fff; border-radius: 3px; padding: 5px; font-size: 0.85rem; }
 
         .right-col { flex: 1; display: flex; flex-direction: column; gap: 8px; height: 100%; }
-        .shortcut-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; flex: 0 0 auto; }
-        .jump-btn { border: 1px solid var(--accent-gold); padding: 8px; border-radius: 6px; color: #fff; font-size: 0.8rem; font-weight: bold; background: rgba(255,255,255,0.1); text-align: center; }
+        .shortcut-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
+        .jump-btn { padding: 8px; font-size: 0.8rem; font-weight: bold; }
 
-        .alarm-card { background: rgba(255,255,255,0.05); padding: 6px; border-radius: 8px; border: 1px solid var(--gem-red); display: flex; align-items: center; gap: 8px; justify-content: center; flex: 0 0 auto; }
+        .alarm-card { background: rgba(255,255,255,0.05); padding: 6px; border-radius: 8px; border: 1px solid var(--gem-red); display: flex; align-items: center; gap: 8px; justify-content: center; }
 
-        /* Calc box adjustment */
-        .calc-box { background: rgba(0,0,0,0.6); border-radius: 10px; padding: 8px; flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: auto repeat(4, 1fr); gap: 5px; min-height: 0; }
-        #calc-display { grid-column: span 4; background: #000; color: var(--accent-gold); text-align: right; padding: 10px; font-size: 1.4rem; border-radius: 6px; border: 1px solid #333; display: flex; align-items: center; justify-content: flex-end; }
-        .calc-btn { background: #333; border: 1px solid #555; color: #fff; border-radius: 8px; font-weight: bold; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; height: 100%; }
+        /* Calc 1:1 adjustment */
+        .calc-box { background: rgba(0,0,0,0.6); border-radius: 10px; padding: 10px; flex: 1; display: flex; flex-direction: column; gap: 5px; max-height: 400px; }
+        #calc-display { background: #000; color: var(--accent-gold); text-align: right; padding: 10px; font-size: 1.4rem; border-radius: 6px; border: 1px solid #333; margin-bottom: 5px; }
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; flex: 1; }
+        .calc-btn { border: 1px solid #555; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); }
     </style>
 </head>
 <body onload="startApp()">
@@ -97,18 +95,8 @@
 
 <div class="main-container">
     <div class="header-section">
-        <div class="clock-container">
-            <div class="jewel-ring" id="gem-ring"></div>
-            <div class="analog-clock">
-                <div id="h-ptr" class="hand hour"></div>
-                <div id="m-ptr" class="hand minute"></div>
-                <div id="s-ptr" class="hand second"></div>
-            </div>
-        </div>
-        <div class="time-display-group">
-            <p id="time-digit">--:--</p>
-            <p id="date-digit">----/--/--</p>
-        </div>
+        <div class="clock-container"><div class="jewel-ring" id="gem-ring"></div><div class="analog-clock"><div id="h-ptr" class="hand hour"></div><div id="m-ptr" class="hand minute"></div><div id="s-ptr" class="hand second"></div></div></div>
+        <div class="time-display-group"><p id="time-digit">--:--</p><p id="date-digit">----/--/--</p></div>
         <div class="finance-panel">
             <div class="f-item"><span class="f-label">USD/JPY</span><span class="f-val" id="usd-jpy">---</span></div>
             <div class="f-item"><span class="f-label">EUR/JPY</span><span class="f-val" id="eur-jpy">---</span></div>
@@ -120,27 +108,23 @@
     </div>
 
     <div class="tool-bar">
-        <div class="tool-group">
-            <span>天気:</span><input type="text" id="in-city" placeholder="市町村" style="width:60px;">
-            <button onclick="updateWeather()">🔍</button>
-            <span id="loc-label" style="color:var(--accent-gold); margin-left:5px;">多治見</span>
-            <span id="weather-val">--°C</span>
-        </div>
-        <div class="tool-group">
-            <span>株価:</span><input type="text" id="in-stock" placeholder="銘柄..." style="width:90px;">
-            <button onclick="goStock()">🔍</button>
-        </div>
-        <div class="tool-group" style="border:none;">
-            <span style="color:var(--gem-red); font-size:0.7rem;">音設定:</span>
-            <input type="file" id="audio-file" accept="audio/*" onchange="loadAudio(this)" style="width:110px;">
-        </div>
+        <div class="tool-group">天気:<input type="text" id="in-city" placeholder="市町村" style="width:60px;"><button onclick="updateWeather()">🔍</button><span id="loc-label" style="color:var(--accent-gold); margin-left:5px;">多治見</span> <span id="weather-val">--°C</span></div>
+        <div class="tool-group">株価:<input type="text" id="in-stock" placeholder="銘柄..." style="width:80px;"><button onclick="goStock()">🔍</button></div>
+        <div class="tool-group" style="border:none;">音:<input type="file" id="audio-file" accept="audio/*" onchange="loadAudio(this)" style="width:110px;"></div>
     </div>
 
     <div class="content-section">
         <div class="left-col">
-            <div class="cal-box"><div id="calendar-grid"></div></div>
+            <div class="cal-box">
+                <div class="cal-header">
+                    <button class="nav-btn" onclick="moveMonth(-1)">◀</button>
+                    <span id="cal-title" style="font-weight:bold; color:var(--accent-gold);">2026年 2月</span>
+                    <button class="nav-btn" onclick="moveMonth(1)">▶</button>
+                </div>
+                <div id="calendar-grid"></div>
+            </div>
             <div class="schedule-box">
-                <div id="sel-date" style="font-weight:bold; color:var(--accent-gold); font-size:0.9rem; margin-bottom:2px;">日付選択</div>
+                <div id="sel-date" style="font-weight:bold; color:var(--accent-gold); font-size:0.9rem;">日付選択</div>
                 <div class="plan-row"><select id="h1"></select>:<select id="m1"></select><input type="text" id="p1" class="plan-text" oninput="saveP()" placeholder="予定 1"></div>
                 <div class="plan-row"><select id="h2"></select>:<select id="m2"></select><input type="text" id="p2" class="plan-text" oninput="saveP()" placeholder="予定 2"></div>
                 <div class="plan-row"><select id="h3"></select>:<select id="m3"></select><input type="text" id="p3" class="plan-text" oninput="saveP()" placeholder="予定 3"></div>
@@ -151,54 +135,36 @@
 
         <div class="right-col">
             <div class="shortcut-grid">
-                <button class="jump-btn" onclick="openL('yahoo')">Yahoo!路線</button>
-                <button class="jump-btn" onclick="openL('gemini')">Gemini</button>
-                <button class="jump-btn" onclick="openL('ipat')">JRA IPAT</button>
-                <button class="jump-btn" onclick="openL('yshop')">ショッピング</button>
-                <button class="jump-btn" onclick="openL('yauc')">ヤフオク</button>
-                <button class="jump-btn" onclick="openL('gmap')">Google Map</button>
+                <button class="jump-btn" onclick="openL('yahoo')">Yahoo!路線</button><button class="jump-btn" onclick="openL('gemini')">Gemini</button>
+                <button class="jump-btn" onclick="openL('ipat')">JRA IPAT</button><button class="jump-btn" onclick="openL('yshop')">Yahoo!S</button>
+                <button class="jump-btn" onclick="openL('yauc')">ヤフオク</button><button class="jump-btn" onclick="openL('gmap')">GoogleMap</button>
             </div>
-            
             <div class="alarm-card">
                 <span style="color:var(--gem-red); font-weight:bold; font-size:0.75rem;">ALARM</span>
-                <input type="time" id="a-time" style="padding:1px; font-size:0.8rem;">
-                <button id="a-btn" onclick="toggleAlarm()" style="background:var(--gem-red); border:none; color:#fff; font-size:0.75rem; padding:4px 8px; border-radius:4px;">SET</button>
+                <input type="time" id="a-time"><button id="a-btn" onclick="toggleAlarm()" style="background:var(--gem-red); border:none; padding:4px 8px;">SET</button>
                 <span id="a-status" style="font-size:0.7rem;">OFF</span>
             </div>
-
             <div class="calc-box">
                 <div id="calc-display">0</div>
-                <button class="calc-btn" onclick="calcI('7')">7</button>
-                <button class="calc-btn" onclick="calcI('8')">8</button>
-                <button class="calc-btn" onclick="calcI('9')">9</button>
-                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcI('/')">÷</button>
-                <button class="calc-btn" onclick="calcI('4')">4</button>
-                <button class="calc-btn" onclick="calcI('5')">5</button>
-                <button class="calc-btn" onclick="calcI('6')">6</button>
-                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcI('*')">×</button>
-                <button class="calc-btn" onclick="calcI('1')">1</button>
-                <button class="calc-btn" onclick="calcI('2')">2</button>
-                <button class="calc-btn" onclick="calcI('3')">3</button>
-                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcI('-')">-</button>
-                <button class="calc-btn" onclick="calcI('0')">0</button>
-                <button class="calc-btn" onclick="calcC()">C</button>
-                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcS()">=</button>
-                <button class="calc-btn" style="background:#8a6e2f;" onclick="calcI('+')">+</button>
+                <div class="calc-grid">
+                    <button class="calc-btn" onclick="calcI('7')">7</button><button class="calc-btn" onclick="calcI('8')">8</button><button class="calc-btn" onclick="calcI('9')">9</button><button class="calc-btn" style="background:rgba(138,110,47,0.4);" onclick="calcI('/')">÷</button>
+                    <button class="calc-btn" onclick="calcI('4')">4</button><button class="calc-btn" onclick="calcI('5')">5</button><button class="calc-btn" onclick="calcI('6')">6</button><button class="calc-btn" style="background:rgba(138,110,47,0.4);" onclick="calcI('*')">×</button>
+                    <button class="calc-btn" onclick="calcI('1')">1</button><button class="calc-btn" onclick="calcI('2')">2</button><button class="calc-btn" onclick="calcI('3')">3</button><button class="calc-btn" style="background:rgba(138,110,47,0.4);" onclick="calcI('-')">-</button>
+                    <button class="calc-btn" onclick="calcI('0')">0</button><button class="calc-btn" onclick="calcC()">C</button><button class="calc-btn" style="background:rgba(138,110,47,0.4);" onclick="calcS()">=</button><button class="calc-btn" style="background:rgba(138,110,47,0.4);" onclick="calcI('+')">+</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    let curYMD = ""; let cBuf = "";
+    let curYMD = ""; let cBuf = ""; let viewDate = new Date();
     let alarmTime = null; let isAlarmSet = false;
     const holidays2026 = ["2026-01-01", "2026-01-12", "2026-02-11", "2026-02-23", "2026-03-20", "2026-04-29", "2026-05-03", "2026-05-04", "2026-05-05", "2026-05-06", "2026-07-20", "2026-08-11", "2026-09-21", "2026-09-22", "2026-09-23", "2026-10-12", "2026-11-03", "2026-11-23"];
 
     function startApp() {
-        createJewels(); initT(); tick(); setInterval(tick, 1000);
-        fetchF(); setInterval(fetchF, 60000);
-        const now = new Date(); curYMD = formatD(now);
-        drawC(); selectD(curYMD); loadW(35.33, 137.12);
+        createJewels(); initT(); tick(); setInterval(tick, 1000); fetchF(); setInterval(fetchF, 60000);
+        curYMD = formatD(new Date()); drawC(); selectD(curYMD); loadW(35.33, 137.12);
     }
 
     function createJewels() {
@@ -219,7 +185,42 @@
         document.getElementById('h-ptr').style.transform = `rotate(${(n.getHours()%12/12)*360 + (n.getMinutes()/60)*30}deg)`;
         document.getElementById('time-digit').innerText = n.toTimeString().substring(0,5);
         document.getElementById('date-digit').innerText = n.toLocaleDateString();
-        if (isAlarmSet && alarmTime === n.toTimeString().substring(0,5) && n.getSeconds() === 0) { document.getElementById('alarm-sound').play(); }
+        if (isAlarmSet && alarmTime === n.toTimeString().substring(0,5) && n.getSeconds() === 0) document.getElementById('alarm-sound').play();
+    }
+
+    function moveMonth(diff) { viewDate.setMonth(viewDate.getMonth() + diff); drawC(); }
+
+    function drawC() {
+        const g = document.getElementById('calendar-grid'); const y = viewDate.getFullYear(); const m = viewDate.getMonth();
+        document.getElementById('cal-title').innerText = `${y}年 ${m+1}月`;
+        const last = new Date(y, m+1, 0).getDate(); const first = new Date(y, m, 1).getDay();
+        g.innerHTML = '';
+        ['日','月','火','水','木','金','土'].forEach((w,i) => {
+            const e = document.createElement('div'); e.innerText = w; e.className = 'd-cell ' + (i===0?'sun':i===6?'sat':'');
+            e.style.fontSize = '0.7rem'; g.appendChild(e);
+        });
+        for(let i=0; i<first; i++) g.appendChild(document.createElement('div'));
+        for(let i=1; i<=last; i++) {
+            const e = document.createElement('div'); const ymd = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+            const dow = new Date(y, m, i).getDay(); e.className = 'd-cell';
+            if(dow===0 || holidays2026.includes(ymd)) e.classList.add('holiday');
+            if(dow===6) e.classList.add('sat');
+            if(ymd === formatD(new Date())) e.classList.add('today');
+            e.setAttribute('data-ymd', ymd); e.innerText = i; e.onclick = () => selectD(ymd); g.appendChild(e);
+            if(ymd === curYMD) e.classList.add('selected-day');
+        }
+    }
+
+    function selectD(ymd) {
+        curYMD = ymd; document.getElementById('sel-date').innerText = ymd;
+        document.querySelectorAll('.d-cell').forEach(el => { el.classList.remove('selected-day'); if(el.getAttribute('data-ymd') === ymd) el.classList.add('selected-day'); });
+        const s = localStorage.getItem('plans_' + ymd); const d = s ? JSON.parse(s) : {};
+        for(let i=1; i<=5; i++) { document.getElementById('h'+i).value = d['h'+i] || ""; document.getElementById('m'+i).value = d['m'+i] || ""; document.getElementById('p'+i).value = d['p'+i] || ""; }
+    }
+
+    function saveP() {
+        const d = {}; for(let i=1; i<=5; i++) { d['h'+i]=document.getElementById('h'+i).value; d['m'+i]=document.getElementById('m'+i).value; d['p'+i]=document.getElementById('p'+i).value; }
+        localStorage.setItem('plans_' + curYMD, JSON.stringify(d));
     }
 
     function loadAudio(i) { if(i.files[0]) document.getElementById('alarm-sound').src = URL.createObjectURL(i.files[0]); }
@@ -251,26 +252,6 @@
         } catch(e) {}
     }
 
-    function drawC() {
-        const g = document.getElementById('calendar-grid'); const n = new Date();
-        const y = n.getFullYear(); const m = n.getMonth();
-        const last = new Date(y, m+1, 0).getDate(); const first = new Date(y, m, 1).getDay();
-        g.innerHTML = '';
-        ['日','月','火','水','木','金','土'].forEach((w,i) => {
-            const e = document.createElement('div'); e.innerText = w; e.className = 'd-cell ' + (i===0?'sun':i===6?'sat':'');
-            e.style.fontSize = '0.7rem'; g.appendChild(e);
-        });
-        for(let i=0; i<first; i++) g.appendChild(document.createElement('div'));
-        for(let i=1; i<=last; i++) {
-            const e = document.createElement('div'); const ymd = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-            const dow = new Date(y, m, i).getDay(); e.className = 'd-cell';
-            if(dow===0 || holidays2026.includes(ymd)) e.classList.add('holiday');
-            if(dow===6) e.classList.add('sat');
-            if(ymd === formatD(n)) e.classList.add('today');
-            e.setAttribute('data-ymd', ymd); e.innerText = i; e.onclick = () => selectD(ymd); g.appendChild(e);
-        }
-    }
-
     function initT() {
         for(let i=1; i<=5; i++) {
             const h = document.getElementById('h'+i); const m = document.getElementById('m'+i);
@@ -283,16 +264,6 @@
     function calcC() { cBuf = ""; document.getElementById('calc-display').innerText = "0"; }
     function calcS() { try { cBuf = eval(cBuf.replace(/×/g, '*').replace(/÷/g, '/')).toString(); document.getElementById('calc-display').innerText = cBuf; } catch(e) { calcC(); } }
     function formatD(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-    function selectD(ymd) {
-        curYMD = ymd; document.getElementById('sel-date').innerText = ymd;
-        document.querySelectorAll('.d-cell').forEach(el => { el.classList.remove('selected-day'); if(el.getAttribute('data-ymd') === ymd) el.classList.add('selected-day'); });
-        const s = localStorage.getItem('plans_' + ymd); const d = s ? JSON.parse(s) : {};
-        for(let i=1; i<=5; i++) { document.getElementById('h'+i).value = d['h'+i] || ""; document.getElementById('m'+i).value = d['m'+i] || ""; document.getElementById('p'+i).value = d['p'+i] || ""; }
-    }
-    function saveP() {
-        const d = {}; for(let i=1; i<=5; i++) { d['h'+i]=document.getElementById('h'+i).value; d['m'+i]=document.getElementById('m'+i).value; d['p'+i]=document.getElementById('p'+i).value; }
-        localStorage.setItem('plans_' + curYMD, JSON.stringify(d));
-    }
     function openL(t) {
         const links = { yahoo: "https://transit.yahoo.co.jp/search/result?from=%E6%96%B0%E5%AE%88%E5%B1%B1&to=%E5%B0%8F%E6%B3%89(%E5%B2%90%E9%98%9C%E7%9C%8C)", gemini: "https://gemini.google.com/", ipat: "https://www.ipat.jra.go.jp/", yshop: "https://shopping.yahoo.co.jp/", yauc: "https://auctions.yahoo.co.jp/", gmap: "https://www.google.co.jp/maps" };
         window.open(links[t], '_blank');
