@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Museum Clock & Calendar</title>
+    <title>Museum Digital & Analog</title>
     <style>
         :root {
             --gold: linear-gradient(145deg, #f9e17d, #bf953f, #8a6e2f, #bf953f, #f9e17d);
@@ -18,71 +18,91 @@
             color: #d4b483;
             font-family: 'Georgia', serif;
             display: flex;
-            flex-direction: row;
+            flex-direction: column; /* スマホ・アプリ基準で上下構成 */
             height: 100vh;
             margin: 0;
             overflow: hidden;
         }
 
-        /* 時計のデザイン */
-        .clock-section {
-            flex: 1.2;
+        /* --- 上部：時計・デジタル・天気セクション --- */
+        .top-section {
+            flex: none;
+            height: 35vh; /* 少しコンパクトに */
             display: flex;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle, #2a1b0a 0%, #0a0805 100%);
-            border-right: 3px double #5c441a;
-            padding: 20px;
+            background: radial-gradient(circle at 0% 50%, #2a1b0a 0%, #0a0805 100%);
+            border-bottom: 3px double #5c441a;
+            position: relative;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
+        /* アナログ時計を左端に */
         .museum-frame {
             position: relative;
-            width: 380px;
-            height: 380px;
-            padding: 20px;
+            width: 140px;
+            height: 140px;
+            padding: 8px;
             background: var(--gold);
             border-radius: 50%;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            align-self: center;
+            margin-left: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
 
         .clock-face {
             width: 100%; height: 100%;
             background: var(--marble);
             border-radius: 50%;
-            border: 10px solid #2a1b0a;
+            border: 5px solid #2a1b0a;
             position: relative;
-            overflow: hidden;
         }
 
-        .gears-bg {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 250px; height: 250px;
-            border: 2px dashed rgba(138, 110, 47, 0.2);
-            border-radius: 50%;
-            animation: rotateGear 60s linear infinite;
-        }
+        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: #1a120b; }
+        .hour { width: 4px; height: 35px; margin-left: -2px; z-index: 3; }
+        .minute { width: 3px; height: 50px; margin-left: -1.5px; z-index: 4; }
+        .second { width: 1px; height: 55px; margin-left: -0.5px; background: #a52a2a; z-index: 5; }
 
-        @keyframes rotateGear { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
-
-        .hand {
-            position: absolute;
-            bottom: 50%; left: 50%;
-            transform-origin: bottom;
-            background: #1a120b;
-        }
-        .hour { width: 10px; height: 100px; margin-left: -5px; clip-path: polygon(50% 0%, 100% 20%, 50% 100%, 0% 20%); z-index: 3; }
-        .minute { width: 6px; height: 140px; margin-left: -3px; clip-path: polygon(50% 0%, 100% 10%, 50% 100%, 0% 10%); z-index: 4; }
-        .second { width: 2px; height: 160px; margin-left: -1px; background: #a52a2a; z-index: 5; }
-
-        /* カレンダーのデザイン */
-        .schedule-section {
+        /* 右上：デジタル時計と日付 */
+        .info-panel {
             flex: 1;
-            padding: 30px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            align-items: flex-end;
+            justify-content: flex-start;
+            padding-top: 10px;
+            padding-right: 15px;
+        }
+
+        #digital-date { font-size: 0.9rem; opacity: 0.8; margin-bottom: 2px; }
+        #digital-clock { font-size: 1.8rem; font-weight: bold; color: #f9e17d; text-shadow: 0 0 10px rgba(249, 225, 125, 0.5); }
+
+        /* 天気予報エリア */
+        .weather-panel {
+            margin-top: 15px;
+            text-align: right;
+            background: rgba(255,255,255,0.05);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(212, 180, 131, 0.2);
+        }
+
+        #city-select {
+            background: #1a120b;
+            color: #d4b483;
+            border: 1px solid #5c441a;
+            font-size: 0.7rem;
+            margin-bottom: 5px;
+        }
+
+        #weather-info { font-size: 0.8rem; }
+
+        /* --- 下部：カレンダー・スケジュール（1.3倍拡大） --- */
+        .schedule-section {
+            flex: 1; /* 残りのスペースをすべて使う */
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             background: #0f0a05;
             overflow-y: auto;
         }
@@ -90,21 +110,21 @@
         .calendar-card {
             background: rgba(42, 27, 10, 0.4);
             border: 1px solid #5c441a;
-            padding: 15px;
+            padding: 10px;
             border-radius: 10px;
         }
 
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .nav-btn { background: none; border: 1px solid #d4b483; color: #d4b483; padding: 5px 12px; cursor: pointer; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .nav-btn { background: none; border: 1px solid #d4b483; color: #d4b483; padding: 2px 10px; cursor: pointer; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
-        .day { padding: 8px 0; cursor: pointer; border: 1px solid rgba(212, 180, 131, 0.05); font-size: 0.9rem; }
+        .day { padding: 12px 0; cursor: pointer; border: 1px solid rgba(212, 180, 131, 0.05); font-size: 1rem; }
         .sun { color: #ff6b6b; font-weight: bold; } 
         .sat { color: #6ba6ff; font-weight: bold; }
         .today { background: #8a6e2f; color: white; border-radius: 4px; }
 
         #note-area {
-            width: 100%;
-            height: 150px;
+            flex: 1; /* スケジュール欄を広げ、余った縦幅を全部使う */
+            min-height: 120px;
             background: #1a120b;
             border: 1px solid #3d2b1f;
             color: #f4e4bc;
@@ -112,32 +132,38 @@
             font-size: 1rem;
             resize: none;
             box-sizing: border-box;
+            outline: none;
+            border-radius: 5px;
         }
 
-        .gem { position: absolute; width: 20px; height: 20px; border-radius: 50%; z-index: 10; border: 1px solid #3d2b1f; }
-
-        /* モバイル対応：縦長画面用 */
-        @media (max-width: 800px) {
-            body { flex-direction: column; }
-            .clock-section { flex: none; height: 45vh; border-right: none; border-bottom: 3px double #5c441a; }
-            .museum-frame { width: 260px; height: 260px; }
-            .schedule-section { flex: 1; padding: 15px; }
-        }
+        .gem { position: absolute; width: 10px; height: 100px; z-index: 1; }
     </style>
 </head>
 <body>
 
-<div class="clock-section">
+<div class="top-section">
     <div class="museum-frame">
-        <div class="gem" style="top: -10px; left: 50%; transform: translateX(-50%); background: var(--ruby);"></div>
-        <div class="gem" style="bottom: -10px; left: 50%; transform: translateX(-50%); background: var(--ruby);"></div>
-        <div class="gem" style="left: -10px; top: 50%; transform: translateY(-50%); background: var(--emerald);"></div>
-        <div class="gem" style="right: -10px; top: 50%; transform: translateY(-50%); background: var(--emerald);"></div>
         <div class="clock-face">
-            <div class="gears-bg"></div>
             <div class="hand hour" id="hour"></div>
             <div class="hand minute" id="minute"></div>
             <div class="hand second" id="second"></div>
+        </div>
+    </div>
+
+    <div class="info-panel">
+        <div id="digital-date">2026.02.11 (Wed)</div>
+        <div id="digital-clock">15:49</div>
+        
+        <div class="weather-panel">
+            <select id="city-select" onchange="getWeather()">
+                <option value="35.6895,139.6917">東京</option>
+                <option value="34.6937,135.5023">大阪</option>
+                <option value="43.0642,141.3468">札幌</option>
+                <option value="35.1815,136.9066">名古屋</option>
+                <option value="33.5904,130.4017">福岡</option>
+                <option value="26.2124,127.6809">那覇</option>
+            </select>
+            <div id="weather-info">Loading...</div>
         </div>
     </div>
 </div>
@@ -146,25 +172,56 @@
     <div class="calendar-card">
         <div class="calendar-header">
             <button class="nav-btn" onclick="changeMonth(-1)">◀</button>
-            <h3 id="month-display" style="margin:0"></h3>
+            <h3 id="month-display" style="margin:0; font-size: 1.1rem;"></h3>
             <button class="nav-btn" onclick="changeMonth(1)">▶</button>
         </div>
         <div class="calendar-grid" id="calendar-days"></div>
     </div>
-    <h4 id="selected-date-title" style="margin: 5px 0">日付を選択してください</h4>
-    <textarea id="note-area" placeholder="予定を書き込むと自動保存されます..."></textarea>
+    <h4 id="selected-date-title" style="margin: 0; font-size: 0.9rem;">日付を選択</h4>
+    <textarea id="note-area" placeholder="ここに予定を書き込む..."></textarea>
 </div>
 
 <script>
+    // 時計更新
     function updateClock() {
         const now = new Date();
+        // アナログ
         document.getElementById('second').style.transform = `rotate(${(now.getSeconds()/60)*360}deg)`;
         document.getElementById('minute').style.transform = `rotate(${(now.getMinutes()/60)*360 + (now.getSeconds()/60)*6}deg)`;
         document.getElementById('hour').style.transform = `rotate(${(now.getHours()%12/12)*360 + (now.getMinutes()/60)*30}deg)`;
+        
+        // デジタル日付・時刻
+        const y = now.getFullYear();
+        const m = now.getMonth() + 1;
+        const d = now.getDate();
+        const w = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][now.getDay()];
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        
+        document.getElementById('digital-date').innerText = `${y}.${m}.${d} (${w})`;
+        document.getElementById('digital-clock').innerText = `${hh}:${mm}`;
     }
     setInterval(updateClock, 1000);
     updateClock();
 
+    // 天気予報取得
+    async function getWeather() {
+        const coords = document.getElementById('city-select').value.split(',');
+        try {
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords[0]}&longitude=${coords[1]}&current_weather=true&timezone=Asia%2FTokyo`);
+            const data = await res.json();
+            const temp = data.current_weather.temperature;
+            const code = data.current_weather.weathercode;
+            const icons = { 0: "☀️", 1: "🌤", 2: "⛅", 3: "☁️", 45: "🌫", 51: "🌦", 61: "🌧", 71: "❄️", 95: "⚡" };
+            const icon = icons[code] || "✨";
+            document.getElementById('weather-info').innerText = `${icon} ${temp}°C`;
+        } catch (e) {
+            document.getElementById('weather-info').innerText = "取得エラー";
+        }
+    }
+    getWeather();
+
+    // カレンダー機能
     let currentViewDate = new Date();
     let selectedDateKey = "";
 
@@ -179,6 +236,7 @@
         ['日','月','火','水','木','金','土'].forEach((d, i) => {
             const el = document.createElement('div');
             el.className = `day ${i===0 ? 'sun' : (i===6 ? 'sat' : '')}`;
+            el.style.fontSize = "0.7rem";
             el.innerText = d;
             grid.appendChild(el);
         });
@@ -198,7 +256,7 @@
 
     function selectDate(y, m, d) {
         selectedDateKey = `note_v2_${y}_${m}_${d}`;
-        document.getElementById('selected-date-title').innerText = `${y}/${m}/${d} の予定`;
+        document.getElementById('selected-date-title').innerText = `${y}/${m}/${d} の記録`;
         document.getElementById('note-area').value = localStorage.getItem(selectedDateKey) || "";
     }
 
